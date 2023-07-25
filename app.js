@@ -23,12 +23,12 @@ const campgroundsRoutes = require("./routes/campgrounds");
 const reviewsRoutes = require("./routes/reviews");
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+// const { MongoClient, ServerApiVersion } = require('mongodb');
 // const dbUrl = process.env.DB_URL
 
 // const uri = dbUrl ;
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+// // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 // const client = new MongoClient(uri, {
 //   serverApi: {
 //     version: ServerApiVersion.v1,
@@ -54,9 +54,12 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 // mongoose.connect(uri)
 
 
-const dbUrl = process.end.DB_URL || "mongodb://localhost:27017/yelp-camp";
+// const uri = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
 
-mongoose.connect(dbUrl)
+//elemina esta linea
+const uri = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
+
+mongoose.connect(uri)
   .then(() => {
     console.log("Mongo Connection Open!!!")
   })
@@ -84,7 +87,7 @@ app.use(
 const secret = process.env.SECRET || "thisshouldbeabettersecret!";
 
 const store = MongoStore.create ({
-  mongoUrl: dbUrl,
+  mongoUrl: uri,
   touchAfter: 24 * 60 * 60,
   crypto: {
     secret
