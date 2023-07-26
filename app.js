@@ -58,7 +58,7 @@ const reviewsRoutes = require("./routes/reviews");
 
 //elemina esta linea
 // const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
-const dbUrl = process.env.DB_URL || "mongodb://localhost:27017/yelp-camp";
+const dbUrl = process.env.DB_URL;
 
 
 mongoose.connect(dbUrl)
