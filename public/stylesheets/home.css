@@ -16,6 +16,7 @@ body {
   color: rgba(255,255,255,0.5);
   margin-left: 1rem;
   border-bottom: 0.25rem solid transparent;
+  font-size: 1rem;
 }
 
 .nav-link:hover {
@@ -33,30 +34,27 @@ body {
   background-color: #fff;
   border-color: #fff;
   text-shadow: none;
-  font-size: 2rem;
+  font-size: 1rem;
   font-weight: bold;
-  padding: 0.8rem 1.5rem;
+  padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   text-decoration: none;
 }
 
 .title {
-  margin-bottom: 5rem;
-  font-size: 3rem;
+  margin-bottom: 2rem;
+  font-size: 2rem;
 }
 
 .navbar-brand  {
-  font-size: 2rem;
-
-}
-.nav-link {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
 .lead {
-  font-size: 1.75rem;
-  margin-bottom: 12rem;
+  font-size: 1rem;
+  margin-bottom: 6rem;
 }
+
 .copyright {
-  font-size: 1.75rem;
+  font-size: 1rem;
 }

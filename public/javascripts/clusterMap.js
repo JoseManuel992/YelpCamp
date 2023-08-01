@@ -4,8 +4,8 @@ const map = new mapboxgl.Map({
   container: 'cluster-map',
   // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
   style: 'mapbox://styles/mapbox/outdoors-v12',
-  center: [-103.5917, 40.6699],
-  zoom: 3
+  center: [-0.118092, 51.509865],
+  zoom: 6
 });
 
 map.addControl(new mapboxgl.NavigationControl());
