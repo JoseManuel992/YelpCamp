@@ -9,9 +9,37 @@ const upload = multer({ storage });
 
 const Campground = require('../model/campground');
 
-router.route('/')
-    .get(catchAsync(campgrounds.index))
-    .post(isLoggedIn, upload.array('image'), validateCampground, catchAsync(campgrounds.createCampground))
+router.get('/', catchAsync(async (req, res) => {
+  const perPage = 10; // Number of campgrounds per page
+  const page = req.query.page || 1; // Get the page number from query parameters
+
+  try {
+    // Fetch paginated campgrounds from the database
+    const paginatedCampgrounds = await Campground.find({})
+    .skip((perPage * page) - perPage)
+    .limit(perPage);
+
+    const allCampgrounds = await Campground.find({}); // Fetch all campgrounds for the cluster map
+
+    // Count all campgrounds to calculate total pages
+    const campgroundsCount = await Campground.countDocuments();
+    const totalPages = Math.ceil(campgroundsCount / perPage);
+
+    res.render('campgrounds/index', {
+      campgrounds: paginatedCampgrounds,
+      allCampgrounds,
+      currentPage: page,
+      totalPages,
+    });
+  } catch (err) {
+    console.error('Error fetching paginated campgrounds:', err);
+    // Handle the error appropriately, e.g., render an error page.
+    res.render('error', { err });
+  }
+}))
+
+
+router.post('/', isLoggedIn, upload.array('image'), validateCampground, catchAsync(campgrounds.createCampground))
 
 
 router.get('/new', isLoggedIn, campgrounds.renderNewForm)

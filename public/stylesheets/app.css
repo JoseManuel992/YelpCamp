@@ -15,8 +15,10 @@
 }
 
 /* Set a fixed height for the images in the cards on the index and edit page*/
+
+
 .card-img-size-campground {
-  height: 14rem;
+  height: 16rem;
   width: 100%;
   object-fit: cover;
 }
@@ -26,7 +28,7 @@ h1 {
 }
 
 
-/* Button styles */
+/* add camping button index page */
 .button-add-campground {
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -43,7 +45,7 @@ h1 {
   margin-bottom: 5%;
 }
 
-/* Primary button styles */
+
 .button-add-campground, .button-add-campground:focus, .button-add-campground:active {
   color: #fff;
   background-color: #007bff;
@@ -51,7 +53,7 @@ h1 {
 
 }
 
-/* Hover and active states */
+
 .button-add-campground:hover {
   color: #fff;
   background-color: #0056b3;
