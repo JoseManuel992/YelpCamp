@@ -37,7 +37,7 @@
       </ul>
       <% if(currentUser && campground.author.equals(currentUser._id)){ %>
         <div class="card-body">
-          <a class="card-link btn btn-info" href="/campgrounds/<%= campground._id  %>/edit" class="card-link">Edit</a>
+          <a class="card-link btn btn-info text-white" href="/campgrounds/<%= campground._id  %>/edit" class="card-link">Edit</a>
           <form class="d-inline" action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
             <button class="btn btn-danger">Delete</button>
           </form>
@@ -82,7 +82,7 @@
             Looks good!
           </div>
         </div>
-        <button class="btn btn-success">Submit</button>
+        <button class="btn btn-info text-white">Submit</button>
       </form>
     <% } %>
     <!-- display the reviews -->
