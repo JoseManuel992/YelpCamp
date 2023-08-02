@@ -72,7 +72,7 @@ body {
 }
 
 /* Add media query for mobile devices */
-@media screen and (max-width: 576px) {
+@media (max-width: 576px) {
   .cover-container {
     max-width: 90vw;
   }
@@ -141,7 +141,7 @@ body {
     z-index: 9998; /* Make sure the background image is behind the navbar */
     transform: translateY(-100%) ;
     opacity: 0;
-    transition: transform 0.8s linear;
+    transition: transform 0.7s linear;
 
   }
 

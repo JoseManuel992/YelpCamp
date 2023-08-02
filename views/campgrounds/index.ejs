@@ -35,6 +35,11 @@
     <% const startPage = Math.max(currentPage - halfNumLinks, 1); %>
     <% const endPage = Math.min(startPage + numLinksToShow - 1, totalPages); %>
 
+    <!-- Add Previous link -->
+    <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+      <a class="page-link" href="?page=<%= currentPage - 1 %>" <% if (currentPage === 1) { %> tabindex="-1" aria-disabled="true" <% } %>>&laquo; Previous</a>
+    </li>
+
     <% if (startPage > 1) { %>
       <li class="page-item">
         <a class="page-link" href="?page=1">1</a>
@@ -62,6 +67,12 @@
         <a class="page-link" href="?page=<%= totalPages %>"><%= totalPages %></a>
       </li>
     <% } %>
+
+    <!-- Add Next link -->
+    <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+      <a id="nextLink" class="page-link" href="<%= currentPage === totalPages ? '#' : '?page=' + Math.min(totalPages, parseInt(currentPage) + 1) %>"> Next &raquo; </a>
+    </li>
+
   </ul>
 </nav>
 
@@ -69,5 +80,21 @@
 <script>
   const mapToken = "<%-process.env.MAPBOX_TOKEN %>";
   const campgrounds = { features: <%- JSON.stringify(allCampgrounds) %> }
+
+    // JavaScript event handler to prevent default behavior when "Next" link is clicked on the last page
+  const nextLink = document.getElementById('nextLink');
+  if (nextLink) {
+    nextLink.addEventListener('click', (event) => {
+      // Parse currentPage and totalPages as integers before the comparison
+      const currentPage = parseInt("<%= currentPage %>");
+      const totalPages = parseInt("<%= totalPages %>");
+
+      // If the current page is the last page, prevent the default behavior (page refresh)
+      if (currentPage === totalPages) {
+        event.preventDefault();
+      }
+    });
+  }
+
 </script>
 <script src="/javascripts/clusterMap.js"></script>
