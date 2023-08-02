@@ -102,13 +102,13 @@ body {
     transform: translateY(-100%);/* Inicialmente, oculta el navbar fuera de la pantalla */
   }
 
-  .register{
+  /* .register{
     margin-bottom: 23.2rem;
   }
 
   .logout{
     margin-bottom: 25.5rem;
-  }
+  } */
 
 
 /* this is to indicate that the navbar opens from top to bottom */
