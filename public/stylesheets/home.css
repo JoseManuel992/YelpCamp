@@ -1,60 +1,170 @@
-body {
-  height: 100vh;
-  background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
-  url("https://images.unsplash.com/photo-1465056836041-7f43ac27dcb5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80");
-  background-size: cover;
-  background-position: center;
-  text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.5);
-}
-.cover-container {
-  max-width: 60vw;
-}
-.nav-link {
-  padding: 0.25rem 0;
-  font-weight: 700;
-  color: rgba(255,255,255,0.5);
-  margin-left: 1rem;
-  border-bottom: 0.25rem solid transparent;
-  font-size: 1rem;
+
+  body {
+    height: 100vh;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+    url("https://images.unsplash.com/photo-1465056836041-7f43ac27dcb5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2071&q=80");
+    background-size: cover;
+    background-position: center;
+    text-shadow: 0 0.05rem 0.1rem rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 5rem rgba(0, 0, 0, 0.5);
+  }
+  .cover-container {
+    max-width: 80vw;
+  }
+  .nav-link {
+    padding: 0.25rem 0;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    margin-left: 1rem;
+    border-bottom: 0.25rem solid transparent;
+    font-size: 1rem;
+  }
+
+  .nav-link:hover {
+    color: rgba(255,255,255,0.5);
+    border-bottom-color: rgba(255,255,255,0.5);
+  }
+
+  .nav-link.active {
+    color: white;
+    border-bottom-color: white;
+  }
+
+  .button {
+    color: #333;
+    background-color: #fff;
+    border-color: #fff;
+    text-shadow: none;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+  }
+
+  .title {
+    margin-bottom: 2rem;
+    font-size: 2rem;
+  }
+
+  .navbar-brand  {
+    font-size: 1.2rem;
+  }
+
+  .lead {
+    font-size: 1rem;
+    margin-bottom: 6rem;
+  }
+
+  .copyright {
+    font-size: 1rem;
+  }
+
+
+
+
+/* Add media query for tablet devices */
+@media screen and (max-width: 780px) {
+  .cover-container {
+    max-width: 80vw;
+  }
+
+
 }
 
-.nav-link:hover {
-  color: rgba(255,255,255,0.5);
-  border-bottom-color: rgba(255,255,255,0.5);
-}
+/* Add media query for mobile devices */
+@media screen and (max-width: 576px) {
+  .cover-container {
+    max-width: 90vw;
+  }
 
-.nav-link.active {
-  color: white;
-  border-bottom-color: white;
-}
+  .navbar-toggler-icon {
+    font-size: 1rem; /* Adjust the font-size to make the toggler icon smaller */
+  }
 
-.button {
-  color: #333;
-  background-color: #fff;
-  border-color: #fff;
-  text-shadow: none;
-  font-size: 1rem;
-  font-weight: bold;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  text-decoration: none;
-}
 
-.title {
-  margin-bottom: 2rem;
-  font-size: 2rem;
-}
 
-.navbar-brand  {
-  font-size: 1.2rem;
-}
+/* ---- lets make some styling when we open the navbar ---- */
 
-.lead {
-  font-size: 1rem;
-  margin-bottom: 6rem;
-}
+  /* Agrega una animación y css style para el colapso del navbar cuando se abra */
+  .navbar-collapse {
+    animation: slideInRight 0.3s ease forwards;
+    position: fixed; /* Agrega posicionamiento fijo para superponer el navbar */
+    top: 0; /* Ajusta la posición superior según tus preferencias */
+    bottom: 0; /* Ajusta la posición inferior según tus preferencias */
+    right: 0; /* Ajusta la posición derecha según tus preferencias */
+    width: 100vw; /* Ajusta el ancho según tus preferencias */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)),
+    url("    https://images.unsplash.com/photo-1470246973918-29a93221c455?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80");
+    background-size: cover;
+    background-position: center;
+    z-index: 9999; /* Asegura que el navbar esté por encima de todo el contenido */
+    transform: translateY(-100%);/* Inicialmente, oculta el navbar fuera de la pantalla */
+  }
 
-.copyright {
-  font-size: 1rem;
+  /* esto es para indicar que el navbar se abre de arriba a bajo */
+
+  @keyframes slideInRight {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  /* vamos a crear un button para volver a colapsar el navbar */
+  .close-button {
+    position: absolute;
+    top: 0.75Srem;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    z-index: 9999;
+    color: white;
+  }
+
+/*---- until here is navbar opening styling---- */
+
+
+  .active {
+    margin-top: 5rem;
+  }
+
+  .nav-link {
+    padding: 0.25rem 0;
+    font-weight: 700;
+    margin-left: 0%;
+  }
+
+
+
+  .title {
+    margin-bottom: 1rem;
+    font-size: 2rem;
+  }
+
+  .navbar-brand  {
+    font-size: 1.2rem;
+  }
+
+  .lead {
+    font-size: 0.85rem;
+    margin-bottom: 4rem;
+  }
+
+  .button {
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    text-decoration: none;
+  }
+
+  .copyright {
+    margin-top: 4rem;
+    font-size: 0.85rem;
+  }
 }
