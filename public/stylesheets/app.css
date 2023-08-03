@@ -89,3 +89,16 @@ h1 {
   width: 100%; /* Make the width of the image fill its container */
   object-fit: cover; /* Scale the image while maintaining aspect ratio */
 }
+
+.card {
+  border-radius: 0 0 0.4rem 0.4rem;
+
+
+
+
+
+/* Add media query for mobile devices */
+@media (max-width: 576px) {
+
+
+}
