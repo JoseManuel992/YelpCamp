@@ -27,7 +27,7 @@
     </div>
 
 
-    <div class="card mb-3">
+    <div class="card CampgroundCardShowPage">
       <div class="card-body">
         <h5 class="card-title"><%= campground.title  %></h5>
         <p class="card-text"><%= campground.description  %></p>
@@ -63,7 +63,7 @@
             <%= messages.error %>
           </div>
           <% } %>
-        <form action="/campgrounds/<%= campground._id  %>/reviews" method="POST" class="mb-3 validated-form" novalidate>
+        <form action="/campgrounds/<%= campground._id  %>/reviews" method="POST" class="validated-form" novalidate>
           <fieldset class="starability-heartbeat">
             <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
             <input type="radio" id="first-rate1" name="review[rating]" value="1" />
@@ -78,19 +78,19 @@
             <label for="first-rate5" title="Amazing">5 stars</label>
           </fieldset>
       </div>
-        <div class="mb-3">
+        <div class=" reviewTextCard">
           <label class="form-label" for="body">Review Text</label>
           <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required></textarea>
           <div class="valid-feedback">
             Looks good!
           </div>
         </div>
-        <button class="btn btn-info text-white">Submit</button>
+        <button class="btn btn-info text-white btnSubmit">Submit</button>
       </form>
     <% } %>
     <!-- display the reviews -->
     <% for (let review of campground.reviews) { %>
-      <div class="card mb-3">
+      <div class="card  reviewCard">
         <div class="card-body">
           <h5 class="card-title">
             <%= review.author.username  %>
