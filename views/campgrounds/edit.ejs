@@ -5,7 +5,7 @@
 <div class="row">
   <h1 class="text-center">Edit Campground</h1>
   <!-- I put the form in the middle -->
-  <div class="col-6 offset-md-3">
+  <div class="col-md-6 offset-md-3 editFormCard">
     <form action="/campgrounds/<%= campground._id %>?_method=PUT" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
       <div class="mb-3">
         <label class="form-lable" for="title">Title</label>
@@ -53,7 +53,7 @@
             <div class="col-md-6 mb-3 ">
               <img src="<%= img.thumbnail %>" class="img-thumbnail card-img-size-campground" alt="">
               <div class="form-check-inline">
-                <input type="checkbox" id="image-<%= i %>" name="deleteImages[]" value="<%= img.filename %>">
+                <input type="checkbox" class="checkbox-delete-input" id="image-<%= i %>" name="deleteImages[]" value="<%= img.filename %>">
                 <label class="form-check-label" for="image-<%= i %>">Delete?</label>
               </div>
             </div>

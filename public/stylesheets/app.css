@@ -1,4 +1,4 @@
-/* styling index page */
+/* ..........styling index page.............. */
 
 #cluster-map {
   width: 100%;
@@ -76,7 +76,9 @@ h1 {
 
 }
 
-/* styling show page */
+
+
+/* .......styling show page......... */
 
 #map {
   width: 100%;
@@ -138,4 +140,24 @@ h2{
     height: 15rem;
   }
 
+}
+
+
+/* .............styling the edit page for a specific campground................... */
+
+/* Add media query for mobile devices */
+
+.editFormCard{
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 576px) {
+
+  /* making bigger size the checkbox and the label to delete fotos on the edit form */
+  .checkbox-delete-input {
+    transform: scale(1.2);
+  }
+  .form-check-label {
+    font-size: 1.2rem;
+  }
 }
