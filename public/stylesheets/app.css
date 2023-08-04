@@ -92,7 +92,7 @@ h1 {
 
 .card {
   border-radius: 0 0 0.4rem 0.4rem;
-
+}
 
 
 
@@ -100,5 +100,11 @@ h1 {
 /* Add media query for mobile devices */
 @media (max-width: 576px) {
 
+  .carousel-inner{
+    height: 16rem;
+  }
+  .fixed-size-image{
+    height: 16rem;
+  }
 
 }
