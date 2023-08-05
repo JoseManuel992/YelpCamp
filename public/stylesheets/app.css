@@ -76,7 +76,7 @@ h1 {
   /* pagination for phone */
 
    /* Pagination styles for mobile devices */
-   .pagination {
+   /* .pagination {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -92,7 +92,7 @@ h1 {
 
   .page-link {
     font-size: 0.74rem; /* Adjust the size as needed */
-  }
+  /* } */
 
 
 }

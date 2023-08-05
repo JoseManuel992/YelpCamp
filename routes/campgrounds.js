@@ -13,13 +13,15 @@ router.get('/', catchAsync(async (req, res) => {
   const perPage = 10; // Number of campgrounds per page
   const page = Math.max(req.query.page ? parseInt(req.query.page) : 1, 1); //Get the page number from query parameters and Ensure the page is at least 1
   const isPhoneSize = req.query.isPhoneSize === 'true';
-  const numLinksToShow = isPhoneSize ? 3 : 5;
+  const isJson = req.query.isJson === 'true'; // Add this line
 
-   // Check if the skip value is negative and redirect to the first page if so
-   const skipValue = (perPage * page) - perPage;
-   if (skipValue < 0) {
-     return res.redirect('/?page=1'); // Redirect to the first page if skip is negative
-   }
+  // Check if the skip value is negative and redirect to the first page if so
+  const skipValue = (perPage * page) - perPage;
+  if (skipValue < 0) {
+    return res.redirect('/?page=1'); // Redirect to the first page if skip is negative
+  }
+
+
 
   try {
     // Fetch paginated campgrounds from the database
@@ -33,13 +35,16 @@ router.get('/', catchAsync(async (req, res) => {
     const campgroundsCount = await Campground.countDocuments();
     const totalPages = Math.ceil(campgroundsCount / perPage);
 
+    // Check if the response should be in JSON format
+    if (isJson) {
+      return res.json({ campgrounds: paginatedCampgrounds, totalPages }); // Return JSON response
+    }
 
     res.render('campgrounds/index', {
       campgrounds: paginatedCampgrounds,
       allCampgrounds,
       currentPage: page,
       totalPages,
-      numLinksToShow,
       isPhoneSize
     });
   } catch (err) {
