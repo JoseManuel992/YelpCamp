@@ -100,25 +100,82 @@
       const appendCampgrounds = (campgrounds) => {
         const container = document.getElementById('campgroundsContainer');
         campgrounds.forEach(campground => {
+          console.log(campground);
           // Create new campground element and append to the container
           const item = document.createElement('div');
-          item.innerHTML = campground.name;
+          item.className = "card mb-3";
+
+
+
+          const image = document.createElement('img');
+        image.className = 'card-img-top';
+        image.style.height = '16rem';
+        image.style.width = '100%';
+        image.style.objectFit = 'cover';
+        if (campground.images && campground.images.length > 0) {
+          image.src = campground.images[0].url; // First image URL
+          item.appendChild(image);
+        }
+
+          const cardBody = document.createElement('div');
+          cardBody.className = "card-body";
+
+          const title = document.createElement('h5');
+          title.className = "card-title";
+          title.textContent = campground.title;
+
+          const description = document.createElement('p');
+          description.className = "card-text";
+          description.textContent = campground.description;
+
+          const location = document.createElement('p');
+          location.className = 'card-text text-muted';
+          location.textContent = `Location: ${campground.location}`;
+          location.style.marginBottom = '1rem';
+
+
+
+          const btn = document.createElement('a');
+          btn.className = "btn btn-primary";
+          btn.href = "/campgrounds/" + campground._id;
+          btn.textContent = "View " + campground.title;
+
+          cardBody.appendChild(title);
+          cardBody.appendChild(description);
+          cardBody.appendChild(location);
+          cardBody.appendChild(btn);
+
+
+          item.appendChild(cardBody);
           container.appendChild(item);
         });
       };
 
-      // Infinite scroll listener
-      window.onscroll = async () => {
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-          if (currentPage < totalPages) {
-            currentPage++;
-            const url = `/campgrounds?page=${currentPage}&isJson=true`;
-            const response = await fetch(url);
-            const data = await response.json();
-            appendCampgrounds(data.campgrounds);
-          }
+
+      let page = 1;  // Keeps track of the current page
+
+      const loadCampgrounds = async () => {
+        page += 1;
+        const response = await fetch(`/campgrounds?isPhoneSize=true&isJson=true&page=${page}`);
+        const { campgrounds, totalPages } = await response.json();
+
+        appendCampgrounds(campgrounds);
+
+        if (page >= totalPages) {
+          window.removeEventListener('scroll', handleScroll);  // If we've loaded all pages, stop trying to load more
         }
       };
+
+
+      // Infinite scroll listener
+      const handleScroll = () => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+          loadCampgrounds();
+        }
+      };
+
+      window.addEventListener('scroll', handleScroll);
+
     }
   });
 
