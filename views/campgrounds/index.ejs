@@ -29,6 +29,7 @@
       </div>
   <% } %>
 </div>
+
 <% if (!isPhoneSize) { %>
     <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center">
@@ -80,6 +81,8 @@
 <% } %>
 
 
+<div id="loading" style="display: none;">Loading...</div>
+
 <script>
   const mapToken = "<%-process.env.MAPBOX_TOKEN %>";
   const campgrounds = { features: <%- JSON.stringify(allCampgrounds) %> }
@@ -106,16 +109,15 @@
           item.className = "card mb-3";
 
 
-
           const image = document.createElement('img');
-        image.className = 'card-img-top';
-        image.style.height = '16rem';
-        image.style.width = '100%';
-        image.style.objectFit = 'cover';
-        if (campground.images && campground.images.length > 0) {
-          image.src = campground.images[0].url; // First image URL
-          item.appendChild(image);
-        }
+          image.className = 'card-img-top';
+          image.style.height = '16rem';
+          image.style.width = '100%';
+          image.style.objectFit = 'cover';
+          if (campground.images && campground.images.length > 0) {
+            image.src = campground.images[0].url; // First image URL
+            item.appendChild(image);
+          }
 
           const cardBody = document.createElement('div');
           cardBody.className = "card-body";
@@ -153,16 +155,25 @@
 
 
       let page = 1;  // Keeps track of the current page
+      const loadingElement = document.getElementById('loading');
 
       const loadCampgrounds = async () => {
-        page += 1;
-        const response = await fetch(`/campgrounds?isPhoneSize=true&isJson=true&page=${page}`);
-        const { campgrounds, totalPages } = await response.json();
-
-        appendCampgrounds(campgrounds);
-
-        if (page >= totalPages) {
-          window.removeEventListener('scroll', handleScroll);  // If we've loaded all pages, stop trying to load more
+        loadingElement.style.display = 'block'; // Show loading indicator
+        try {
+          page += 1;
+          const response = await fetch(`/campgrounds?isPhoneSize=true&isJson=true&page=${page}`);
+          if (!response.ok) {  // Check if response was successful
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const { campgrounds, totalPages } = await response.json();
+          appendCampgrounds(campgrounds);
+          if (page >= totalPages) {
+            window.removeEventListener('scroll', handleScroll);  // If we've loaded all pages, stop trying to load more
+          }
+        } catch (e) {
+          console.error('An error occurred while fetching campgrounds:', e);
+        } finally {
+          loadingElement.style.display = 'none'; // Hide loading indicator
         }
       };
 
