@@ -9,33 +9,52 @@ const upload = multer({ storage });
 
 const Campground = require('../model/campground');
 
-router.route('/')
-  .get(catchAsync(async (req, res) => {
-    const page = Math.max(req.query.page ? parseInt(req.query.page) : 1, 1); // Get page number from query parameters
-    const limit = 10; // Number of campgrounds per page
-    const skip = (page - 1) * limit; // Calculate the number of results to skip
+router.get('/', catchAsync(async (req, res) => {
+  const perPage = 10; // Number of campgrounds per page
+  const isPhoneSize = req.query.isPhoneSize === 'true';
+  const isJson = req.query.isJson === 'true';
 
-    // Fetch paginated campgrounds from the database
+  if (isPhoneSize && isJson) {
+    const skip = parseInt(req.query.skip) || 0; // Get skip from query parameters, default to 0
+    const limit = parseInt(req.query.limit) || 10; // Get limit from query parameters, default to 10
+
+    // Fetch campgrounds from database with limit and skip
     const campgrounds = await Campground.find().skip(skip).limit(limit);
 
-    // Fetch all campgrounds for the cluster map
-    const allCampgrounds = await Campground.find();
+    return res.json({ campgrounds });
+  } else {
+    const page = req.query.page || 1; // Get the page number from query parameters
 
-    // Count all campgrounds to calculate total pages
-    const totalCampgrounds = await Campground.countDocuments();
-    const totalPages = Math.ceil(totalCampgrounds / limit);
+    try {
+      // Fetch paginated campgrounds from the database
+      const paginatedCampgrounds = await Campground.find({})
+        .skip((perPage * page) - perPage)
+        .limit(perPage);
 
-    // If it's a phone size, and isJson is true, return JSON response
-    const isPhoneSize = req.query.isPhoneSize === 'true';
-    const isJson = req.query.isJson === 'true';
-    if (isPhoneSize && isJson) {
-      return res.json({ campgrounds, totalPages });
+      const allCampgrounds = await Campground.find({}); // Fetch all campgrounds for the cluster map
+
+      // Count all campgrounds to calculate total pages
+      const campgroundsCount = await Campground.countDocuments();
+      const totalPages = Math.ceil(campgroundsCount / perPage);
+
+      res.render('campgrounds/index', {
+        campgrounds: paginatedCampgrounds,
+        allCampgrounds,
+        currentPage: page,
+        totalPages,
+        isPhoneSize
+      });
+    } catch (err) {
+      console.error('Error fetching paginated campgrounds:', err);
+      // Handle the error appropriately, e.g., render an error page.
+      res.render('error', { err });
     }
+  }
+}));
 
-    // Render the index page with paginated campgrounds
-    res.render('campgrounds/index', { campgrounds, allCampgrounds, currentPage: page, totalPages, isPhoneSize });
-  }))
-  .post(isLoggedIn, upload.array('image'), validateCampground, catchAsync(campgrounds.createCampground));
+
+router.post('/', isLoggedIn, upload.array('image'), validateCampground, catchAsync(campgrounds.createCampground))
+
 
 router.get('/new', isLoggedIn, campgrounds.renderNewForm)
 
