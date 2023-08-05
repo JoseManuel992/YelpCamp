@@ -11,7 +11,15 @@ const Campground = require('../model/campground');
 
 router.get('/', catchAsync(async (req, res) => {
   const perPage = 10; // Number of campgrounds per page
-  const page = req.query.page || 1; // Get the page number from query parameters
+  const page = Math.max(req.query.page ? parseInt(req.query.page) : 1, 1); //Get the page number from query parameters and Ensure the page is at least 1
+  const isPhoneSize = req.query.isPhoneSize === 'true';
+  const numLinksToShow = isPhoneSize ? 3 : 5;
+
+   // Check if the skip value is negative and redirect to the first page if so
+   const skipValue = (perPage * page) - perPage;
+   if (skipValue < 0) {
+     return res.redirect('/?page=1'); // Redirect to the first page if skip is negative
+   }
 
   try {
     // Fetch paginated campgrounds from the database
@@ -25,17 +33,21 @@ router.get('/', catchAsync(async (req, res) => {
     const campgroundsCount = await Campground.countDocuments();
     const totalPages = Math.ceil(campgroundsCount / perPage);
 
+
     res.render('campgrounds/index', {
       campgrounds: paginatedCampgrounds,
       allCampgrounds,
       currentPage: page,
       totalPages,
+      numLinksToShow,
+      isPhoneSize
     });
   } catch (err) {
     console.error('Error fetching paginated campgrounds:', err);
     // Handle the error appropriately, e.g., render an error page.
     res.render('error', { err });
   }
+
 }))
 
 

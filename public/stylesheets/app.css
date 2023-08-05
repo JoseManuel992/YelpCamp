@@ -73,6 +73,27 @@ h1 {
     margin-bottom: 3rem;
   }
 
+  /* pagination for phone */
+
+   /* Pagination styles for mobile devices */
+   .pagination {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .page-item {
+    margin: 0.25rem;
+  }
+
+  .page-link {
+    padding: 0.25rem 0.5rem;
+  }
+
+  .page-link {
+    font-size: 0.74rem; /* Adjust the size as needed */
+  }
+
 
 }
 
@@ -178,4 +199,12 @@ h2{
   }
 
 
+}
+
+
+/* .............styling the New Form page to create a campground................... */
+
+
+.newCampgroundFormContainer{
+  margin-bottom: 3rem;
 }
