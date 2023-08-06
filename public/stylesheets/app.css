@@ -114,9 +114,32 @@ h1 {
     transition: background 0.3s;
 }
 
-#showMoreButton:hover {
-    background-color: rgba(235, 235, 235, 0.916);
-}
+  #showMoreButton:hover {
+      background-color: rgba(235, 235, 235, 0.916);
+  }
+
+
+
+
+  /* Add a new CSS animation for revealing the cards */
+  @keyframes revealAnimation {
+    0% {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .card {
+    /* Add the CSS animation to the cards */
+    animation: revealAnimation 2s ease;
+  }
+
+
+
 
 
 }

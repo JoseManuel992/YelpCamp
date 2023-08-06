@@ -98,9 +98,6 @@
   const mapToken = "<%-process.env.MAPBOX_TOKEN %>";
   const campgrounds = { features: <%- JSON.stringify(allCampgrounds) %> }
 
-
-
-
   document.addEventListener('DOMContentLoaded', () => {
 
      // JavaScript event handler to prevent default behavior when "Previous" link is clicked on the first page
@@ -122,8 +119,6 @@
           previousLink.classList.remove('disabled');
       }
     }
-
-
 
     // JavaScript event handler to prevent default behavior when "Next" link is clicked on the last page
     const nextLink = document.getElementById('nextLink');
@@ -153,12 +148,31 @@
       const perPage = 10; // Number of campgrounds per fetch request
       document.querySelector('.pagination').style.display = 'none'; // Hide pagination
 
+      // Function to reveal each campground card with a delay
+      let index = 0; // Define index here
+      const delay = 100; // Adjust the delay value as needed (100ms here)
+
+      const revealNextCampground = (container, delay)  => {
+        const campground = campgrounds[index];
+        if (!campground) {
+          // All campgrounds are revealed, show the container
+          container.style.display = 'block';
+          return;
+        }
+
+        const item = container.children[index];
+        item.classList.remove('hidden'); // Reveal the campground card
+        item.classList.add('reveal'); // Add the "reveal" class to gradually make the card visible
+
+        index++; // Move to the next campground
+        setTimeout(revealNextCampground, delay); // Schedule the next reveal
+
+      };
 
 
       // Function to append new campgrounds
       const appendCampgrounds = (campgrounds) => {
         const container = document.getElementById('campgroundsContainer');
-
 
         campgrounds.forEach(campground => {
           // console.log(campground);
@@ -208,12 +222,16 @@
 
           item.appendChild(cardBody);
           container.appendChild(item);
+
+
         });
+
+
 
       };
 
 
-      const loadCampgrounds = async () => {
+      const loadCampgrounds = async (container) => {
       console.log('loadCampgrounds called');
 
 
@@ -233,14 +251,19 @@
           if (campgrounds.length < perPage) {
             document.getElementById('showMoreButton').disabled = true;
           }
+          // Call revealNextCampground inside the loadCampgrounds function, after appending campgrounds
+           revealNextCampground(container, delay);
         } catch (error) {
           console.error('An error occurred while fetching the campgrounds:', error);
         }
       };
 
-      document.getElementById('showMoreButton').addEventListener('click', loadCampgrounds);
-
-      loadCampgrounds(); // Load the initial set of campgrounds
+      document.getElementById('showMoreButton').addEventListener('click', () => {
+        const container = document.getElementById('campgroundsContainer');
+        loadCampgrounds(container);
+      });
+      loadCampgrounds(document.getElementById('campgroundsContainer')); // Load the initial set of campgrounds
+      revealNextCampground(document.getElementById('campgroundsContainer'), delay);
     }
   });
 
