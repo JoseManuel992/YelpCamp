@@ -1,9 +1,8 @@
-<% layout("./layouts/boilerplate") %>
 
+<% layout("./layouts/boilerplate") %>
 
 <div id="cluster-map"></div>
 <h1>All Campgrounds</h1>
-
 
 <div>
   <a href="/campgrounds/new" class=" button-add-campground">Add Campground</a>
@@ -40,7 +39,6 @@
   <button id="showMoreButton">Show More</button>
 </div>
 
-
 <nav aria-label="Page navigation">
   <ul class="pagination justify-content-center">
     <% const numLinksToShow = 5; // Number of page links to show at a time %>
@@ -52,8 +50,6 @@
     <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
       <a id="previousLink" class="page-link" href="<%= parseInt(currentPage) === 1 ? '#' : '?page=' + (currentPage - 1) %>" <% if (parseInt(currentPage) === 1) { %> tabindex="-1" aria-disabled="true" <% } %>>&laquo; Previous</a>
     </li>
-
-
 
     <% if (startPage > 1) { %>
       <li class="page-item">
@@ -93,14 +89,13 @@
 
 
 
-
 <script>
   const mapToken = "<%-process.env.MAPBOX_TOKEN %>";
   const campgrounds = { features: <%- JSON.stringify(allCampgrounds) %> }
 
   document.addEventListener('DOMContentLoaded', () => {
 
-     // JavaScript event handler to prevent default behavior when "Previous" link is clicked on the first page
+    // JavaScript event handler to prevent default behavior when "Previous" link is clicked on the first page
     const previousLink = document.getElementById('previousLink');
     if (previousLink) {
       // Parse currentPage as integer before the comparison
@@ -141,10 +136,9 @@
       }
     }
 
-
     // Check if window size is less or equal to 576px (phone size)
     if (window.innerWidth <= 576) {
-      let fetchedCampgrounds = 0; // Keeps track of the number of fetched campgrounds
+      let fetchedCampgrounds = 10; // Keeps track of the number of fetched campgrounds
       const perPage = 10; // Number of campgrounds per fetch request
       document.querySelector('.pagination').style.display = 'none'; // Hide pagination
 
@@ -152,7 +146,7 @@
       let index = 0; // Define index here
       const delay = 100; // Adjust the delay value as needed (100ms here)
 
-      const revealNextCampground = (container, delay)  => {
+      const revealNextCampground = (container, delay) => {
         const campground = campgrounds[index];
         if (!campground) {
           // All campgrounds are revealed, show the container
@@ -169,7 +163,6 @@
 
       };
 
-
       // Function to append new campgrounds
       const appendCampgrounds = (campgrounds) => {
         const container = document.getElementById('campgroundsContainer');
@@ -179,7 +172,6 @@
           // Create new campground element and append to the container
           const item = document.createElement('div');
           item.className = "card mb-3";
-
 
           const image = document.createElement('img');
           image.className = 'card-img-top';
@@ -207,8 +199,6 @@
           location.textContent = `Location: ${campground.location}`;
           location.style.marginBottom = '1rem';
 
-
-
           const btn = document.createElement('a');
           btn.className = "btn btn-primary";
           btn.href = "/campgrounds/" + campground._id;
@@ -219,23 +209,21 @@
           cardBody.appendChild(location);
           cardBody.appendChild(btn);
 
-
           item.appendChild(cardBody);
           container.appendChild(item);
 
-
         });
-
-
 
       };
 
-
       const loadCampgrounds = async (container) => {
-      console.log('loadCampgrounds called');
-
+        console.log('loadCampgrounds called');
 
         try {
+          // Calculate the number of campgrounds to skip (first 10 campgrounds)
+          const skip = fetchedCampgrounds;
+
+          // Fetch campgrounds with the "skip" parameter to skip the initial campgrounds
           const response = await fetch(`/campgrounds?isJson=true&skip=${fetchedCampgrounds}&limit=${perPage}`);
 
           if (!response.ok) {
@@ -251,8 +239,7 @@
           if (campgrounds.length < perPage) {
             document.getElementById('showMoreButton').disabled = true;
           }
-          // Call revealNextCampground inside the loadCampgrounds function, after appending campgrounds
-           revealNextCampground(container, delay);
+
         } catch (error) {
           console.error('An error occurred while fetching the campgrounds:', error);
         }
@@ -262,11 +249,13 @@
         const container = document.getElementById('campgroundsContainer');
         loadCampgrounds(container);
       });
-      loadCampgrounds(document.getElementById('campgroundsContainer')); // Load the initial set of campgrounds
+
+      // loadCampgrounds(document.getElementById('campgroundsContainer'));  Load the initial set of 10 campgrounds autmatically to the index page,
+      // I comment it out if I want to have this but I prefer to load each time I press the button show more
+
       revealNextCampground(document.getElementById('campgroundsContainer'), delay);
     }
   });
-
 
 </script>
 

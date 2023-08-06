@@ -18,7 +18,7 @@ router.get('/', catchAsync(async (req, res) => {
 
   // Add this check to ensure skip is not less than 0
   if (skip < 0) {
-    skip = 1;
+    skip = 0;
   }
 
   try {
@@ -43,7 +43,7 @@ router.get('/', catchAsync(async (req, res) => {
       allCampgrounds,
       currentPage: page,
       totalPages,
-      isPhoneSize,
+      isPhoneSize
     });
   } catch (err) {
     console.error('Error fetching paginated campgrounds:', err);
