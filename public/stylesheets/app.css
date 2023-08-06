@@ -55,6 +55,26 @@ h1 {
   border-color: #0056b3;
 }
 
+#showMoreCamgroundsTitle, #showMoreButton {
+  display: none;
+}
+
+#showMoreContainer {
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+  margin-bottom: 3rem;
+}
+
+
+.disabled {
+  pointer-events: none; /* Prevents clicking on the button */
+  color: grey; /* Changes the color of the button */
+}
+
+
+
+
 
 /* Add media query for mobile devices */
 @media (max-width: 576px) {
@@ -73,26 +93,30 @@ h1 {
     margin-bottom: 3rem;
   }
 
-  /* pagination for phone */
 
-   /* Pagination styles for mobile devices */
-   /* .pagination {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+  #showMoreCamgroundsTitle{
+    display: block;
+    text-align: center;
   }
 
-  .page-item {
-    margin: 0.25rem;
-  }
+  #showMoreButton {
+    color: black;
+    background-color: white;
+    border-radius: 1rem;
+    border: 2px solid black;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1rem;
+    margin: 4px 2px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
 
-  .page-link {
-    padding: 0.25rem 0.5rem;
-  }
-
-  .page-link {
-    font-size: 0.74rem; /* Adjust the size as needed */
-  /* } */
+#showMoreButton:hover {
+    background-color: rgba(235, 235, 235, 0.916);
+}
 
 
 }
