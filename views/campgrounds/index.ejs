@@ -286,18 +286,30 @@
         }
       };
 
+
+
       const showMoreButton = document.getElementById('showMoreButton');
 
-      showMoreButton.addEventListener('click', async () => {
-        showMoreButton.classList.add('clicked'); // Add "clicked" class
-
-        const container = document.getElementById('campgroundsContainer');
-        await loadCampgrounds(container);
+      // For touch devices
+      showMoreButton.addEventListener('touchstart', () => {
+          showMoreButton.classList.add('clicked');
+      });
+      showMoreButton.addEventListener('touchend', () => {
+          showMoreButton.classList.remove('clicked');
       });
 
-      // Event listener to remove "clicked" class when touch is finished on the button
-      showMoreButton.addEventListener('touchend', () => {
-        showMoreButton.classList.remove('clicked');
+      // For mouse devices
+      showMoreButton.addEventListener('mousedown', () => {
+          showMoreButton.classList.add('clicked');
+      });
+      showMoreButton.addEventListener('mouseup', () => {
+          showMoreButton.classList.remove('clicked');
+      });
+
+      // The function to load campgrounds
+      showMoreButton.addEventListener('click', async () => {
+          const container = document.getElementById('campgroundsContainer');
+          await loadCampgrounds(container);
       });
 
 
