@@ -43,6 +43,7 @@ router.get('/', catchAsync(async (req, res) => {
       allCampgrounds,
       currentPage: page,
       totalPages,
+      perPage,
       isPhoneSize
     });
   } catch (err) {
