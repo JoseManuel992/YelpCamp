@@ -112,7 +112,6 @@
     }
 
 
-
     // JavaScript event handler to prevent default behavior when "Previous" link is clicked on the first page
     const previousLink = document.getElementById('previousLink');
     if (previousLink) {
@@ -287,10 +286,20 @@
         }
       };
 
-      document.getElementById('showMoreButton').addEventListener('click', () => {
+      const showMoreButton = document.getElementById('showMoreButton');
+
+      showMoreButton.addEventListener('click', async () => {
+        showMoreButton.classList.add('clicked'); // Add "clicked" class
+
         const container = document.getElementById('campgroundsContainer');
-        loadCampgrounds(container);
+        await loadCampgrounds(container);
       });
+
+      // Event listener to remove "clicked" class when touch is finished on the button
+      showMoreButton.addEventListener('touchend', () => {
+        showMoreButton.classList.remove('clicked');
+      });
+
 
       // loadCampgrounds(document.getElementById('campgroundsContainer'));  Load the initial set of 10 campgrounds autmatically to the index page,
       // I comment it out if I want to have this but I prefer to load each time I press the button show more
