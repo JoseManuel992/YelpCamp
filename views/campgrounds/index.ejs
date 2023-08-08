@@ -38,8 +38,8 @@
   <input type="hidden" id="totalPages" value="<%= totalPages %>">
   <input type="hidden" id="perPage" value="<%= perPage %>">
 
-  <button id="showMoreButton">Show More</button>
-  <button id="backToTopButton" style="display: none;">Back to the start</button>
+  <button id="showMoreButton" type="button" class="btn btn-light">Show More</button>
+  <button id="backToTopButton" style="display: none;" type="button" class="btn btn-light">Back to the start</button>
 </div>
 
 <nav aria-label="Page navigation">
@@ -290,26 +290,13 @@
 
       const showMoreButton = document.getElementById('showMoreButton');
 
-      // For touch devices
-      showMoreButton.addEventListener('touchstart', () => {
-          showMoreButton.classList.add('clicked');
-      });
-      showMoreButton.addEventListener('touchend', () => {
-          showMoreButton.classList.remove('clicked');
-      });
-
-      // For mouse devices
-      showMoreButton.addEventListener('mousedown', () => {
-          showMoreButton.classList.add('clicked');
-      });
-      showMoreButton.addEventListener('mouseup', () => {
-          showMoreButton.classList.remove('clicked');
-      });
 
       // The function to load campgrounds
       showMoreButton.addEventListener('click', async () => {
           const container = document.getElementById('campgroundsContainer');
           await loadCampgrounds(container);
+          // Blur the button to reset its state
+          showMoreButton.blur();
       });
 
 

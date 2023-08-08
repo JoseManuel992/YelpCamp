@@ -67,10 +67,6 @@ h1 {
 }
 
 
-.disabled {
-  pointer-events: none; /* Prevents clicking on the button */
-  color: grey; /* Changes the color of the button */
-}
 
 
 
@@ -100,8 +96,7 @@ h1 {
   }
 
   #showMoreButton {
-    color: black;
-    background-color: white;
+
     border-radius: 1rem;
     border: 2px solid black;
     padding: 1rem 1.5rem;
@@ -111,13 +106,13 @@ h1 {
     font-size: 1rem;
     margin: 4px 2px;
     cursor: pointer;
-    transition: background 0.3s;
-}
+
+  }
 
 
 
-  #showMoreButton.clicked {
-    background-color: rgba(235, 235, 235, 0.916);
+
+
 }
 
 
