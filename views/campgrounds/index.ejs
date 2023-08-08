@@ -34,6 +34,8 @@
 </div>
 
 <h2 id="showMoreCamgroundsTitle">Continue exploring Campgrounds</h2>
+<h2 id="TakeMeToTheTopTitle" style="display: none;">Take Me to the <br> Top of the Page</h2>
+
 <div id="campgroundsContainer">
   <input type="hidden" id="totalPages" value="<%= totalPages %>">
   <input type="hidden" id="perPage" value="<%= perPage %>">
@@ -106,6 +108,22 @@
     if (backToTopButton) {
       backToTopButton.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Clear any previously set inline styles
+        backToTopButton.removeAttribute('style');
+
+        backToTopButton.style.backgroundColor = '#f8f9fa';  // Directly set the button's background color after the click event
+
+        // Blur the button to reset its state
+        backToTopButton.blur();
+
+        // Add the class to override Bootstrap's active/focus styles
+        backToTopButton.classList.add('no-focus');
+
+        // Remove the class after a short delay
+        setTimeout(() => {
+          backToTopButton.classList.remove('no-focus');
+        }, 100);
       });
       backToTopButton.style.display = 'none';
 
@@ -275,10 +293,18 @@
             // If there are no more campgrounds, hide the "Show More" button and show the "Back to Top" button
             showMoreButton.style.display = 'none';
             backToTopButton.style.display = 'block';
+
+            // If there are no more campgrounds, hide the "Continue exploring Campgrounds" title and show the "Take me to the Top of the Page" title
+            showMoreCamgroundsTitle.style.display = 'none';
+            TakeMeToTheTopTitle.style.display = 'block';
           } else {
             // If there are more campgrounds, show the "Show More" button and hide the "Back to Top" button
             showMoreButton.style.display = 'block';
             backToTopButton.style.display = 'none';
+
+            // If there are more campgrounds, show the "Continue exploring Campgrounds" title and hide the "Take me to the Top of the Page" title
+            showMoreCamgroundsTitle.style.display = 'block';
+            TakeMeToTheTopTitle.style.display = 'none';
           }
 
         } catch (error) {
@@ -294,9 +320,24 @@
       // The function to load campgrounds
       showMoreButton.addEventListener('click', async () => {
           const container = document.getElementById('campgroundsContainer');
+
+          // Clear any previously set inline styles
+          showMoreButton.removeAttribute('style');
+
           await loadCampgrounds(container);
+
+          showMoreButton.style.backgroundColor = '#f8f9fa';  // Directly set the button's background color after the click event
+
           // Blur the button to reset its state
           showMoreButton.blur();
+
+          // Add the class to override Bootstrap's active/focus styles
+          showMoreButton.classList.add('no-focus');
+
+          // Remove the class after a short delay
+          setTimeout(() => {
+              showMoreButton.classList.remove('no-focus');
+          }, 100);
       });
 
 
