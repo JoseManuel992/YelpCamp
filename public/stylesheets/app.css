@@ -1,28 +1,5 @@
 /* ..........styling index page.............. */
 
-#cluster-map {
-  width: 100%;
-  height: 500px;
-}
-
-
-/* Set a fixed height for the images in the cards on the index and edit page*/
-
-.card-img-size-campground {
-  height: 16rem;
-  width: 100%;
-  object-fit: cover;
-}
-
-h1 {
-  margin: 5% 0;
-}
-
-.pagination{
-  margin-top: 3rem;
-  margin-bottom: 3rem;
-}
-
 /* add camping button index page */
 .button-add-campground {
   display: inline-block;
@@ -55,20 +32,63 @@ h1 {
   border-color: #0056b3;
 }
 
-#showMoreCamgroundsTitle, #showMoreButton {
-  display: none;
-}
-
-#showMoreContainer {
-  display: flex;
-  justify-content: center; /* Horizontally center */
-  align-items: center; /* Vertically center */
-  margin-bottom: 3rem;
+.card-img-size-campground {
+  height: 17.6rem;
+  width: 100%;
+  object-fit: cover;
 }
 
 
 
 
+
+@media (min-width: 576px) and (max-width: 2500px) {
+  #cluster-map {
+    width: 100%;
+    height: 500px;
+  }
+
+
+  h1 {
+    margin: 5% 0;
+  }
+
+
+  /* Set a fixed height for the images in the cards on the index and edit page*/
+
+  .card-img-size-campground {
+    height: 17.6rem;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .card-title {
+    font-size: 1.4rem;
+  }
+
+  .campground-card-button-to-go-showPage {
+    font-size: 1.2rem;
+  }
+
+  .truncate-paragraph {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #showMoreCamgroundsTitle, #showMoreButton {
+    display: none;
+  }
+
+  .pagination{
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+  }
+
+
+}
 
 
 
@@ -90,42 +110,6 @@ h1 {
   }
 
 
-  #showMoreCamgroundsTitle, #TakeMeToTheTopTitle{
-    display: block;
-    text-align: center;
-  }
-
-  #campgroundsContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-
-
-  #showMoreButton, #backToTopButton {
-    border-radius: 1rem;
-    border: 2px solid black;
-    padding: 1rem 1.5rem;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 1rem;
-    margin: 4px 2px;
-    cursor: pointer;
-    margin-bottom: 3rem;
-  }
-
-
-
-
-
-
-
-}
-
-
-
 
   /* Add a new CSS animation for revealing the cards */
   @keyframes revealAnimation {
@@ -145,6 +129,33 @@ h1 {
   }
 
 
+
+
+  #showMoreCamgroundsTitle, #TakeMeToTheTopTitle{
+    display: block;
+    text-align: center;
+  }
+
+  #showMoreAndBackToTheTopContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  #showMoreButton, #backToTopButton {
+    border-radius: 1rem;
+    border: 2px solid black;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1rem;
+    margin: 4px 2px;
+    cursor: pointer;
+    margin-bottom: 3rem;
+  }
 
 
 

@@ -15,17 +15,17 @@
             <% if(campground.images.length) { %>
               <img crossorigin="anonymous" class="img-fluid card-img-size-campground" alt="" src="<%= campground.images[0].url %>">
             <% } else{%>
-              <img crossorigin="anonymous" class="img-fluid card-img-size-campground" alt="" src="https://res.cloudinary.com/dsb9ybqqc/image/upload/v1689866175/YelpCamp/dgtcroxltbzn62nlodgo.jpg">
+              <img crossorigin="anonymous" class="img-fluid card-img-size-campground " alt="" src="https://res.cloudinary.com/dsb9ybqqc/image/upload/v1689866175/YelpCamp/dgtcroxltbzn62nlodgo.jpg">
             <% } %>
           </div>
           <div class="col-md-8">
             <div class="card-body">
               <h5 class="card-title"> <%=  campground.title %> </h5>
-              <p class="card-text"><%=  campground.description %></p>
+              <p class="card-text truncate-paragraph"><%=  campground.description %></p>
               <p class="card-text">
                 <small class="text-muted"><%=  campground.location %></small>
               </p>
-              <a class="btn btn-primary" href="/campgrounds/<%=campground._id %>">View <%=  campground.title %></a>
+              <a class="btn btn-primary campground-card-button-to-go-showPage" href="/campgrounds/<%=campground._id %>">View <%=  campground.title %></a>
             </div>
           </div>
         </div>
@@ -36,7 +36,7 @@
 <h2 id="showMoreCamgroundsTitle">Continue exploring Campgrounds</h2>
 <h2 id="TakeMeToTheTopTitle" style="display: none;">Take Me to the <br> Top of the Page</h2>
 
-<div id="campgroundsContainer">
+<div id="showMoreAndBackToTheTopContainer">
   <input type="hidden" id="totalPages" value="<%= totalPages %>">
   <input type="hidden" id="perPage" value="<%= perPage %>">
 
@@ -102,7 +102,7 @@
 
   document.addEventListener('DOMContentLoaded', () => {
 
-    const container = document.getElementById('campgroundsContainer');
+    const container = document.getElementById('showMoreAndBackToTheTopContainer');
     const backToTopButton = document.getElementById('backToTopButton');
 
     if (backToTopButton) {
@@ -226,6 +226,10 @@
           image.style.height = '16rem';
           image.style.width = '100%';
           image.style.objectFit = 'cover';
+          image.style.borderRadius = '0';
+
+
+
           if (campground.images && campground.images.length > 0) {
             image.src = campground.images[0].url; // First image URL
             item.appendChild(image);
@@ -265,7 +269,7 @@
       };
 
       const loadCampgrounds = async (container) => {
-        console.log('loadCampgrounds called');
+        // console.log('loadCampgrounds called');
 
         try {
           // Calculate the number of campgrounds to skip (first 10 campgrounds)
@@ -279,7 +283,7 @@
           }
 
           const { campgrounds } = await response.json();
-          console.log('Received response:', response, 'Campgrounds:', campgrounds);
+          // console.log('Received response:', response, 'Campgrounds:', campgrounds);
 
           fetchedCampgrounds += campgrounds.length;
           appendCampgrounds(campgrounds);
@@ -319,7 +323,7 @@
 
       // The function to load campgrounds
       showMoreButton.addEventListener('click', async () => {
-          const container = document.getElementById('campgroundsContainer');
+          const container = document.getElementById('showMoreAndBackToTheTopContainer');
 
           // Clear any previously set inline styles
           showMoreButton.removeAttribute('style');
