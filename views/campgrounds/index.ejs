@@ -1,5 +1,14 @@
 <% layout("./layouts/boilerplate") %>
 
+<form class="searchForm" action="/campgrounds/search" method="GET">
+  <div class="searchWrapper">
+    <input class="searchFormInput" type="text" name="query" placeholder="Search by location or title">
+    <button class="searchFormButton" type="submit">Search</button>
+  </div>
+</form>
+
+
+
 <div id="cluster-map"></div>
 <h1>All Campgrounds</h1>
 
@@ -33,66 +42,71 @@
   <% } %>
 </div>
 
-<h2 id="showMoreCamgroundsTitle">Continue exploring Campgrounds</h2>
-<h2 id="TakeMeToTheTopTitle" style="display: none;">Take Me to the <br> Top of the Page</h2>
 
-<div id="showMoreAndBackToTheTopContainer">
-  <input type="hidden" id="totalPages" value="<%= totalPages %>">
-  <input type="hidden" id="perPage" value="<%= perPage %>">
 
-  <button id="showMoreButton" type="button" class="btn btn-light">Show More</button>
-  <button id="backToTopButton" style="display: none;" type="button" class="btn btn-light">Back to the start</button>
-</div>
+<% if (totalPages > 1) { %>
 
-<nav aria-label="Page navigation">
+  <h2 id="showMoreCamgroundsTitle">Continue exploring Campgrounds</h2>
+  <h2 id="TakeMeToTheTopTitle" style="display: none;">Take Me to the <br> Top of the Page</h2>
 
-  <ul class="pagination justify-content-center">
-    <% const numLinksToShow = 5; // Number of page links to show at a time %>
-    <% const halfNumLinks = Math.floor(numLinksToShow / 2); %>
-    <% const startPage = Math.max(currentPage - halfNumLinks, 1); %>
-    <% const endPage = Math.min(startPage + numLinksToShow - 1, totalPages); %>
+  <div id="showMoreAndBackToTheTopContainer">
+    <input type="hidden" id="totalPages" value="<%= totalPages %>">
+    <input type="hidden" id="perPage" value="<%= perPage %>">
 
-    <!-- Add Previous link -->
-    <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-      <a id="previousLink" class="page-link" href="<%= parseInt(currentPage) === 1 ? '#' : '?page=' + (currentPage - 1) %>" <% if (parseInt(currentPage) === 1) { %> tabindex="-1" aria-disabled="true" <% } %>>&laquo; Previous</a>
-    </li>
+    <button id="showMoreButton" type="button" class="btn btn-light">Show More</button>
+    <button id="backToTopButton" style="display: none;" type="button" class="btn btn-light">Back to the start</button>
+  </div>
 
-    <% if (startPage > 1) { %>
-      <li class="page-item">
-        <a class="page-link" href="?page=1">1</a>
+  <nav aria-label="Page navigation">
+
+    <ul class="pagination justify-content-center">
+      <% const numLinksToShow = 5; // Number of page links to show at a time %>
+      <% const halfNumLinks = Math.floor(numLinksToShow / 2); %>
+      <% const startPage = Math.max(currentPage - halfNumLinks, 1); %>
+      <% const endPage = Math.min(startPage + numLinksToShow - 1, totalPages); %>
+
+      <!-- Add Previous link -->
+      <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+        <a id="previousLink" class="page-link" href="<%= parseInt(currentPage) === 1 ? '#' : '?page=' + (currentPage - 1) %>" <% if (parseInt(currentPage) === 1) { %> tabindex="-1" aria-disabled="true" <% } %>>&laquo; Previous</a>
       </li>
-      <% if (startPage > 2) { %>
-        <li class="page-item disabled">
-          <span class="page-link">...</span>
+
+      <% if (startPage > 1) { %>
+        <li class="page-item">
+          <a class="page-link" href="?page=1">1</a>
+        </li>
+        <% if (startPage > 2) { %>
+          <li class="page-item disabled">
+            <span class="page-link">...</span>
+          </li>
+        <% } %>
+      <% } %>
+
+      <% for (let i = startPage; i <= endPage; i++) { %>
+        <li class="page-item <%= currentPage == i ? 'active' : '' %>">
+          <a class="page-link" href="?page=<%= i %>"><%= i %></a>
         </li>
       <% } %>
-    <% } %>
 
-    <% for (let i = startPage; i <= endPage; i++) { %>
-      <li class="page-item <%= currentPage == i ? 'active' : '' %>">
-        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
-      </li>
-    <% } %>
-
-    <% if (endPage < totalPages) { %>
-      <% if (endPage < totalPages - 1) { %>
-        <li class="page-item disabled">
-          <span class="page-link">...</span>
+      <% if (endPage < totalPages) { %>
+        <% if (endPage < totalPages - 1) { %>
+          <li class="page-item disabled">
+            <span class="page-link">...</span>
+          </li>
+        <% } %>
+        <li class="page-item">
+          <a class="page-link" href="?page=<%= totalPages %>"><%= totalPages %></a>
         </li>
       <% } %>
-      <li class="page-item">
-        <a class="page-link" href="?page=<%= totalPages %>"><%= totalPages %></a>
+
+      <!-- Add Next link -->
+      <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+        <a id="nextLink" class="page-link" href="<%= parseInt(currentPage) === totalPages ? '#' : '?page=' + Math.min(totalPages, parseInt(currentPage) + 1) %>"> Next &raquo; </a>
       </li>
-    <% } %>
 
-    <!-- Add Next link -->
-    <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
-      <a id="nextLink" class="page-link" href="<%= parseInt(currentPage) === totalPages ? '#' : '?page=' + Math.min(totalPages, parseInt(currentPage) + 1) %>"> Next &raquo; </a>
-    </li>
+    </ul>
 
-  </ul>
-
-</nav>
+  </nav>
+<% } %>
 
 
 

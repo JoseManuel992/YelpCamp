@@ -11,6 +11,118 @@ module.exports.index = async (req, res) => {
   res.render("campgrounds/index", {campgrounds})
 }
 
+
+//moved perPage in the general scope inside this file
+// so paginateCampgrounds and searchCampgrounds can use it!
+const perPage = 10;
+
+const paginateCampgrounds = async (req, res) => {
+  const page = req.query.page || 1;
+  const skip = req.query.skip || ((perPage * page) - perPage);
+  const isJson = req.query.isJson === 'true';
+  const isPhoneSize = req.query.isPhoneSize === 'true';
+
+  if (skip < 0) {
+      skip = 0;
+  }
+
+  const paginatedCampgrounds = await Campground.find({})
+      .skip(Number(skip))
+      .limit(perPage);
+
+  const allCampgrounds = await Campground.find({});
+  const campgroundsCount = await Campground.countDocuments();
+  const totalPages = Math.ceil(campgroundsCount / perPage);
+
+  if (isJson) {
+      return res.json({ campgrounds: paginatedCampgrounds });
+  }
+
+  return {
+      campgrounds: paginatedCampgrounds,
+      allCampgrounds,
+      currentPage: page,
+      totalPages,
+      perPage,
+      isPhoneSize
+  };
+};
+
+module.exports.listCampgroundsPaginationAndInfiniteScroll = async (req, res) => {
+  try {
+      const context = await paginateCampgrounds(req, res);
+      res.render('campgrounds/index', context);
+  } catch (err) {
+      console.error('Error fetching paginated campgrounds:', err);
+      res.render('error', { err });
+  }
+};
+
+function escapeRegex(text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+}
+
+
+module.exports.searchCampgrounds = async (req, res, next) => {
+  if (req.query.query) {
+      try {
+          const regex = new RegExp(escapeRegex(req.query.query), 'i');
+          const campgrounds = await Campground.find({
+              $or: [
+                  { title: regex },
+                  { location: regex }
+              ]
+          });
+
+          // NEW: Calculate the number of pages based on search results
+          const totalPages = Math.ceil(campgrounds.length / perPage);
+
+          if (campgrounds.length > 0) {
+            const context = await paginateCampgrounds(req, res);
+            context.campgrounds = campgrounds;
+            context.totalPages = totalPages; // Overwrite totalPages from pagination with search results count
+            return res.render("campgrounds/index", context);
+        }
+
+        // If there's no query or no matching campgrounds, fallback to pagination logic
+        const context = await paginateCampgrounds(req, res);
+        res.render('campgrounds/index', context);
+
+      } catch (err) {
+          console.error(err);
+          return next(err); // Passing the error to the error handler
+      }
+  }
+
+  // If there's no query or no matching campgrounds, fallback to pagination logic
+  try {
+      const context = await paginateCampgrounds(req, res);
+      res.render('campgrounds/index', context);
+  } catch (err) {
+      console.error('Error fetching paginated campgrounds:', err);
+      next(err);
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //create new
 
 module.exports.renderNewForm = (req, res) => {

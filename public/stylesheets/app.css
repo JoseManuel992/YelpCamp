@@ -1,5 +1,54 @@
 /* ..........styling index page.............. */
 
+
+
+.searchForm {
+  margin-bottom: 2rem;
+}
+
+.searchWrapper {
+  position: relative;
+  display:block;
+}
+
+.searchFormInput {
+
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 0.75rem; /* Bootstrap's typical padding */
+  font-size: 1rem;
+  font-weight: 400;
+  color: #495057;
+  background-color: #fff; /* White background */
+  background-clip: padding-box; /* This is to ensur;e the background only covers the area of the padding box, not border or margin */
+  border: 1px solid #ced4da; /* A neutral light grey border */
+  border-radius: 1rem; /* A slight curve on the borders */
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Smooth transitions for interactions */
+
+  /* When the input is focused */
+  &:focus {
+      color: #495057;
+      background-color: #fff;
+      border-color: #80bdff; /* A light blue border when focused */
+      outline: 0; /* To remove the browser's default focus outline */
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* A faint blue glow around the input */
+  }
+
+}
+
+.searchFormButton {
+  position: absolute;
+  right: -1px; /* Adjust based on your preference */
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #dbdbdb; /* If you want to retain input's background */
+  border: none; /* Remove border */
+  cursor: pointer;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  border-radius: 0rem 1rem 1rem 0rem;
+}
+
 /* add camping button index page */
 .button-add-campground {
   display: inline-block;
@@ -43,6 +92,8 @@
 
 
 @media (min-width: 576px) and (max-width: 2500px) {
+
+
   #cluster-map {
     width: 100%;
     height: 500px;
@@ -70,6 +121,7 @@
     font-size: 1.2rem;
   }
 
+
   .truncate-paragraph {
     display: -webkit-box;
     -webkit-line-clamp: 4;
@@ -86,6 +138,11 @@
     margin-top: 3rem;
     margin-bottom: 3rem;
   }
+  .page-link {
+    font-size: 1.1rem;
+    padding: 0.8rem 1.1rem;
+
+  }
 
 
 }
@@ -94,6 +151,12 @@
 
 /* Add media query for mobile devices */
 @media (max-width: 576px) {
+
+  .searchFormInput, .searchFormButton {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.89rem;
+
+  }
   #cluster-map {
     height:15rem;
 
