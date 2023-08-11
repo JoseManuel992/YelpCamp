@@ -11,7 +11,6 @@ module.exports.index = async (req, res) => {
   res.render("campgrounds/index", {campgrounds})
 }
 
-
 //moved perPage in the general scope inside this file
 // so paginateCampgrounds and searchCampgrounds can use it!
 const perPage = 10;
@@ -34,9 +33,11 @@ const paginateCampgrounds = async (req, res) => {
   const campgroundsCount = await Campground.countDocuments();
   const totalPages = Math.ceil(campgroundsCount / perPage);
 
+  // In paginateCampgrounds
   if (isJson) {
-      return res.json({ campgrounds: paginatedCampgrounds });
+    return { responseAsJson: true, data: { campgrounds: paginatedCampgrounds } };
   }
+
 
   return {
       campgrounds: paginatedCampgrounds,
@@ -50,7 +51,10 @@ const paginateCampgrounds = async (req, res) => {
 
 module.exports.listCampgroundsPaginationAndInfiniteScroll = async (req, res) => {
   try {
-      const context = await paginateCampgrounds(req, res);
+    const context = await paginateCampgrounds(req, res);
+    if (context.responseAsJson) {
+      return res.json(context.data);
+    }
       res.render('campgrounds/index', context);
   } catch (err) {
       console.error('Error fetching paginated campgrounds:', err);
@@ -62,64 +66,43 @@ function escapeRegex(text) {
   return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
 }
 
-
 module.exports.searchCampgrounds = async (req, res, next) => {
   if (req.query.query) {
+    try {
+        const regex = new RegExp(escapeRegex(req.query.query), 'i');
+        const campgrounds = await Campground.find({
+            $or: [
+                { title: regex },
+                { location: regex }
+            ]
+        });
+
+        // NEW: Calculate the number of pages based on search results
+        const totalPages = Math.ceil(campgrounds.length / perPage);
+
+      if (campgrounds.length > 0) {
+          const context = await paginateCampgrounds(req, res);
+          context.campgrounds = campgrounds;
+          context.totalPages = totalPages; // Overwrite totalPages from pagination with search results count
+          return res.render("campgrounds/index", context);
+      }
+    } catch (err) {
+      console.error(err);
+      return next(err); // Passing the error to the error handler
+    }
+
+      // If there's no query or no matching campgrounds, fallback to pagination logic
       try {
-          const regex = new RegExp(escapeRegex(req.query.query), 'i');
-          const campgrounds = await Campground.find({
-              $or: [
-                  { title: regex },
-                  { location: regex }
-              ]
-          });
-
-          // NEW: Calculate the number of pages based on search results
-          const totalPages = Math.ceil(campgrounds.length / perPage);
-
-          if (campgrounds.length > 0) {
-            const context = await paginateCampgrounds(req, res);
-            context.campgrounds = campgrounds;
-            context.totalPages = totalPages; // Overwrite totalPages from pagination with search results count
-            return res.render("campgrounds/index", context);
-        }
-
-        // If there's no query or no matching campgrounds, fallback to pagination logic
         const context = await paginateCampgrounds(req, res);
         res.render('campgrounds/index', context);
-
-      } catch (err) {
-          console.error(err);
-          return next(err); // Passing the error to the error handler
-      }
+    } catch (err) {
+        console.error('Error fetching paginated campgrounds:', err);
+        next(err);
+    }
   }
 
-  // If there's no query or no matching campgrounds, fallback to pagination logic
-  try {
-      const context = await paginateCampgrounds(req, res);
-      res.render('campgrounds/index', context);
-  } catch (err) {
-      console.error('Error fetching paginated campgrounds:', err);
-      next(err);
-  }
+
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -160,7 +143,6 @@ module.exports.showCampground = async (req, res) => {
   res.render("campgrounds/show", {campground, messages: req.flash()});
 }
 
-
 //edit
 
 module.exports.renderEditForm = async (req, res) => {
@@ -190,7 +172,6 @@ module.exports.updateCampground = async (req, res) => {
   req.flash("success", "Successfully updated campground!");
   res.redirect(`/campgrounds/${campground._id}`)
 }
-
 
 //delete
 

@@ -7,8 +7,6 @@
   </div>
 </form>
 
-
-
 <div id="cluster-map"></div>
 <h1>All Campgrounds</h1>
 
@@ -41,8 +39,6 @@
       </div>
   <% } %>
 </div>
-
-
 
 <% if (totalPages > 1) { %>
 
@@ -108,8 +104,6 @@
   </nav>
 <% } %>
 
-
-
 <script>
   const mapToken = "<%-process.env.MAPBOX_TOKEN %>";
   const campgrounds = { features: <%- JSON.stringify(allCampgrounds) %> }
@@ -142,7 +136,6 @@
       backToTopButton.style.display = 'none';
 
     }
-
 
     // JavaScript event handler to prevent default behavior when "Previous" link is clicked on the first page
     const previousLink = document.getElementById('previousLink');
@@ -185,8 +178,6 @@
       }
     }
 
-
-
     // Check if window size is less or equal to 576px (phone size)
     if (window.innerWidth <= 576) {
       let fetchedCampgrounds = 10; // Keeps track of the number of fetched campgrounds
@@ -206,7 +197,6 @@
           container.style.display = 'block';
 
         }
-
 
         const item = container.children[index];
         item.classList.remove('hidden'); // Reveal the campground card
@@ -241,8 +231,6 @@
           image.style.width = '100%';
           image.style.objectFit = 'cover';
           image.style.borderRadius = '0';
-
-
 
           if (campground.images && campground.images.length > 0) {
             image.src = campground.images[0].url; // First image URL
@@ -305,8 +293,6 @@
           const showMoreButton = document.getElementById('showMoreButton');
           const backToTopButton = document.getElementById('backToTopButton');  // Assuming this is your "Back to Top" button
 
-
-
           if (campgrounds.length < perPage) {
             // If there are no more campgrounds, hide the "Show More" button and show the "Back to Top" button
             showMoreButton.style.display = 'none';
@@ -330,13 +316,13 @@
         }
       };
 
-
-
       const showMoreButton = document.getElementById('showMoreButton');
 
 
       // The function to load campgrounds
       showMoreButton.addEventListener('click', async () => {
+        showNavbarOnEveryScrollUp = true;
+
           const container = document.getElementById('showMoreAndBackToTheTopContainer');
 
           // Clear any previously set inline styles
@@ -358,10 +344,38 @@
           }, 100);
       });
 
-
       // loadCampgrounds(document.getElementById('campgroundsContainer'));  Load the initial set of 10 campgrounds autmatically to the index page,
       // I comment it out if I want to have this but I prefer to load each time I press the button show more
 
+      let lastScrollTop = 0;
+      let scrollUpDistance = 0;  // Initialize the scrollUpDistance
+      const navbar = document.querySelector('.navbar');
+      const clusterMap = document.querySelector('#cluster-map');
+      let showNavbarOnEveryScrollUp = false; // This flag will be enabled after clicking "Show More"
+      const SCROLL_UP_THRESHOLD = 1800;  // Adjust this value based on your needs
+
+
+      window.addEventListener('scroll', function() {
+          let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          let clusterMapBottom = clusterMap.getBoundingClientRect().bottom;
+
+          if (scrollTop > lastScrollTop && clusterMapBottom < 0) {
+              navbar.classList.add('nav-hidden');
+              scrollUpDistance = 0;  // Reset the scroll distance
+          } else if (scrollTop < lastScrollTop) {
+              scrollUpDistance += (lastScrollTop - scrollTop);  // Add to the total scrolled up distance
+
+              // Check for the cluster map position
+              if (clusterMapBottom > 0) {
+                  navbar.classList.remove('nav-hidden');
+              } else if (showNavbarOnEveryScrollUp && scrollUpDistance > SCROLL_UP_THRESHOLD) {
+                  navbar.classList.remove('nav-hidden');
+                  scrollUpDistance = 0;  // Reset the scroll up distance after showing the navbar
+              }
+          }
+
+          lastScrollTop = scrollTop;
+      });
 
     }
 
