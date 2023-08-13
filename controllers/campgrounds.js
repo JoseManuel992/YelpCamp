@@ -130,18 +130,38 @@ module.exports.createCampground = async (req, res, next) => {
 //show
 
 module.exports.showCampground = async (req, res) => {
-  const campground = await Campground.findById(req.params.id).populate({
-    path: "reviews",
-    populate: {
-      path: "author"
-    }
-  }).populate("author");
-  if(!campground){
-    req.flash("error", "Cannot find that campground!");
-    return res.redirect("/campgrounds");
+  try {
+      const campground = await Campground.findById(req.params.id).populate({
+          path: "reviews",
+          options: { sort: { createdAt: -1 } },  // Sort by creation date in descending order
+          populate: {
+              path: "author"
+          }
+      }).populate("author");
+
+      if (!campground) {
+          req.flash("error", "Cannot find that campground!");
+          return res.redirect("/campgrounds");
+      }
+
+      // Calculate average rating
+      let averageRating = 0;
+      if (campground.reviews.length > 0) {
+        let totalRating = 0;
+        for (let review of campground.reviews) {
+          totalRating += review.rating;
+        }
+        averageRating = totalRating / campground.reviews.length;
+      }
+
+      res.render("campgrounds/show", { campground, averageRating, messages: req.flash() });
+  } catch (err) {
+      console.error(err);
+      req.flash("error", "Something went wrong.");
+      res.redirect("/campgrounds");
   }
-  res.render("campgrounds/show", {campground, messages: req.flash()});
 }
+
 
 //edit
 

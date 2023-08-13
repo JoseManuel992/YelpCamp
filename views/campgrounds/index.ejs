@@ -16,7 +16,7 @@
 
 <div id="campgroundsContainer">
   <% for (let campground of campgrounds) { %>
-      <div class="card mb-3">
+      <div class="card animation-index-page mb-3">
         <div class="row">
           <div class="col-md-4">
             <% if(campground.images.length) { %>
@@ -223,7 +223,7 @@
           // console.log(campground);
           // Create new campground element and append to the container
           const item = document.createElement('div');
-          item.className = "card mb-3";
+          item.className = "card animation-index-page mb-3";
 
           const image = document.createElement('img');
           image.className = 'card-img-top';

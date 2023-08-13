@@ -2,7 +2,6 @@
 <link rel="stylesheet" href="/stylesheets/stars.css">
 
 
-
 <div class="row">
   <div class="col-md-6 ">
 
@@ -46,7 +45,7 @@
         </div>
       <% } %>
       <div class="card-footer text-body-secondary">
-        <a href="/campgrounds">All Campgrounds</a>
+        <a class="backtoallcampgrounds" href="/campgrounds"><i class="fa-solid fa-circle-arrow-left" style="color: #000000;"></i> Back To All Campgrounds</a>
       </div>
     </div>
   </div>
@@ -54,6 +53,18 @@
   <div class="col-md-6">
 
     <div id='map'></div>
+
+
+     <!-- Average Rating Display -->
+     <div class="averageCampgroundRating">
+        <% if(typeof averageRating !== 'undefined' && campground.reviews.length > 0) { %>
+            <div class="average-rating-section">
+              <h3><i class="fa-solid fa-star" style="color: #000;"></i> <%= averageRating.toFixed(1) %> <i class="fas fa-circle custom-dot"></i>  <%= campground.reviews.length %> reviews</h3>
+              <!-- You can add a visual representation of the rating using stars or other symbols if you want -->
+            </div>
+        <% } %>
+      </div>
+
 
     <% if(currentUser) { %>
       <h2>Leave a Review</h2>
@@ -88,9 +99,27 @@
         <button class="btn btn-info text-white btnSubmit">Submit</button>
       </form>
     <% } %>
-    <!-- display the reviews -->
-    <% for (let review of campground.reviews) { %>
-      <div class="card  reviewCard">
+  </div>
+
+</div>
+
+<!-- Start a New Full-width Row for Reviews -->
+<div class="row">
+
+  <!-- display the reviews -->
+  <% let reviewCount = 0; %>
+  <% for (let review of campground.reviews) { %>
+
+    <!-- Stop the loop if 6 reviews are already displayed -->
+    <% if(reviewCount >= 6) break; %>
+
+    <% if (reviewCount % 2 === 0) { %>
+      <div class="row"> <!-- Begin a new row every 2 reviews -->
+    <% } %>
+
+    <div class="col-md-6"> <!-- Each review takes up half the width of the parent div -->
+
+      <div class="card reviewCard">
         <div class="card-body">
           <h5 class="card-title">
             <%= review.author.username  %>
@@ -99,7 +128,7 @@
             Rated: <%= review.rating %> stars
           </p>
           <p class="card-text">
-             Review: <%= review.body  %>
+              Review: <%= review.body  %>
           </p>
           <%  if( currentUser && review.author.equals(currentUser._id))  {%>
             <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
@@ -108,9 +137,76 @@
           <% } %>
         </div>
       </div>
+
+    </div>
+
+    <% reviewCount++; %>
+    <% if (reviewCount % 2 === 0 || reviewCount === campground.reviews.length) { %>
+      </div> <!-- Close the row every 2 reviews or if it's the last review -->
+    <% } %>
+
+  <% } %>
+
+  <!-- Add a button for showing all reviews after the first six: -->
+  <div id="showAllReviewsContainer">
+    <% if(campground.reviews.length > 6) { %>
+      <button id="showAllReviews">Show all <%= campground.reviews.length %> reviews</button>
     <% } %>
   </div>
+
+
 </div>
+
+<!-- here is the modal structure to show all the reviews  -->
+<div id="reviewsModal" class="reviews-modal">
+  <div class="reviews-modal-content">
+    <span class="close">&times;</span>
+
+    <div class="modal-inner-content">
+
+      <div class="search-container">
+        <form id="localReviewSearch" action="#" method="post">
+          <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="reviewSearch" placeholder="Search reviews" autocomplete="off">
+            <i class="fa-solid fa-circle-xmark clear-icon" style="display: none"></i>
+          </div>
+        </form>
+
+        <div class="search-result-message" style="display: none;">
+          <span class="match-count"></span> reviews mentioned "<span class="search-term"></span>"
+        </div>
+      </div>
+
+      <div class="cloned-reviews-container"></div>
+
+      <div class="original-reviews-container">
+        <% for (let review of campground.reviews) { %>
+          <div class="card reviewCard">
+            <div class="card-body">
+              <h5 class="card-title">
+                <%= review.author.username  %>
+              </h5>
+              <p class="starability-result" data-rating="<%= review.rating %>">
+                Rated: <%= review.rating %> stars
+              </p>
+              <p class="card-text">
+                  Review: <%= review.body  %>
+              </p>
+              <%  if( currentUser && review.author.equals(currentUser._id))  {%>
+                <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
+                  <button class="btn btn-sm btn-danger">Delete</button>
+                </form>
+              <% } %>
+            </div>
+          </div>
+        <% } %>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 
 
 <script src="/javascripts/showPageValidateStarsRating.js"></script>
@@ -119,6 +215,166 @@
 
   const mapToken = "<%-process.env.MAPBOX_TOKEN %>";
   const campground = <%- JSON.stringify(campground) %>
+
+  // JavaScript to handle the modal's open and close functionality
+  document.addEventListener('DOMContentLoaded', (event) => {
+    const modal = document.getElementById("reviewsModal");
+    const btn = document.getElementById("showAllReviews");
+    const span = document.getElementsByClassName("close")[0];
+    const originalReviewsContainer = document.querySelector('.original-reviews-container');
+
+    btn.onclick = function() {
+    // console.log("Button clicked to open modal.");
+
+    // Display the modal:
+    modal.style.display = "block";
+
+    // Clone the reviews and append them to the modal:
+    const originalReviews = originalReviewsContainer.querySelectorAll('.reviewCard');
+    // console.log("Number of original reviews:", originalReviews.length); // Log the number of original reviews
+
+    const reviewsContainer = document.querySelector('.cloned-reviews-container');
+
+     // Clear out ALL child elements of the reviewsContainer:
+     while(reviewsContainer.firstChild) {
+        reviewsContainer.removeChild(reviewsContainer.firstChild);
+    }
+
+
+    // // Clear out previous clones:
+    // const clonedReviewsInContainer = reviewsContainer.querySelectorAll('.reviewCard');
+    // clonedReviewsInContainer.forEach(cr => cr.remove());
+
+      // Check if the cloned-reviews-container is really empty:
+    const clonedReviewsAfterClearing = reviewsContainer.querySelectorAll('.reviewCard');
+    // console.log("Number of cloned reviews after clearing:", clonedReviewsAfterClearing.length);
+
+
+    // console.log('About to clone reviews...');
+
+    originalReviews.forEach(review => {
+        const clone = review.cloneNode(true);
+        reviewsContainer.appendChild(clone);
+    });
+    // Log the number of cloned reviews after cloning:
+    // console.log("Number of cloned reviews after cloning:", reviewsContainer.querySelectorAll('.reviewCard').length);
+
+
+
+    document.body.classList.add('no-scroll'); // Continue with your existing code.
+   }
+
+
+    span.onclick = function() {
+      modal.style.display = "none";
+      document.body.classList.remove('no-scroll'); // Remove the class to enable scrolling again
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+          document.body.classList.remove('no-scroll'); // Remove the class to enable scrolling again
+        }
+    }
+
+     // Prevent form from submitting when Enter is pressed
+    document.getElementById('localReviewSearch').addEventListener('submit', function(e) {
+        e.preventDefault();
+    });
+
+    const reviewSearch = document.getElementById('reviewSearch');
+
+    function highlightMatches(element, searchTerm) {
+      const regEx = new RegExp(`(${searchTerm})`, 'gi');
+      const newText = element.innerHTML.replace(regEx, '<span class="highlight">$1</span>');
+      element.innerHTML = newText;
+    }
+
+    reviewSearch.addEventListener('keyup', function() {
+      const searchTerm = this.value.toLowerCase();
+
+       // First, remove all previous highlights
+      const clonedReviews = document.querySelectorAll('.cloned-reviews-container .reviewCard');
+      clonedReviews.forEach(review => {
+        review.innerHTML = review.innerHTML.replace(/<span class="highlight">([^<]+)<\/span>/gi, '$1');
+      });
+
+      if (searchTerm.trim() === '') {
+        // Hide the search result message
+        document.querySelector('.search-result-message').style.display = 'none';
+
+        // Show all reviews since the search term is empty
+        const clonedReviews = document.querySelectorAll('.cloned-reviews-container .reviewCard');
+        clonedReviews.forEach(review => {
+          review.style.display = '';  // Show all reviews if the search term is empty
+        });
+        return;
+      }
+
+      // Use clonedReviews here:
+      // Highlight matches and show/hide reviews
+      const clonedReviewTexts = document.querySelectorAll('.cloned-reviews-container .reviewCard .card-text');
+
+      let matchCount = 0;  // Variable to keep track of the number of matches
+
+      clonedReviewTexts.forEach(reviewText => {
+        const reviewContent = reviewText.textContent.toLowerCase();
+
+        // Hide or show the review based on the search term
+        if (reviewContent.includes(searchTerm)) {
+            reviewText.closest('.reviewCard').style.display = ''; // show the review if it matches
+            highlightMatches(reviewText, searchTerm);  // Highlight the matches
+            matchCount++;  // Increase the match count
+        } else {
+            reviewText.closest('.reviewCard').style.display = 'none'; // hide the review if it doesn't match
+        }
+      });
+      // Update and display the search message:
+      if (matchCount > 0 && searchTerm.trim() !== '') {
+         document.querySelector('.search-result-message .match-count').textContent = matchCount;
+         document.querySelector('.search-result-message .search-term').textContent = searchTerm;
+         document.querySelector('.search-result-message').style.display = 'block';
+     } else {
+         document.querySelector('.search-result-message').style.display = 'none';
+     }
+    });
+
+
+    reviewSearch.addEventListener('focus', function() {
+      document.querySelector('.search-container').classList.add('focused');
+    });
+
+    reviewSearch.addEventListener('blur', function() {
+      document.querySelector('.search-container').classList.remove('focused');
+    });
+
+
+    reviewSearch.addEventListener('input', function() {
+      const clearIcon = document.querySelector('.clear-icon');
+      if (this.value) {
+        clearIcon.style.display = 'block';
+      } else {
+        clearIcon.style.display = 'none';
+      }
+    });
+
+    // show/hide the clear icon based on the input value, and to clear the input and reset reviews when the clear icon is clicked.
+    document.querySelector('.clear-icon').addEventListener('click', function() {
+      const reviewSearchInput = document.getElementById('reviewSearch');
+      reviewSearchInput.value = '';
+      this.style.display = 'none'; // Hide the clear icon
+
+      // Manually trigger the keyup event on reviewSearch input
+      const event = new Event('keyup', {
+        'bubbles': true,
+        'cancelable': true
+      });
+      reviewSearchInput.dispatchEvent(event);
+
+    });
+
+  });
+
 </script>
 
 <script src="/javascripts/showPageMap.js"></script>

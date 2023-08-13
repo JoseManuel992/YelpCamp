@@ -1,7 +1,5 @@
 /* ..........styling index page.............. */
 
-
-
 .searchForm {
   margin-bottom: 2rem;
 }
@@ -71,7 +69,6 @@
   color: #fff;
   background-color: #007bff;
   border-color: #007bff;
-
 }
 
 
@@ -90,9 +87,7 @@
 
 
 
-
 @media (min-width: 576px) and (max-width: 2500px) {
-
 
 
   #cluster-map {
@@ -144,8 +139,6 @@
     padding: 0.8rem 1.1rem;
 
   }
-
-
 }
 
 
@@ -161,25 +154,22 @@
     opacity: 1;
     transition: transform 0.3s ease-in-out, opacity 0.5s ease-in-out;
   }
+
   body {
     padding-top: 56px; /* Assuming the navbar is 56px tall, adjust if necessary */
-}
-
-
+  }
 
   .nav-hidden {
     transform: translateY(-100%);
     opacity: 0;
   }
 
-
-
-
   .searchFormInput, .searchFormButton {
     padding: 0.5rem 0.75rem;
     font-size: 0.89rem;
 
   }
+
   #cluster-map {
     height:15rem;
 
@@ -190,12 +180,11 @@
     margin-top: 3rem;
     margin-bottom: 2rem;
   }
+
   .button-add-campground {
     font-size: 1rem;
     margin-bottom: 3rem;
   }
-
-
 
   /* Add a new CSS animation for revealing the cards */
   @keyframes revealAnimation {
@@ -209,7 +198,7 @@
     }
   }
 
-  .card {
+  .animation-index-page {
     /* Add the CSS animation to the cards */
     animation: revealAnimation 2s ease;
   }
@@ -217,9 +206,6 @@
     height: 15rem;
 
   }
-
-
-
 
   #showMoreCamgroundsTitle, #TakeMeToTheTopTitle{
     display: block;
@@ -233,7 +219,6 @@
     justify-content: center;
   }
 
-
   #showMoreButton, #backToTopButton {
     border-radius: 1rem;
     border: 2px solid black;
@@ -246,9 +231,6 @@
     cursor: pointer;
     margin-bottom: 3rem;
   }
-
-
-
 }
 
 
@@ -290,9 +272,189 @@ h2{
   margin-bottom: 3rem;
 }
 
+.backtoallcampgrounds{
+  text-decoration: none;
+}
+
+.btn-info {
+  margin-right: 0.5rem;
+}
+
 .reviewCard{
   margin-bottom: 3rem;
 }
+
+.card-footer{
+  padding: 1rem;
+}
+
+.average-rating-section {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    text-align: center;
+    background-color: #f7f7f7;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.custom-dot {
+  font-size: 0.5rem; /* Adjust to the size you want */
+  vertical-align: middle;
+  margin-left: 0.4rem;
+  margin-right: 0.4rem;
+
+}
+
+/* modal styling to show all the reviews  */
+
+.reviews-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.reviews-modal-content {
+  background-color: #fefefe;
+  margin: 0 auto; /* horizontal centering */
+  padding: 40px 30px 10px; /* Top, right, bottom */
+  border: 1px solid #888;
+  border-radius: 1rem;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
+  width: 80%;
+  height: 85vh; /* 50% of the viewport height */
+  position: relative;
+  top: 46%; /* Move the top side down by 50% of the viewport */
+  transform: translateY(-50%); /* Pull the modal up by 50% of its own height */
+}
+.modal-inner-content {
+  padding: 20px 60px 10px 20px; /* Top, right, bottom, left */
+  height: calc(100% - 40px);  /* Subtracting top and bottom padding */
+  overflow-y: auto;
+}
+
+/* Style for the search container */
+.search-container {
+  margin-bottom: 30px; /* Add some margin to separate it from content below */
+  position: relative; /* This is added so that the icon positions itself relative to this container */
+}
+
+
+/* Style for the search input */
+#reviewSearch {
+  background-color: #efefefaf;
+  padding: 10px 10px 10px 40px;  /* top, right, bottom, left */
+  border-radius: 2rem;
+  border: 1px solid #ccc;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border 0.2s, box-shadow 0.2s; /* Makes focus effect smooth */
+  width: 100%; /* Make the input span the full width of its container */
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px; /* Place it to the left, 10px from the edge */
+  top: 50%; /* This will center it vertically */
+  transform: translateY(-50%); /* This will perfectly vertically center it */
+  font-size: 16px; /* adjust size if necessary */
+  color: #2f2f2fbb;
+  pointer-events: none; /* to make sure it doesn't interfere with input focus */
+}
+
+
+/* Style for the search input when it's focused */
+#reviewSearch:focus {
+  border: 0.12rem solid black; /* Thicker border when focused */
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.15);
+  outline: none; /* Removes the browser's default focus styling */
+}
+
+.search-container.focused .search-icon {
+  color: black;
+  font-weight: 900;  /* For Font Awesome, a higher font-weight will give a bolder icon */
+}
+
+.search-box {
+  position: relative; /* Ensure it's relative so that the absolute-positioned clear-icon works within its context */
+}
+
+.search-result-message{
+  margin-top: 1.5rem;
+}
+
+
+.clear-icon {
+  position: absolute;
+  right: 25px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  cursor: pointer;
+  color: #c7c7c7;
+  transition: color 0.3s;
+}
+
+.clear-icon:hover {
+  color: #000000; /* Slightly darker grey on hover, adjust as needed */
+}
+
+.close {
+  color: #aaa;
+  float: left;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#showAllReviews {
+  display: block;
+  text-align: center;
+}
+
+#showAllReviewsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#showAllReviews {
+  border-radius: 1rem;
+  border: 2px solid black;
+  padding: 1rem 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  margin: 4px 2px;
+  cursor: pointer;
+  margin-bottom: 3rem;
+}
+
+.highlight {
+  background-color: yellow;
+  font-weight: bold;
+}
+
+#reviewsModal .original-reviews-container {
+  display: none;
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
 
 
 
@@ -315,6 +477,13 @@ h2{
     height: 15rem;
   }
 
+  .btn-info {
+    padding: 0.25rem 0.9rem;
+  }
+
+  .card-footer{
+    padding: 0.8rem;
+  }
 }
 
 
