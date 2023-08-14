@@ -127,6 +127,7 @@ const scriptSrcUrls = [
   "https://cdnjs.cloudflare.com/",
   "https://cdn.jsdelivr.net",
   "https://code.jquery.com/jquery-3.6.0.min.js",
+  "https://unpkg.com/",
 ];
 const styleSrcUrls = [
   "https://kit-free.fontawesome.com/",
@@ -136,6 +137,7 @@ const styleSrcUrls = [
   "https://fonts.googleapis.com/",
   "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css",
   "https://cdnjs.cloudflare.com/",
+  "https://unpkg.com/",
 
 ];
 const connectSrcUrls = [
@@ -147,7 +149,8 @@ const connectSrcUrls = [
 const fontSrcUrls = [
   "https://cdnjs.cloudflare.com/",
   "https://kit.fontawesome.com/",
-  "https://use.fontawesome.com/"
+  "https://use.fontawesome.com/",
+  "data:",
 ];
 
 app.use(

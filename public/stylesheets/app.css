@@ -328,13 +328,37 @@ h2{
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.3);
   width: 80%;
   height: 85vh; /* 50% of the viewport height */
-  position: relative;
-  top: 46%; /* Move the top side down by 50% of the viewport */
-  transform: translateY(-50%); /* Pull the modal up by 50% of its own height */
+  position: fixed; /* Adjust to fixed */
+  top: 4%; /* Center vertically */
+  left: 10.5%; /* Center horizontally */
+  transform: translateY(100vh);  /* Move the modal below the screen */
+  opacity: 0;                    /* Start as transparent */
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;  /* Apply transition effect */
+  overflow: hidden;  /* This will prevent any overflow from the modal content */
+
 }
+.reviews-modal-content.active {
+  transform: translateY(0);   /* Bring the modal back to center */
+  opacity: 1;                /* Make it visible */
+}
+
+.reviews-modal-content.active {
+  transform: translateY(0); /* Move it to its normal position */
+}
+
+.sticky-header {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  top: 0;
+  background: #fefefe; /* Same as your .reviews-modal-content */
+  z-index: 10;
+  padding: 10px 0  25px; /* Adjust according to your requirement */
+}
+
+
 .modal-inner-content {
   padding: 20px 60px 10px 20px; /* Top, right, bottom, left */
-  height: calc(100% - 40px);  /* Subtracting top and bottom padding */
+  height: calc(90% - 40px);  /* Subtracting top and bottom padding */
   overflow-y: auto;
 }
 
@@ -342,6 +366,8 @@ h2{
 .search-container {
   margin-bottom: 30px; /* Add some margin to separate it from content below */
   position: relative; /* This is added so that the icon positions itself relative to this container */
+  top: 30px;
+
 }
 
 
@@ -404,6 +430,8 @@ h2{
 }
 
 .close {
+  position: fixed;
+  top: 21px;
   color: #aaa;
   float: left;
   font-size: 28px;
@@ -447,6 +475,32 @@ h2{
   font-weight: bold;
 }
 
+.modal-backdrop {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100vw;
+   height: 100vh;
+   background-color: rgba(0, 0, 0, 0.5); /* This is the gray overlay */
+   opacity: 0;
+   transition: opacity 0.3s ease; /* This will handle the smooth fade in/out */
+   z-index: 1000; /* You might need to adjust this value based on your site's z-indexes */
+}
+
+
+/* Add a new CSS animation for revealing the reviewsModal */
+@keyframes slideUp {
+  0% {
+      transform: translateY(100%);
+      opacity: 0;
+  }
+  100% {
+      transform: translateY(0);
+      opacity: 1;
+  }
+}
+
+
 #reviewsModal .original-reviews-container {
   display: none;
 }
@@ -483,6 +537,102 @@ h2{
 
   .card-footer{
     padding: 0.8rem;
+  }
+
+
+
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100% !important;
+  }
+
+
+  /* Ensure only one review card is visible on mobile screens at a time */
+  .swiper-container, .swiper-slide {
+
+    height: auto !important;
+  }
+  .swiper-container {
+    overflow: hidden;
+  }
+
+ @media (max-width: 576px) {  /* Assuming this is your mobile breakpoint */
+
+  #reviewsModal {
+    z-index: 2000;     /* Make content occupy full height */
+
+  }
+
+    /* Modal Content */
+  .reviews-modal {
+    background-color: transparent; /* Remove the darkened background */
+  }
+
+  .reviews-modal-content {
+    position: fixed;   /* Fix position of the modal */
+    top: 0;            /* Start from the top */
+    left: 0;           /* Start from the left */
+    width: 100vw;      /* 100% of viewport width */
+    height: 100vh;     /* 100% of viewport height */
+    z-index: 2000;     /* Make content occupy full height */
+    box-sizing: border-box; /* So padding or borders don't cause overflow */
+    overflow: hidden;
+    left:0%;
+    border-radius: 0%;
+    font-size: 1rem;
+    border: 2px solid #fefefe;
+    padding: 0px 0px 0px ;
+    box-shadow: none;
+  }
+
+  .sticky-header {
+    position: -webkit-sticky; /* For Safari */
+    position: sticky;
+    top: 0;
+    left: 0;
+    background-color: #fefefe;
+    z-index: 4000;
+    padding: 10px 0px  25px; /* Adjust according to your requirement */
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+  }
+
+  .close {
+    position: static; /* remove fixed positioning */
+    margin-right: 20px; /* space between close and search */
+    margin-left: 1rem;
+    z-index: 4001; /* make it on top */
+  }
+
+  .search-container{
+    padding: 0px 14px;
+  }
+
+
+  /* Search Result Message */
+  .search-result-message {
+    font-size: 0.9rem; /* Slightly smaller font for the search result message */
+    margin-top: 1rem; /* Space above the message */
+  }
+
+  .modal-inner-content{
+    padding: 30px 20px 30px 20px ;
+    height: calc(90% - 60px);  /* This considers the header's height and any other potential elements. */
+  }
+
+  .original-reviews-container{
+    margin-bottom: 0px;
+  }
+
+  .navbar {
+    z-index: 1000;
+  }
+
+  .reviewCard {
+    position: relative;
+    z-index: 500;
   }
 }
 
