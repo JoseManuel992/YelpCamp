@@ -5,12 +5,15 @@ const catchAsync = require("../utils/catchAsync");
 const User = require("../model/user");
 const { storeReturnTo } = require('../middleware');
 const users = require("../controllers/users");
+const multer = require('multer');
+const { storage } = require('../cloudinary');
+const upload = multer({ storage });
 
 //register a  new user
 
 router.route("/register")
   .get(users.renderRegisterForm)
-  .post(catchAsync(users.register))
+  .post(upload.single('avatar'), catchAsync(users.register))
 
 //loging a user
 

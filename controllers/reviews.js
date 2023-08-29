@@ -12,6 +12,19 @@ module.exports.createReview = async (req, res) => {
   res.redirect(`/campgrounds/${campground._id}`);
 }
 
+
+module.exports.showReview = async (req, res) => {
+  const reviewId = req.params.reviewId;
+  const review = await Review.findById(reviewId);
+  if (!review) {
+      // Handle review not found, e.g., return a 404 response.
+      req.flash("error", "Review not found!");
+      return res.redirect(`/campgrounds/${campground._id}`);
+  }
+  res.render('reviews/show', { review });
+};
+
+
 module.exports.deleteReview = async (req, res) => {
   const {id, reviewId} = req.params;
   await Campground.findByIdAndUpdate(id, {$pull: {reviews: reviewId}});

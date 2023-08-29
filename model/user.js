@@ -8,6 +8,13 @@ const UserSchema = new Schema({
     type: String,
     required: true,
     unique: true
+  },
+  avatar: {
+    url: {
+      type: String,
+      default: '../images/default-user-image.png'  // path for the default image
+    },
+    filename: String
   }
 });
 

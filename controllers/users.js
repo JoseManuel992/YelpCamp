@@ -9,7 +9,21 @@ module.exports.renderRegisterForm = (req, res) => {
 module.exports.register = async(req, res, next) => {
   try{
     const {email, username, password} = req.body;
-    const user = new User({ email, username });
+    let avatarImage;
+
+    if (req.file) {
+        avatarImage = {
+            url: req.file.path,
+            filename: req.file.filename
+        };
+    } else {
+        avatarImage = {
+            url: '/images/default-user-image.png',
+            filename: 'default-avatar'
+        };
+    }
+
+    const user = new User({ email, username, avatar: avatarImage });
     const registerUser = await User.register(user, password);
     req.login(registerUser, err => {
       if(err) return next(err);

@@ -1,3 +1,4 @@
+
 <% layout("./layouts/boilerplate") %>
 <link rel="stylesheet" href="/stylesheets/stars.css">
 
@@ -5,6 +6,7 @@
 <div class="row">
   <div class="col-md-6 ">
 
+    <!-- carousel -->
     <div id="campgroundCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
       <div class="carousel-inner">
         <% campground.images.forEach((img, i) => {%>
@@ -15,16 +17,23 @@
       </div>
       <%  if(campground.images.length > 1) {%>
         <button class="carousel-control-prev" type="button" data-bs-target="#campgroundCarousel" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <i class="fa-solid fa-angle-left" aria-hidden="true"></i>
           <span class="visually-hidden">Previous</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#campgroundCarousel" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+          <span class="visually-hidden"> <i class="fa-solid fa-angle-right" style="color: #000000;"></i></span>
         </button>
       <% } %>
+      <!-- indicators inside the carousel -->
+      <div class="carousel-indicators-container">
+        <ol class="carousel-indicators">
+          <% for(let i=0; i < campground.images.length; i++) { %>
+            <li data-bs-target="#campgroundCarousel" data-bs-slide-to="<%= i %>" class="<%= i === 0 ? 'active' : '' %>"></li>
+          <% } %>
+        </ol>
+      </div>
     </div>
-
 
     <div class="card CampgroundCardShowPage">
       <div class="card-body">
@@ -54,7 +63,6 @@
 
     <div id='map'></div>
 
-
      <!-- Average Rating Display -->
      <div class="averageCampgroundRating">
         <% if(typeof averageRating !== 'undefined' && campground.reviews.length > 0) { %>
@@ -64,7 +72,6 @@
             </div>
         <% } %>
       </div>
-
 
     <% if(currentUser) { %>
       <h2>Leave a Review</h2>
@@ -105,18 +112,33 @@
 
 <div class="row">
 
- <!-- For mobile: Integrate the Swiper slider -->
+ <!-- For mobile: Integrate the Swiper slider to show the reviews in the show page -->
  <div class="swiper-container d-block d-md-none">
     <div class="swiper-wrapper">
 
       <% for (let review of campground.reviews) { %>
+
+        <%
+          let date = new Date(review.createdAt);
+          let monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+          let formattedDate = monthNames[date.getMonth()] + " " + date.getFullYear();
+        %>
+
         <div class="swiper-slide">
           <div class="col-md-6">
             <div class="card reviewCard">
               <div class="card-body">
-                <h5 class="card-title">
-                  <%= review.author.username  %>
-                </h5>
+                <div class="reviewCardImageAndTitlewithRatingstars">
+                  <img src="<%= review.author.avatar.url %>" alt="Avatar of <%= review.author.username %>" class="avatar mr-3"> <!-- Added margin-right -->
+
+                  <div>
+                    <h5 class="card-title">
+                      <%= review.author.username  %>
+                    </h5>
+                    <p><%= formattedDate %></p>
+                  </div>
+                </div>
                 <p class="starability-result" data-rating="<%= review.rating %>">
                   Rated: <%= review.rating %> stars
                 </p>
@@ -138,47 +160,66 @@
 
   </div>
 
-  <!-- For desktop: Your original code -->
-  <div class="d-none d-md-block">
-    <div class="d-none d-md-block"> <!-- Hide for mobile and show only for desktop using Bootstrap classes -->
-      <% let reviewCount = 0; %>
-      <% for (let review of campground.reviews) { %>
+  <!-- For desktop: the display to show the reviews on the show page -->
 
-        <!-- Stop the loop if 6 reviews are already displayed -->
-        <% if(reviewCount >= 6) break; %>
+  <div class="d-none d-md-block"> <!-- Hide for mobile and show only for desktop using Bootstrap classes -->
+    <% let reviewCount = 0; %>
+    <% for (let review of campground.reviews) { %>
 
-        <% if (reviewCount % 2 === 0) { %>
-          <div class="row">
-        <% } %>
+      <!-- Stop the loop if 6 reviews are already displayed -->
+      <% if(reviewCount >= 6) break; %>
 
-        <div class="col-md-6">
-          <div class="card reviewCard">
-            <div class="card-body">
-              <h5 class="card-title">
-                <%= review.author.username  %>
-              </h5>
-              <p class="starability-result" data-rating="<%= review.rating %>">
-                Rated: <%= review.rating %> stars
-              </p>
-              <p class="card-text">
-                  Review: <%= review.body  %>
-              </p>
-              <%  if( currentUser && review.author.equals(currentUser._id))  {%>
-                <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
-                  <button class="btn btn-sm btn-danger">Delete</button>
-                </form>
-              <% } %>
+      <% if (reviewCount % 2 === 0) { %>
+        <div class="row">
+      <% } %>
+
+      <%
+        let date = new Date(review.createdAt);
+        let monthNames = ["January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"];
+        let formattedDate = monthNames[date.getMonth()] + " " + date.getFullYear();
+      %>
+
+      <div class="col-md-6" id="review-<%= review._id %>">
+
+        <div class="card reviewCard">
+          <div class="card-body">
+            <div class="reviewCardImageAndTitlewithRatingstars">
+              <img src="<%= review.author.avatar.url %>" alt="Avatar of <%= review.author.username %>" class="avatar mr-3"> <!-- Added margin-right -->
+
+              <div>
+                <h5 class="card-title">
+                  <%= review.author.username  %>
+                </h5>
+                <p><%= formattedDate %></p>
+              </div>
             </div>
+            <p class="starability-result" data-rating="<%= review.rating %>">
+              Rated: <%= review.rating %> stars
+            </p>
+            <p class="card-text truncate-paragraph">
+              Review: <%= review.body  %>
+            </p>
+            <% if(review.body.length > 4) { %>
+              <a href="#!" class="show-more-link" data-review-id="<%= review._id %>"  onclick="openAndScrollToReview('<%= review._id %>')">Show more ></a>
+            <% } %>
+
+            <%  if( currentUser && review.author.equals(currentUser._id))  {%>
+              <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
+                <button class="btn btn-sm btn-danger">Delete</button>
+              </form>
+            <% } %>
           </div>
         </div>
 
-        <% reviewCount++; %>
-        <% if (reviewCount % 2 === 0 || reviewCount === campground.reviews.length) { %>
-          </div>
-        <% } %>
+      </div>
 
+      <% reviewCount++; %>
+      <% if (reviewCount % 2 === 0 || reviewCount === campground.reviews.length) { %>
+        </div>
       <% } %>
-    </div>
+
+    <% } %>
   </div>
 
   <!-- Add a button for showing all reviews after the first six -->
@@ -190,12 +231,11 @@
 
 </div>
 
-
 <!-- here is the modal structure to show all the reviews  -->
 <div id="reviewsModal" class="reviews-modal">
   <div class="reviews-modal-content">
     <div class="sticky-header">
-      <span class="close">&times;</span>
+      <span id="close-modal-button" class="close-modal">&times;</span>
       <div class="search-container">
         <form id="localReviewSearch" action="#" method="post">
           <div class="search-box">
@@ -206,7 +246,7 @@
         </form>
 
         <div class="search-result-message" style="display: none;">
-          <span class="match-count"></span> reviews mentioned "<span class="search-term"></span>"
+          <span class="match-count"></span> <span class="review-word">reviews</span> mentioned "<span class="search-term"></span>"
         </div>
       </div>
 
@@ -218,14 +258,30 @@
 
       <div class="original-reviews-container">
         <% for (let review of campground.reviews) { %>
-          <div class="card reviewCard">
+
+          <%
+            let date = new Date(review.createdAt);
+            let monthNames = ["January", "February", "March", "April", "May", "June",
+              "July", "August", "September", "October", "November", "December"];
+            let formattedDate = monthNames[date.getMonth()] + " " + date.getFullYear();
+          %>
+
+          <div class="card reviewCard" id="review-<%= review._id %>">
             <div class="card-body">
-              <h5 class="card-title">
-                <%= review.author.username  %>
-              </h5>
+              <div class="reviewCardImageAndTitlewithRatingstars">
+                <img src="<%= review.author.avatar.url %>" alt="Avatar of <%= review.author.username %>" class="avatar mr-3"> <!-- Added margin-right -->
+
+                <div>
+                  <h5 class="card-title">
+                    <%= review.author.username  %>
+                  </h5>
+                  <p><%= formattedDate %></p>
+                </div>
+              </div>
               <p class="starability-result" data-rating="<%= review.rating %>">
                 Rated: <%= review.rating %> stars
               </p>
+
               <p class="card-text">
                   Review: <%= review.body  %>
               </p>
@@ -248,202 +304,542 @@
 <script src="/javascripts/showPageValidateStarsRating.js"></script>
 
 <script>
-
   const mapToken = "<%-process.env.MAPBOX_TOKEN %>";
   const campground = <%- JSON.stringify(campground) %>
 
-  // JavaScript to handle the modal's open and close functionality
-  document.addEventListener('DOMContentLoaded', (event) => {
-    const modal = document.getElementById("reviewsModal");
-    const btn = document.getElementById("showAllReviews");
-    const span = document.getElementsByClassName("close")[0];
-    const originalReviewsContainer = document.querySelector('.original-reviews-container');
 
-    btn.onclick = function() {
-    // console.log("Button clicked to open modal.");
-
-    // Display the modal:
-    modal.style.display = "block";
-    setTimeout(function() {
-      document.querySelector('.reviews-modal-content').classList.add('active');
-    }, 10); // Add a tiny delay for the CSS transition to work correctly
-
-    // Closing the modal:
-    span.onclick = function() {
-      document.querySelector('.reviews-modal-content').classList.remove('active');
-      setTimeout(function() {
-        modal.style.display = "none";
-        document.body.classList.remove('no-scroll');
-      }, 300); // Delay hiding the modal by the transition duration
-    }
-
-    // Clone the reviews and append them to the modal:
-    const originalReviews = originalReviewsContainer.querySelectorAll('.reviewCard');
-    // console.log("Number of original reviews:", originalReviews.length); // Log the number of original reviews
-
-    const reviewsContainer = document.querySelector('.cloned-reviews-container');
-
-     // Clear out ALL child elements of the reviewsContainer:
-     while(reviewsContainer.firstChild) {
-      reviewsContainer.removeChild(reviewsContainer.firstChild);
-    }
-
-
-    // Check if the cloned-reviews-container is really empty:
-    const clonedReviewsAfterClearing = reviewsContainer.querySelectorAll('.reviewCard');
-    // console.log("Number of cloned reviews after clearing:", clonedReviewsAfterClearing.length);
-
-
-    // console.log('About to clone reviews...');
-
-    originalReviews.forEach(review => {
-      const clone = review.cloneNode(true);
-      reviewsContainer.appendChild(clone);
-    });
-    // Log the number of cloned reviews after cloning:
-    // console.log("Number of cloned reviews after cloning:", reviewsContainer.querySelectorAll('.reviewCard').length);
-
-
-
-    document.body.classList.add('no-scroll'); // Continue with your existing code.
-   }
-
-
-    function closeModal() {
-      document.querySelector('.reviews-modal-content').classList.remove('active');
-      setTimeout(function() {
-        modal.style.display = "none";
-        document.body.classList.remove('no-scroll'); // Remove the class to enable scrolling again
-      }, 300); // Delay hiding the modal by the transition duration
-    }
-
-
-    span.onclick = function() {
-      closeModal();
-    }
-
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        closeModal();
-      }
-    }
-
-
-     // Prevent form from submitting when Enter is pressed
-    document.getElementById('localReviewSearch').addEventListener('submit', function(e) {
-      e.preventDefault();
-    });
-
+  document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('reviewsModal');
+    const closeButton = document.getElementById('close-modal-button');
     const reviewSearch = document.getElementById('reviewSearch');
+    const span = document.getElementsByClassName("close-modal")[0];
+    const showMoreLinks = document.querySelectorAll('.show-more-link');
+    const campgroundId = campground._id;
+    const urlParams = new URLSearchParams(window.location.search);
+    const scrollToReviewId = urlParams.get("scroll_to_review");
 
-    function highlightMatches(element, searchTerm) {
-      const regEx = new RegExp(`(${searchTerm})`, 'gi');
-      const newText = element.innerHTML.replace(regEx, '<span class="highlight">$1</span>');
-      element.innerHTML = newText;
+    if (scrollToReviewId) {
+      displayReviewInModal(scrollToReviewId);
     }
 
-    reviewSearch.addEventListener('keyup', function() {
-      const searchTerm = this.value.toLowerCase();
+    // Add a click event listener for the "Show All Reviews" button
+    let showAllButton = document.getElementById('showAllReviews');
+    if (showAllButton) {
+      showAllButton.addEventListener('click', function() {
+       // Query for all cloned reviews within the modal
+       let clonedReviews = document.querySelectorAll('.cloned-reviews-container .reviewCard');
 
-      // First, remove all previous highlights
-      const clonedReviews = document.querySelectorAll('.cloned-reviews-container .reviewCard');
-      clonedReviews.forEach(review => {
-        review.innerHTML = review.innerHTML.replace(/<span class="highlight">([^<]+)<\/span>/gi, '$1');
-      });
-
-      if (searchTerm.trim() === '') {
-        // Hide the search result message
-        document.querySelector('.search-result-message').style.display = 'none';
-
-        // Show all reviews since the search term is empty
-        const clonedReviews = document.querySelectorAll('.cloned-reviews-container .reviewCard');
+        // Show all the reviews when the button is clicked
         clonedReviews.forEach(review => {
-          review.style.display = '';  // Show all reviews if the search term is empty
+          review.style.display = 'block';
         });
-        return;
-      }
-
-      // Use clonedReviews here:
-      // Highlight matches and show/hide reviews
-      const clonedReviewTexts = document.querySelectorAll('.cloned-reviews-container .reviewCard .card-text');
-
-      let matchCount = 0;  // Variable to keep track of the number of matches
-
-      clonedReviewTexts.forEach(reviewText => {
-        const reviewContent = reviewText.textContent.toLowerCase();
-
-        // Hide or show the review based on the search term
-        if (reviewContent.includes(searchTerm)) {
-          reviewText.closest('.reviewCard').style.display = ''; // show the review if it matches
-          highlightMatches(reviewText, searchTerm);  // Highlight the matches
-          matchCount++;  // Increase the match count
-        } else {
-          reviewText.closest('.reviewCard').style.display = 'none'; // hide the review if it doesn't match
-        }
       });
-      // Update and display the search message:
-      if (matchCount > 0 && searchTerm.trim() !== '') {
-        document.querySelector('.search-result-message .match-count').textContent = matchCount;
-        document.querySelector('.search-result-message .search-term').textContent = searchTerm;
-        document.querySelector('.search-result-message').style.display = 'block';
-     } else {
-      document.querySelector('.search-result-message').style.display = 'none';
-     }
+    }
+
+    const originalReviewElements = document.querySelectorAll('.original-reviews-container .reviewCard');
+    originalReviewElements.forEach((element, index) => {
+        console.log(`Original review at index ${index} has id: ${element.id}`);
     });
 
 
-    reviewSearch.addEventListener('focus', function() {
-      document.querySelector('.search-container').classList.add('focused');
-    });
 
-    reviewSearch.addEventListener('blur', function() {
-      document.querySelector('.search-container').classList.remove('focused');
-    });
-
-
-    reviewSearch.addEventListener('input', function() {
-      const clearIcon = document.querySelector('.clear-icon');
-      if (this.value) {
-        clearIcon.style.display = 'block';
-      } else {
-        clearIcon.style.display = 'none';
-      }
-    });
-
-    // show/hide the clear icon based on the input value, and to clear the input and reset reviews when the clear icon is clicked.
-    document.querySelector('.clear-icon').addEventListener('click', function() {
+    initializeModalControls(modal, campgroundId);
+    handleReviewSearch(reviewSearch);
+    showMoreHandler();
+    initializeSwiperCarousel();
+    handleCarouselArrowHiding();
+    handleDynamicCarouselIndicator(modal, closeButton, function() {
       const reviewSearchInput = document.getElementById('reviewSearch');
-      reviewSearchInput.value = '';
-      this.style.display = 'none'; // Hide the clear icon
-
-      // Manually trigger the keyup event on reviewSearch input
-      const event = new Event('keyup', {
-        'bubbles': true,
-        'cancelable': true
-      });
-      reviewSearchInput.dispatchEvent(event);
-
+      const clearIcon = document.querySelector('.clear-icon');
+      clearSearch(reviewSearchInput, clearIcon);
     });
+
+     // Check if closeButton actually got an element
+    if (closeButton) {
+        closeButton.addEventListener('click', function() {
+            const reviewSearchInput = document.getElementById('reviewSearch');
+            const clearIcon = document.querySelector('.clear-icon');
+            clearSearch(reviewSearchInput, clearIcon);
+        });
+    } else {
+        console.error("Close button not found!");
+    }
+
+    // Event listener for clicking outside the modal
+
+    attachModalEventListeners(modal, closeButton, clearSearch, campgroundId);
+      showMoreLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+          e.preventDefault();
+
+          const reviewId = this.getAttribute('data-review-id');
+          displayReviewInModal(reviewId);
+
+          // Open the modal
+          document.getElementById('reviewsModal').style.display = 'block';
+          setTimeout(() => {
+              document.querySelector('.reviews-modal-content').classList.add('active');
+          }, 10);
+
+      });
+    });
+
+    attachUpdateUrlEventListeners();
+
 
   });
 
+  // This function is triggered when "Show More" is clicked
+  function showMoreClicked(reviewId) {
+    // Open the modal (if it's not already open)
+    // Scroll to the review in the modal
+    const element = document.getElementById(reviewId);
+    if (element) {
+      element.scrollIntoView({behavior: "smooth", block: "start"});
+    }
+  }
 
-  //Javascript to ensure that the Swiper JS is correctly initialized
+  function openAndScrollToReview(reviewId) {
+  $('#reviewsModal').modal('show'); // Open the modal
+
+  // Use a timeout to scroll after the modal is visible
+  setTimeout(() => {
+    const element = document.getElementById(`review-${reviewId}`);
+    if (element) {
+      element.scrollIntoView({behavior: "smooth", block: "start"});
+    }
+  }, 500); // Adjust the timeout duration as needed
+}
 
 
-  document.addEventListener("DOMContentLoaded", function() {
+
+
+  function initializeModalControls(modal, campgroundId) {
+    const btn = document.getElementById("showAllReviews");
+    const span = document.getElementsByClassName("close-modal")[0];
+    const originalReviewsContainer = document.querySelector('.original-reviews-container');
+
+    btn.addEventListener('click', () => openModal(modal, originalReviewsContainer));
+    span.addEventListener('click', () => closeModal(modal, campgroundId));
+
+    document.getElementById('localReviewSearch').addEventListener('submit', (e) => {
+      e.preventDefault();
+    });
+  }
+
+  function attachModalEventListeners(modal, closeButton, clearSearchFn, campgroundId) {
+    // Wrap the clearSearch call in another function to ensure parameters are always passed.
+    closeButton.addEventListener('click', function() {
+        const reviewSearchInput = document.getElementById('reviewSearch');
+        const clearIcon = document.querySelector('.clear-icon');
+        clearSearchFn(reviewSearchInput, clearIcon);
+    });
+
+    modal.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            const reviewSearchInput = document.getElementById('reviewSearch');
+            const clearIcon = document.querySelector('.clear-icon');
+            clearSearchFn(reviewSearchInput, clearIcon);
+            closeModal(modal, campgroundId);
+        }
+    });
+  }
+
+  function openModal(modal, originalReviewsContainer) {
+    modal.style.display = "block";
+    setTimeout(() => {
+      document.querySelector('.reviews-modal-content').classList.add('active');
+    }, 10);
+
+    cloneReviews(originalReviewsContainer);
+
+    document.body.classList.add('no-scroll');
+  }
+
+   // Function to handle closing the modal
+   function closeModal(modal, campgroundId) {
+    document.querySelector('.reviews-modal-content').classList.remove('active');
+
+    document.getElementById('reviewsModal').style.display = 'none';
+
+    // Reset scroll position of cloned reviews container
+    const clonedReviewsContainer = document.querySelector('.cloned-reviews-container');
+    clonedReviewsContainer.scrollTop = 0;
+
+    setTimeout(function() {
+        modal.style.display = "none"; // Ensure the entire modal is hidden
+        document.body.classList.remove('no-scroll');
+    }, 300);
+    // Clear the search input
+    const reviewSearchInput = document.getElementById('reviewSearch');
+    reviewSearchInput.value = '';
+
+    // Manually trigger the input event on reviewSearch input to handle clear icon visibility
+    const inputEvent = new Event('input', {
+      'bubbles': true,
+      'cancelable': true
+    });
+    reviewSearchInput.dispatchEvent(inputEvent);
+
+    // Manually trigger the keyup event on reviewSearch input to reset reviews
+    const keyupEvent = new Event('keyup', {
+      'bubbles': true,
+      'cancelable': true
+    });
+    reviewSearchInput.dispatchEvent(keyupEvent);
+    history.replaceState({}, document.title, `/campgrounds/${campgroundId}`);
+
+  }
+
+  function updateUrl(action, reviewId) {
+    let baseUrl = window.location.origin + `/campgrounds/${campground._id}`; // replace 'yourCampgroundId' with the actual ID
+    let currentParams = window.location.search;
+
+    switch (action) {
+        case "showMoreOnReview":
+            history.pushState({}, '', baseUrl + "/reviews" + currentParams + "&scroll_to_review=" + reviewId);
+            break;
+        case "showAllReviews":
+            history.pushState({}, '', baseUrl + "/reviews" + currentParams);
+            break;
+    }
+  }
+
+  // Function to open a modal and scroll to a specific review
+  function openAndScrollToReview(reviewId) {
+    document.getElementById('reviewsModal').style.display = 'block';
+    setTimeout(() => {
+      document.querySelector('.reviews-modal-content').classList.add('active');
+
+      const reviewElement = document.getElementById(`modal-review-${reviewId}`);
+      if (reviewElement) {
+        const container = document.querySelector('.reviews-modal-content');
+        container.scrollTop = reviewElement.offsetTop;
+      }
+    }, 10);
+  }
+
+  function commonShowMoreHandler(reviewId) {
+    updateUrl("showMoreOnReview", reviewId);
+    openAndScrollToReview(reviewId);
+  }
+
+
+
+  function attachUpdateUrlEventListeners() {
+    // "Show all reviews" button/link
+    document.getElementById("showAllReviews").addEventListener("click", function() {
+      updateUrl("showAllReviews");
+    });
+
+    // Event listener for "show more" links
+    const showMoreLinks = document.querySelectorAll('.show-more-link');
+    showMoreLinks.forEach(link => {
+      link.removeEventListener('click', commonShowMoreHandler);  // Remove any previous listeners
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const reviewId = this.getAttribute('data-review-id');
+        commonShowMoreHandler(reviewId);
+      });
+    });
+  }
+
+  attachUpdateUrlEventListeners();
+
+
+
+
+
+  document.querySelector(".show-more-link").addEventListener("click", handleShowMore);
+
+  function handleShowMore(event) {
+    event.preventDefault();  // Prevent the default click event
+    const reviewId = event.target.dataset.reviewId;  // Extract the review ID from the clicked element
+    commonShowMoreHandler(reviewId);  // Call the common function
+  }
+
+
+  function cloneReviews(originalReviewsContainer) {
+    const originalReviews = originalReviewsContainer.querySelectorAll('.reviewCard');
+    const reviewsContainer = document.querySelector('.cloned-reviews-container');
+
+
+    // Clear existing reviews in the modal
+    while (reviewsContainer.firstChild) {
+      reviewsContainer.removeChild(reviewsContainer.firstChild);
+    }
+
+    originalReviews.forEach((review, index) => {
+        const clone = review.cloneNode(true);
+        console.log(`Cloning review index: ${index}, id: ${review.id}`);
+        console.log(`Cloned review has id: ${clone.id}`);
+        reviewsContainer.appendChild(clone);
+    });
+    console.log(`Total number of reviews cloned: ${originalReviews.length}`);
+  }
+
+  function handleReviewSearch() {
+    reviewSearch.addEventListener('keyup', searchReviews);
+
+    reviewSearch.addEventListener('focus', () => {
+      document.querySelector('.search-container').classList.add('focused');
+    });
+
+    reviewSearch.addEventListener('blur', () => {
+      document.querySelector('.search-container').classList.remove('focused');
+    });
+
+    reviewSearch.addEventListener('input', toggleClearIcon);
+
+    const clearIcon = document.querySelector('.clear-icon');
+    clearIcon.addEventListener('click', () => {
+        clearSearch(reviewSearch, clearIcon);
+    });
+  }
+
+  function highlightMatches(element, searchTerm) {
+    const regEx = new RegExp(`(${searchTerm})`, 'gi');
+    const newText = element.innerHTML.replace(regEx, '<span class="highlight">$1</span>');
+    element.innerHTML = newText;
+  }
+
+  function clearHighlights() {
+    const clonedReviews = document.querySelectorAll('.cloned-reviews-container .reviewCard');
+    clonedReviews.forEach(review => {
+      review.innerHTML = review.innerHTML.replace(/<span class="highlight">([^<]+)<\/span>/gi, '$1');
+    });
+  }
+
+  function searchReviews() {
+    const searchTerm = reviewSearch.value.toLowerCase();
+
+    // Clear previous highlights
+    clearHighlights();
+
+    const clonedReviews = document.querySelectorAll('.cloned-reviews-container .reviewCard');
+    if (searchTerm.trim() === '') {
+      // Hide the search result message
+      document.querySelector('.search-result-message').style.display = 'none';
+
+      // Show all reviews since the search term is empty
+      clonedReviews.forEach(review => {
+        review.style.display = '';
+      });
+      return;
+    }
+
+    // Highlight matches and show/hide reviews
+    const clonedReviewTexts = document.querySelectorAll('.cloned-reviews-container .reviewCard .card-text');
+    let matchCount = 0;
+
+    clonedReviewTexts.forEach(reviewText => {
+      const reviewContent = reviewText.textContent.toLowerCase();
+
+      if (reviewContent.includes(searchTerm)) {
+        reviewText.closest('.reviewCard').style.display = '';
+        highlightMatches(reviewText, searchTerm);
+        matchCount++;
+      } else {
+        reviewText.closest('.reviewCard').style.display = 'none';
+      }
+    });
+
+    // Update the search result message based on matches
+    if (matchCount > 0) {
+      document.querySelector('.search-result-message .match-count').textContent = matchCount;
+      document.querySelector('.search-result-message .search-term').textContent = searchTerm;
+
+      const reviewWord = matchCount === 1 ? "review" : "reviews";
+      document.querySelector('.search-result-message .review-word').textContent = reviewWord;
+
+      document.querySelector('.search-result-message').style.display = 'block';
+    } else {
+      document.querySelector('.search-result-message').style.display = 'none';
+    }
+  }
+
+  function toggleClearIcon() {
+    const clearIcon = document.querySelector('.clear-icon');
+    clearIcon.style.display = this.value ? 'block' : 'none';
+  }
+
+  function clearSearch(reviewSearchInput, clearIcon) {
+    if (reviewSearchInput) {
+        reviewSearchInput.value = '';
+        // Dispatch the event once
+        const event = new Event('keyup', {
+            'bubbles': true,
+            'cancelable': true
+        });
+        reviewSearchInput.dispatchEvent(event);
+    } else {
+        console.error("reviewSearchInput is not found");
+    }
+
+    if (clearIcon) {
+        clearIcon.style.display = 'none';
+    } else {
+        console.error("clearIcon is not found");
+    }
+
+    // I'm assuming searchReviews() needs to be called once after the clear actions.
+    // If not, remove the following line.
+    searchReviews();
+  }
+
+  function showMoreHandler() {
+    const showMoreLinks = document.querySelectorAll('.show-more-link');
+
+    showMoreLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+          e.preventDefault();
+
+          const reviewId = this.getAttribute('data-review-id');
+          displayReviewInModal(reviewId);
+
+          // Open the modal
+          document.getElementById('reviewsModal').style.display = 'block';
+          setTimeout(() => {
+            document.querySelector('.reviews-modal-content').classList.add('active');
+            // Scroll to the specific review
+            const reviewElement = document.getElementById(`modal-review-${reviewId}`);
+            if (reviewElement) {
+              const container = document.querySelector('.reviews-modal-content'); // Replace this selector with the actual class or id of the container that scrolls
+              container.scrollTop = reviewElement.offsetTop;
+            }
+          }, 10);
+
+      });
+    });
+  }
+//aaaa
+  function initializeSwiperCarousel() {
     const mySwiper = new Swiper('.swiper-container', {
-      slidesPerView: 1,  // Ensure only one slide is visible at a time
-      spaceBetween: 20,  // Optional: Add some space between slides
+      slidesPerView: 1,
+      spaceBetween: 20,
       direction: 'horizontal',
-      slidesPerView: 'auto', // This allows you to have multiple slides in view at once
-      freeMode: true, // This allows the slide to stop anywhere in between slides
+      slidesPerView: 'auto',
+      freeMode: true,
       pagination: {
         el: '.swiper-pagination',
       },
     });
-  });
+  }
 
+  function handleCarouselArrowHiding() {
+    function handleFirstTab(e) {
+      if (e.keyCode === 9) {
+        document.body.classList.remove('using-mouse');
+        window.removeEventListener('keydown', handleFirstTab);
+        window.addEventListener('mousedown', handleMouseDownOnce);
+      }
+    }
+
+    function handleMouseDownOnce() {
+      document.body.classList.add('using-mouse');
+      window.removeEventListener('mousedown', handleMouseDownOnce);
+      window.addEventListener('keydown', handleFirstTab);
+    }
+
+    window.addEventListener('keydown', handleFirstTab);
+    window.addEventListener('mousedown', handleMouseDownOnce);
+  }
+
+  function handleDynamicCarouselIndicator() {
+    // dinamyc indicator for the carousel
+    $(document).ready(function() {
+      let $carousel = $('#campgroundCarousel');
+      let $indicators = $('.carousel-indicators li');
+      let totalIndicators = $indicators.length;
+
+      // Limiting the indicators to a maximum of 5
+      if (totalIndicators > 5) {
+          // Display only 5 dots initially
+          for(let i=5; i<totalIndicators; i++) {
+            $indicators.eq(i).hide();
+          }
+          // Set initial classes for the last two indicators
+          $indicators.eq(3).addClass('small');
+          $indicators.eq(4).addClass('smallest');
+      }
+
+      $carousel.on('slide.bs.carousel', function (e) {
+        let currentIndex = $(e.relatedTarget).index();
+        $indicators.removeClass('small smallest').show();
+
+        // If there are 5 or fewer images, no special adjustments required
+        if (totalIndicators <= 5) return;  // No special logic for 5 or fewer indicators
+
+          // When you are in the first three images
+        if (currentIndex < 3) {
+          for(let i=5; i<totalIndicators; i++) {
+            $indicators.eq(i).hide();
+          }
+          $indicators.eq(3).addClass('small');
+          $indicators.eq(4).addClass('smallest');
+        }
+          // When you slide to the 4th image onward, adjust the shown indicators
+        else if (currentIndex >= 3 && currentIndex < totalIndicators - 2) {
+          let start = currentIndex - 2;
+          for(let i=0; i<start; i++) {
+            $indicators.eq(i).hide();
+          }
+          for(let i=currentIndex+3; i<totalIndicators; i++) {
+            $indicators.eq(i).hide();
+          }
+          $indicators.eq(currentIndex - 2).addClass('smallest');
+          $indicators.eq(currentIndex - 1).addClass('small');
+          $indicators.eq(currentIndex + 1).addClass('small');
+          $indicators.eq(currentIndex + 2).addClass('smallest');
+        }
+          // When you're at the last two images, adjust the indicators
+        else {
+          for(let i=0; i<totalIndicators-5; i++) {
+            $indicators.eq(i).hide();
+          }
+          $indicators.slice(-5).show();  // Show the last five indicators
+          $indicators.eq(totalIndicators - 5).addClass('smallest');
+          $indicators.eq(totalIndicators - 4).addClass('small');
+        }
+
+      });
+    });
+
+  }
+
+  function displayReviewInModal(reviewId) {
+    // Log the reviewId to confirm it's being passed correctly
+    console.log("Review ID to display:", reviewId);
+
+    const clonedReviewsContainer = document.querySelector('.cloned-reviews-container');
+    const originalReviewsContainer = document.querySelector('.original-reviews-container');
+
+      // Log to confirm containers are found
+      console.log("Cloned Reviews Container:", clonedReviewsContainer);
+    console.log("Original Reviews Container:", originalReviewsContainer);
+
+
+    // Clone all the reviews to the modal
+    cloneReviews(originalReviewsContainer);
+
+     // Delay scrolling action
+    setTimeout(() => {
+        const clonedTargetReview = document.querySelector(`.cloned-reviews-container #review-${reviewId}`);
+        // Log to confirm the review element is found in the cloned container
+        console.log("Cloned Target Review:", clonedTargetReview);
+
+        if (clonedTargetReview) {
+            // Your new scroll code here
+            let offsetTop = clonedTargetReview.offsetTop;
+            if (clonedTargetReview.previousElementSibling) {
+                offsetTop -= clonedTargetReview.previousElementSibling.offsetTop;
+            }
+            clonedReviewsContainer.scrollTop = offsetTop;
+        }
+    }, 1000);  // Adjust the delay as needed
+
+    document.getElementById('reviewsModal').style.display = 'block';
+  }
 
 
 

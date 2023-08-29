@@ -4,6 +4,10 @@ const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
 const { cloudinary } = require("../cloudinary");
 
+// we use here mongoose for validateObjectId
+const mongoose = require('mongoose');
+
+
 //index
 
 module.exports.index = async (req, res) => {
@@ -131,34 +135,34 @@ module.exports.createCampground = async (req, res, next) => {
 
 module.exports.showCampground = async (req, res) => {
   try {
-      const campground = await Campground.findById(req.params.id).populate({
-          path: "reviews",
-          options: { sort: { createdAt: -1 } },  // Sort by creation date in descending order
-          populate: {
-              path: "author"
-          }
-      }).populate("author");
-
-      if (!campground) {
-          req.flash("error", "Cannot find that campground!");
-          return res.redirect("/campgrounds");
-      }
-
-      // Calculate average rating
-      let averageRating = 0;
-      if (campground.reviews.length > 0) {
-        let totalRating = 0;
-        for (let review of campground.reviews) {
-          totalRating += review.rating;
+    const campground = await Campground.findById(req.params.id).populate({
+        path: "reviews",
+        options: { sort: { createdAt: -1 } },  // Sort by creation date in descending order
+        populate: {
+          path: "author"
         }
-        averageRating = totalRating / campground.reviews.length;
-      }
+    }).populate("author");
 
-      res.render("campgrounds/show", { campground, averageRating, messages: req.flash() });
+    if (!campground) {
+      req.flash("error", "Cannot find that campground!");
+      return res.redirect("/campgrounds");
+    }
+
+    // Calculate average rating
+    let averageRating = 0;
+    if (campground.reviews.length > 0) {
+      let totalRating = 0;
+      for (let review of campground.reviews) {
+        totalRating += review.rating;
+      }
+      averageRating = totalRating / campground.reviews.length;
+    }
+
+    res.render("campgrounds/show", { campground, averageRating, messages: req.flash() });
   } catch (err) {
-      console.error(err);
-      req.flash("error", "Something went wrong.");
-      res.redirect("/campgrounds");
+    console.error(err);
+    req.flash("error", "Something went wrong.");
+    res.redirect("/campgrounds");
   }
 }
 
@@ -201,3 +205,19 @@ module.exports.deleteCampground = async (req, res) => {
   req.flash("success", "Sucessfully delete campground!");
   res.redirect("/campgrounds");
 }
+
+/**
+ * Middleware to validate the ObjectId format in the request parameters.
+ * If the provided 'id' parameter isn't a valid MongoDB ObjectId,
+ * an error message is flashed and the user is redirected to "/campgrounds".
+ * Otherwise, the next middleware or route handler is executed.
+*/
+
+module.exports.validateObjectId = (req, res, next) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+      req.flash("error", "Invalid campground ID format.");
+      return res.redirect("/campgrounds");
+  }
+  next();
+};

@@ -10,7 +10,7 @@
           alt="" class="card-img-top" />
         <div class="card-body">
           <h5 class="card-title">Register</h5>
-          <form action="/register" method="POST" class="validated-form" novalidate>
+          <form action="/register" method="POST" class="validated-form" enctype="multipart/form-data"  novalidate>
             <div class="mb-3">
               <label class="form-lable" for="username">Username</label>
               <input class="form-control" type="text" name="username" id="username" autofocus required>
@@ -31,6 +31,11 @@
               <div class="valid-feedback">
                 Looks good!
               </div>
+            </div>
+            <div class="mb-3">
+              <label class="form-lable" for="avatar">Profile Picture</label>
+              <input class="form-control" type="file" name="avatar" id="avatar" accept="image/*">
+              <small class="form-text text-muted">Optional. If not selected, a default avatar will be used.</small>
             </div>
             <button class="btn btn-success btn-block">Register</button>
           </form>

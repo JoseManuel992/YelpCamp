@@ -10,8 +10,14 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary,
   params: {
-    folder: "YelpCamp",
-    allowedFormats: ["jpeg", "png", "jpg"]
+    folder: 'YelpCamp/user_avatars',
+    allowedFormats: ['jpeg', 'png', 'jpg'],
+    format: async (req, file) => {
+      const extension = file.mimetype.split('/')[1];
+      return extension;
+    },
+    public_id: (req, file) => 'avatar_' + Date.now()
+
   }
 });
 
