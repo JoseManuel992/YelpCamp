@@ -266,7 +266,8 @@
             let formattedDate = monthNames[date.getMonth()] + " " + date.getFullYear();
           %>
 
-          <div class="card reviewCard" id="review-<%= review._id %>">
+            <div class="card reviewCard review-card" id="review-content-<%= review._id %>"">
+
             <div class="card-body">
               <div class="reviewCardImageAndTitlewithRatingstars">
                 <img src="<%= review.author.avatar.url %>" alt="Avatar of <%= review.author.username %>" class="avatar mr-3"> <!-- Added margin-right -->
@@ -434,6 +435,7 @@
       // Clone and append reviews while updating avatar image paths
       const clonedReviewsContainer = document.querySelector('.cloned-reviews-container');
       clonedReviewsContainer.innerHTML = ''; // Clear the container
+      clonedReviewsContainer.scrollTop = 0; // Scroll to the top
 
       originalReviewsContainer.querySelectorAll('.reviewCard').forEach(originalReview => {
         const clonedReview = originalReview.cloneNode(true); // Clone the review
@@ -445,13 +447,6 @@
         clonedReviewsContainer.appendChild(clonedReview); // Append the cloned review
       });
 
-      // Scroll to the review if reviewIdToScroll is provided
-      if (reviewIdToScroll) {
-        const reviewElementToScroll = clonedReviewsContainer.querySelector(`#review-${reviewIdToScroll}`);
-        if (reviewElementToScroll) {
-          clonedReviewsContainer.scrollTop = reviewElementToScroll.offsetTop;
-        }
-      }
 
       document.body.classList.add('no-scroll');
     }, 10);
@@ -479,9 +474,6 @@
       document.body.classList.remove('no-scroll'); // Enable scrolling on main page
     }, 300); // Adjust the duration as needed
 
-    // Reset scroll position of cloned reviews container
-    const clonedReviewsContainer = modalContent.querySelector('.cloned-reviews-container');
-    clonedReviewsContainer.scrollTop = 0;
 
 
 
@@ -508,7 +500,7 @@
     history.replaceState({}, document.title, `/campgrounds/${campgroundId}`);
 
   }
-// aaaaa
+
   function updateUrl(action, reviewId) {
     let baseUrl = window.location.origin + `/campgrounds/${campground._id}`; // replace 'yourCampgroundId' with the actual ID
     let currentParams = window.location.search;
@@ -662,26 +654,61 @@
       link.addEventListener('click', function(e) {
         e.preventDefault();
 
+
         const reviewId = this.getAttribute('data-review-id');
         displayReviewInModal(reviewId);
 
-        // Open the modal
-        document.getElementById('reviewsModal').style.display = 'block';
-        setTimeout(() => {
-          document.querySelector('.reviews-modal-content').classList.add('active');
-          // Scroll to the specific review
-          const reviewElement = document.getElementById(`modal-review-${reviewId}`);
-          if (reviewElement) {
-            const container = document.querySelector('.reviews-modal-content'); // Replace this selector with the actual class or id of the container that scrolls
-            container.scrollTop = reviewElement.offsetTop;
-          }
+         // Open the modal and add the active class
+        const reviewsModal = document.getElementById('reviewsModal');
+        reviewsModal.classList.add('show');
 
-          // Call the updateUrl function to update the URL
-          updateUrl("showMoreOnReview", reviewId);
+        setTimeout(() => {
+          const reviewsModalContent = document.querySelector('.reviews-modal-content');
+
+          // Reset the scrollbar to the top of the modal content
+          const modalInnerContent = document.querySelector('.modal-inner-content');
+          modalInnerContent.scrollTop = 0;
+
+          reviewsModalContent.classList.add('active');
+
+          // Scroll to the specific review content after a delay
+          setTimeout(() => {
+            const reviewContent = document.getElementById(`review-content-${reviewId}`);
+            if (reviewContent) {
+              const container = document.querySelector('.modal-inner-content');
+              const containerOffset = container.offsetTop; // Offset of the container within the modal
+              const reviewContentOffset = reviewContent.offsetTop - containerOffset;
+
+              // Calculate the duration for smooth scrolling (constant duration)
+              const scrollSpeed = 0.2; // Adjust this value for the desired speed
+              const duration = Math.abs(reviewContentOffset - container.scrollTop) / scrollSpeed;
+
+              let startTime = null;
+
+              function animateScroll(timestamp) {
+                if (!startTime) startTime = timestamp;
+                const progress = timestamp - startTime;
+                const percentage = Math.min(progress / duration, 1);
+
+                container.scrollTop = container.scrollTop + (reviewContentOffset - container.scrollTop) * percentage;
+
+                if (percentage < 1) {
+                  window.requestAnimationFrame(animateScroll);
+                } else {
+                  // Scroll animation complete
+                  // Call the updateUrl function to update the URL
+                  updateUrl("showMoreOnReview", reviewId);
+                }
+              }
+
+              window.requestAnimationFrame(animateScroll);
+            }
+          }, 600); // Delay in milliseconds before scrolling starts
         }, 10);
       });
     });
   }
+
 
   function initializeSwiperCarousel() {
     const mySwiper = new Swiper('.swiper-container', {
