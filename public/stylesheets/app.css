@@ -620,6 +620,19 @@ h2{
   }
 }
 
+/* Updated CSS animation for closing the modal */
+@keyframes slideDown {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+
 
 #reviewsModal .original-reviews-container {
   display: none;
@@ -712,6 +725,7 @@ h2{
     padding: 0px 0px 0px ;
     box-shadow: none;
   }
+
 
   .sticky-header {
     position: -webkit-sticky; /* For Safari */

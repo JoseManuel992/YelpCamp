@@ -315,12 +315,6 @@
     const span = document.getElementsByClassName("close-modal")[0];
     const showMoreLinks = document.querySelectorAll('.show-more-link');
     const campgroundId = campground._id;
-    const urlParams = new URLSearchParams(window.location.search);
-    const scrollToReviewId = urlParams.get("scroll_to_review");
-
-    if (scrollToReviewId) {
-      displayReviewInModal(scrollToReviewId);
-    }
 
     // Add a click event listener for the "Show All Reviews" button
     let showAllButton = document.getElementById('showAllReviews');
@@ -384,33 +378,9 @@
       });
     });
 
-    attachUpdateUrlEventListeners();
 
 
   });
-
-  // This function is triggered when "Show More" is clicked
-  function showMoreClicked(reviewId) {
-    // Open the modal (if it's not already open)
-    // Scroll to the review in the modal
-    const element = document.getElementById(reviewId);
-    if (element) {
-      element.scrollIntoView({behavior: "smooth", block: "start"});
-    }
-  }
-
-  function openAndScrollToReview(reviewId) {
-  $('#reviewsModal').modal('show'); // Open the modal
-
-  // Use a timeout to scroll after the modal is visible
-  setTimeout(() => {
-    const element = document.getElementById(`review-${reviewId}`);
-    if (element) {
-      element.scrollIntoView({behavior: "smooth", block: "start"});
-    }
-  }, 500); // Adjust the timeout duration as needed
-}
-
 
 
 
@@ -449,27 +419,52 @@
     modal.style.display = "block";
     setTimeout(() => {
       document.querySelector('.reviews-modal-content').classList.add('active');
+
+      // Clone and append reviews while updating avatar image paths
+      const clonedReviewsContainer = document.querySelector('.cloned-reviews-container');
+      originalReviewsContainer.querySelectorAll('.reviewCard').forEach(originalReview => {
+        const clonedReview = originalReview.cloneNode(true); // Clone the review
+        const avatar = clonedReview.querySelector('.avatar'); // Get the avatar image
+
+        // Update the avatar image source to use the correct path
+        avatar.src = '/images/default-user-image.png'; // Make sure the path is correct
+
+        clonedReviewsContainer.appendChild(clonedReview); // Append the cloned review
+      });
+
+      document.body.classList.add('no-scroll');
     }, 10);
-
-    cloneReviews(originalReviewsContainer);
-
-    document.body.classList.add('no-scroll');
+    // Call the updateUrl function to update the URL
+    updateUrl("showAllReviews", null);
   }
 
    // Function to handle closing the modal
    function closeModal(modal, campgroundId) {
-    document.querySelector('.reviews-modal-content').classList.remove('active');
+    const modalContent = modal.querySelector('.reviews-modal-content');
 
-    document.getElementById('reviewsModal').style.display = 'none';
+    // Remove the 'active' class from modal content
+    modalContent.classList.remove('active');
+
+    // Apply the closing animation to the modal content
+    modalContent.style.animation = 'slideDown 0.3s ease-out';
+    modalContent.style.opacity = '0';
+
+    // After the animation, reset styles and hide the modal
+    setTimeout(() => {
+      modalContent.style.animation = 'none'; // Reset animation
+      modalContent.style.opacity = '1'; // Reset opacity
+
+      modal.style.display = 'none'; // Hide the modal container
+      document.body.classList.remove('no-scroll'); // Enable scrolling on main page
+    }, 300); // Adjust the duration as needed
 
     // Reset scroll position of cloned reviews container
-    const clonedReviewsContainer = document.querySelector('.cloned-reviews-container');
+    const clonedReviewsContainer = modalContent.querySelector('.cloned-reviews-container');
     clonedReviewsContainer.scrollTop = 0;
 
-    setTimeout(function() {
-        modal.style.display = "none"; // Ensure the entire modal is hidden
-        document.body.classList.remove('no-scroll');
-    }, 300);
+
+
+
     // Clear the search input
     const reviewSearchInput = document.getElementById('reviewSearch');
     reviewSearchInput.value = '';
@@ -487,6 +482,8 @@
       'cancelable': true
     });
     reviewSearchInput.dispatchEvent(keyupEvent);
+
+    // Update URL
     history.replaceState({}, document.title, `/campgrounds/${campgroundId}`);
 
   }
@@ -505,58 +502,6 @@
     }
   }
 
-  // Function to open a modal and scroll to a specific review
-  function openAndScrollToReview(reviewId) {
-    document.getElementById('reviewsModal').style.display = 'block';
-    setTimeout(() => {
-      document.querySelector('.reviews-modal-content').classList.add('active');
-
-      const reviewElement = document.getElementById(`modal-review-${reviewId}`);
-      if (reviewElement) {
-        const container = document.querySelector('.reviews-modal-content');
-        container.scrollTop = reviewElement.offsetTop;
-      }
-    }, 10);
-  }
-
-  function commonShowMoreHandler(reviewId) {
-    updateUrl("showMoreOnReview", reviewId);
-    openAndScrollToReview(reviewId);
-  }
-
-
-
-  function attachUpdateUrlEventListeners() {
-    // "Show all reviews" button/link
-    document.getElementById("showAllReviews").addEventListener("click", function() {
-      updateUrl("showAllReviews");
-    });
-
-    // Event listener for "show more" links
-    const showMoreLinks = document.querySelectorAll('.show-more-link');
-    showMoreLinks.forEach(link => {
-      link.removeEventListener('click', commonShowMoreHandler);  // Remove any previous listeners
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const reviewId = this.getAttribute('data-review-id');
-        commonShowMoreHandler(reviewId);
-      });
-    });
-  }
-
-  attachUpdateUrlEventListeners();
-
-
-
-
-
-  document.querySelector(".show-more-link").addEventListener("click", handleShowMore);
-
-  function handleShowMore(event) {
-    event.preventDefault();  // Prevent the default click event
-    const reviewId = event.target.dataset.reviewId;  // Extract the review ID from the clicked element
-    commonShowMoreHandler(reviewId);  // Call the common function
-  }
 
 
   function cloneReviews(originalReviewsContainer) {
@@ -692,27 +637,29 @@
 
     showMoreLinks.forEach(link => {
       link.addEventListener('click', function(e) {
-          e.preventDefault();
+        e.preventDefault();
 
-          const reviewId = this.getAttribute('data-review-id');
-          displayReviewInModal(reviewId);
+        const reviewId = this.getAttribute('data-review-id');
+        displayReviewInModal(reviewId);
 
-          // Open the modal
-          document.getElementById('reviewsModal').style.display = 'block';
-          setTimeout(() => {
-            document.querySelector('.reviews-modal-content').classList.add('active');
-            // Scroll to the specific review
-            const reviewElement = document.getElementById(`modal-review-${reviewId}`);
-            if (reviewElement) {
-              const container = document.querySelector('.reviews-modal-content'); // Replace this selector with the actual class or id of the container that scrolls
-              container.scrollTop = reviewElement.offsetTop;
-            }
-          }, 10);
+        // Open the modal
+        document.getElementById('reviewsModal').style.display = 'block';
+        setTimeout(() => {
+          document.querySelector('.reviews-modal-content').classList.add('active');
+          // Scroll to the specific review
+          const reviewElement = document.getElementById(`modal-review-${reviewId}`);
+          if (reviewElement) {
+            const container = document.querySelector('.reviews-modal-content'); // Replace this selector with the actual class or id of the container that scrolls
+            container.scrollTop = reviewElement.offsetTop;
+          }
 
+          // Call the updateUrl function to update the URL
+          updateUrl("showMoreOnReview", reviewId);
+        }, 10);
       });
     });
   }
-//aaaa
+
   function initializeSwiperCarousel() {
     const mySwiper = new Swiper('.swiper-container', {
       slidesPerView: 1,
