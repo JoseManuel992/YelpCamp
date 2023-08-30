@@ -201,7 +201,7 @@
               Review: <%= review.body  %>
             </p>
             <% if(review.body.length > 4) { %>
-              <a href="#!" class="show-more-link" data-review-id="<%= review._id %>"  onclick="openAndScrollToReview('<%= review._id %>')">Show more ></a>
+              <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more ></a>
             <% } %>
 
             <%  if( currentUser && review.author.equals(currentUser._id))  {%>
@@ -330,9 +330,19 @@
       });
     }
 
-    const originalReviewElements = document.querySelectorAll('.original-reviews-container .reviewCard');
-    originalReviewElements.forEach((element, index) => {
-        console.log(`Original review at index ${index} has id: ${element.id}`);
+    const originalReviewsContainer = document.querySelector('.original-reviews-container');
+
+    originalReviewsContainer.querySelectorAll('.reviewCard').forEach((element, index) => {
+      console.log(`Original review at index ${index} has id: ${element.id}`);
+    });
+
+
+    showMoreLinks.forEach(link => {
+      link.addEventListener('click', function(event) {
+        event.preventDefault();
+        const reviewId = this.getAttribute('data-review-id');
+        openModal(modal, originalReviewsContainer, reviewId); // Pass reviewId as the third argument
+      });
     });
 
 
@@ -415,13 +425,16 @@
     });
   }
 
-  function openModal(modal, originalReviewsContainer) {
+  function openModal(modal, originalReviewsContainer, reviewIdToScroll) {
     modal.style.display = "block";
     setTimeout(() => {
       document.querySelector('.reviews-modal-content').classList.add('active');
 
+
       // Clone and append reviews while updating avatar image paths
       const clonedReviewsContainer = document.querySelector('.cloned-reviews-container');
+      clonedReviewsContainer.innerHTML = ''; // Clear the container
+
       originalReviewsContainer.querySelectorAll('.reviewCard').forEach(originalReview => {
         const clonedReview = originalReview.cloneNode(true); // Clone the review
         const avatar = clonedReview.querySelector('.avatar'); // Get the avatar image
@@ -431,6 +444,14 @@
 
         clonedReviewsContainer.appendChild(clonedReview); // Append the cloned review
       });
+
+      // Scroll to the review if reviewIdToScroll is provided
+      if (reviewIdToScroll) {
+        const reviewElementToScroll = clonedReviewsContainer.querySelector(`#review-${reviewIdToScroll}`);
+        if (reviewElementToScroll) {
+          clonedReviewsContainer.scrollTop = reviewElementToScroll.offsetTop;
+        }
+      }
 
       document.body.classList.add('no-scroll');
     }, 10);
@@ -487,7 +508,7 @@
     history.replaceState({}, document.title, `/campgrounds/${campgroundId}`);
 
   }
-
+// aaaaa
   function updateUrl(action, reviewId) {
     let baseUrl = window.location.origin + `/campgrounds/${campground._id}`; // replace 'yourCampgroundId' with the actual ID
     let currentParams = window.location.search;
@@ -513,6 +534,8 @@
     while (reviewsContainer.firstChild) {
       reviewsContainer.removeChild(reviewsContainer.firstChild);
     }
+
+
 
     originalReviews.forEach((review, index) => {
         const clone = review.cloneNode(true);
@@ -758,35 +781,43 @@
     // Log the reviewId to confirm it's being passed correctly
     console.log("Review ID to display:", reviewId);
 
+    // Open the modal and scroll to the review
+    openModal(document.getElementById('reviewsModal'), document.querySelector('.original-reviews-container'), reviewId);
+
+
+    // Clear existing reviews in the cloned reviews container
     const clonedReviewsContainer = document.querySelector('.cloned-reviews-container');
-    const originalReviewsContainer = document.querySelector('.original-reviews-container');
+    clonedReviewsContainer.innerHTML = '';
 
-      // Log to confirm containers are found
-      console.log("Cloned Reviews Container:", clonedReviewsContainer);
-    console.log("Original Reviews Container:", originalReviewsContainer);
+    // Clone the target review and append it to the cloned reviews container
+    const clonedTargetReview = document.querySelector(`.original-reviews-container #review-${reviewId}`);
+    if (clonedTargetReview) {
+        const clonedReview = clonedTargetReview.cloneNode(true);
+        const avatar = clonedReview.querySelector('.avatar'); // Get the avatar image
 
+        // Update the avatar image source to use the correct path
+        avatar.src = '/images/default-user-image.png'; // Make sure the path is correct
 
-    // Clone all the reviews to the modal
-    cloneReviews(originalReviewsContainer);
+        clonedReviewsContainer.appendChild(clonedReview); // Append the cloned review
 
-     // Delay scrolling action
-    setTimeout(() => {
-        const clonedTargetReview = document.querySelector(`.cloned-reviews-container #review-${reviewId}`);
-        // Log to confirm the review element is found in the cloned container
-        console.log("Cloned Target Review:", clonedTargetReview);
-
-        if (clonedTargetReview) {
-            // Your new scroll code here
-            let offsetTop = clonedTargetReview.offsetTop;
-            if (clonedTargetReview.previousElementSibling) {
-                offsetTop -= clonedTargetReview.previousElementSibling.offsetTop;
+        // Scroll to the cloned review
+        setTimeout(() => {
+            const offsetTop = clonedReview.offsetTop;
+            if (clonedReview.previousElementSibling) {
+                offsetTop -= clonedReview.previousElementSibling.offsetTop;
             }
             clonedReviewsContainer.scrollTop = offsetTop;
-        }
-    }, 1000);  // Adjust the delay as needed
+        }, 10);
+    }
 
-    document.getElementById('reviewsModal').style.display = 'block';
+    // Open the modal
+    const modal = document.getElementById('reviewsModal');
+    modal.style.display = 'block';
+
+    // Update the URL
+    updateUrl("showMoreOnReview", reviewId);
   }
+
 
 
 
