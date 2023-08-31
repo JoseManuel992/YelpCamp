@@ -142,13 +142,16 @@
                 <p class="starability-result" data-rating="<%= review.rating %>">
                   Rated: <%= review.rating %> stars
                 </p>
-                <p class="card-text">
+                <p class="card-text truncate-paragraph-showpage">
                     Review: <%= review.body  %>
                 </p>
                 <%  if( currentUser && review.author.equals(currentUser._id))  {%>
                   <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
-                    <button class="btn btn-sm btn-danger">Delete</button>
+                    <button class="btn btn-sm btn-danger delete-review">Delete</button>
                   </form>
+                <% } %>
+                <% if(review.body.length > 4) { %>
+                  <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more ></a>
                 <% } %>
               </div>
             </div>
@@ -197,17 +200,18 @@
             <p class="starability-result" data-rating="<%= review.rating %>">
               Rated: <%= review.rating %> stars
             </p>
-            <p class="card-text truncate-paragraph">
+            <p class="card-text truncate-paragraph-showpage">
               Review: <%= review.body  %>
             </p>
-            <% if(review.body.length > 4) { %>
-              <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more ></a>
-            <% } %>
 
             <%  if( currentUser && review.author.equals(currentUser._id))  {%>
               <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
-                <button class="btn btn-sm btn-danger">Delete</button>
+                <button class="btn btn-sm btn-danger delete-review">Delete</button>
               </form>
+            <% } %>
+
+            <% if(review.body.length > 4) { %>
+              <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more ></a>
             <% } %>
           </div>
         </div>
@@ -440,12 +444,31 @@
       originalReviewsContainer.querySelectorAll('.reviewCard').forEach(originalReview => {
         const clonedReview = originalReview.cloneNode(true); // Clone the review
         const avatar = clonedReview.querySelector('.avatar'); // Get the avatar image
+        const deleteButton = clonedReview.querySelector('.btn-danger'); // Get the delete button
+
 
         // Update the avatar image source to use the correct path
         avatar.src = '/images/default-user-image.png'; // Make sure the path is correct
 
+        // Remove the delete button from the cloned review
+        if (deleteButton) {
+          deleteButton.remove();
+        }
         clonedReviewsContainer.appendChild(clonedReview); // Append the cloned review
       });
+
+      // Inside the openModal function, after setting the dynamic height:
+      clonedReviewsContainer.querySelectorAll('.reviewCard').forEach(clonedReview => {
+        const reviewContent = clonedReview.querySelector('.card-text');
+        const contentHeight = reviewContent.scrollHeight;
+        const spacing = 200; // You can adjust this value to control the spacing
+        const totalHeight = contentHeight + spacing;
+        console.log(`Review ID: ${clonedReview.id}, Dynamic Height: ${totalHeight}px`);
+        clonedReview.style.height = `${totalHeight}px`;
+      });
+
+
+
 
 
       document.body.classList.add('no-scroll');

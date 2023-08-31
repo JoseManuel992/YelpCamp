@@ -100,6 +100,10 @@
     margin: 5% 0;
   }
 
+  .card.animation-index-page{
+    border-radius: 0px;
+  }
+
 
   /* Set a fixed height for the images in the cards on the index and edit page*/
 
@@ -118,7 +122,7 @@
   }
 
 
-  .truncate-paragraph {
+  .truncate-paragraph-index {
     display: -webkit-box;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
@@ -369,6 +373,7 @@ h2{
   align-content: space-between;
 }
 
+
 .avatar {
   width: 50px;
   height: 50px;
@@ -381,6 +386,16 @@ h2{
 .reviewTextCard{
   margin-bottom: 1rem!important;
 }
+
+
+.truncate-paragraph-showpage {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 .btnSubmit{
   margin-bottom: 3rem;
@@ -395,8 +410,22 @@ h2{
 }
 
 .reviewCard{
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
+  height: 22rem;
+  border: none;
 }
+
+.delete-review{
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+
+.show-more-link{
+  color: black;
+  font-size: 1.2rem;
+}
+
 
 .card-footer{
   padding: 1rem;
@@ -678,6 +707,17 @@ h2{
     padding: 0.8rem;
   }
 
+  .reviewCard{
+    border: 1px solid #ced4da;
+    border-radius:  1rem;
+    height: 24.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .delete-review{
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
 
 
   .swiper-slide {
@@ -697,7 +737,7 @@ h2{
     overflow: hidden;
   }
 
- @media (max-width: 576px) {  /* Assuming this is your mobile breakpoint */
+
 
   #reviewsModal {
     z-index: 2000;     /* Make content occupy full height */
@@ -765,6 +805,11 @@ h2{
   .original-reviews-container{
     margin-bottom: 0px;
   }
+
+  .cloned-reviews-container .reviewCard {
+    border: none;
+  }
+
 
   .navbar {
     z-index: 1000;

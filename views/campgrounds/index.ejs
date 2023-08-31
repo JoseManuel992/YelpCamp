@@ -2,7 +2,7 @@
 
 <form class="searchForm" action="/campgrounds/search" method="GET">
   <div class="searchWrapper">
-    <input class="searchFormInput" type="text" name="query" placeholder="Search by location or title">
+    <input class="searchFormInput" type="text" name="query" placeholder="Search by location or title" autocomplete="off">
     <button class="searchFormButton" type="submit">Search</button>
   </div>
 </form>
@@ -28,7 +28,7 @@
           <div class="col-md-8">
             <div class="card-body">
               <h5 class="card-title"> <%=  campground.title %> </h5>
-              <p class="card-text truncate-paragraph"><%=  campground.description %></p>
+              <p class="card-text truncate-paragraph-index"><%=  campground.description %></p>
               <p class="card-text">
                 <small class="text-muted"><%=  campground.location %></small>
               </p>
