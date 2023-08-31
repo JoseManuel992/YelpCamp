@@ -9,6 +9,20 @@ const multer = require('multer');
 const { storage } = require('../cloudinary');
 const upload = multer({ storage });
 
+
+// User Profile
+
+router.route("/profile/:user_id")
+ .get(catchAsync(users.getUserProfile))
+
+
+
+  // Edit User Profile
+router.route('/profile/:user_id/edit')
+ .get(catchAsync(users.renderEditProfileForm))
+ .put(catchAsync(users.updateUserProfile)); // line to handle the update
+
+
 //register a  new user
 
 router.route("/register")

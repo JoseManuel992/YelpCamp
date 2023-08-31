@@ -150,9 +150,10 @@
                     <button class="btn btn-sm btn-danger delete-review">Delete</button>
                   </form>
                 <% } %>
-                <% if(review.body.length > 4) { %>
+                <% if (review && review.body && review.body.length > 4) { %>
                   <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more ></a>
                 <% } %>
+
               </div>
             </div>
           </div>

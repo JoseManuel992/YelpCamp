@@ -1,5 +1,65 @@
 const User = require("../model/user");
 
+
+// Get User Profile
+module.exports.getUserProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.user_id);
+    if (!user) {
+      req.flash('error', 'User not found');
+      return res.redirect('/campgrounds');
+    }
+
+    res.render('users/profile', { user });
+  } catch (err) {
+    req.flash('error', 'Something went wrong');
+    res.redirect('/campgrounds');
+  }
+};
+
+// Render Edit Profile Form
+module.exports.renderEditProfileForm = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.user_id);
+    if (!user) {
+      req.flash('error', 'User not found');
+      return res.redirect('/campgrounds');
+    }
+
+    res.render('users/edit', { user });
+  } catch (err) {
+    req.flash('error', 'Something went wrong');
+    res.redirect('/campgrounds');
+  }
+};
+
+// Update User Profile
+// module.exports.updateUserProfile = async (req, res) => {
+//   try {
+//     const { email, username } = req.body;
+//     const user = await User.findByIdAndUpdate(req.params.user_id, { email, username }, { new: true });
+//     req.flash('success', 'Profile updated successfully');
+//     res.redirect(`/profile/${user._id}`);
+//   } catch (err) {
+//     req.flash('error', 'Something went wrong');
+//     res.redirect('/campgrounds');
+//   }
+// };
+
+// Update User Profile
+module.exports.updateUserProfile = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const user = await User.findByIdAndUpdate(user_id, req.body, { new: true });
+
+    req.flash("success", "Profile updated successfully!");
+    res.redirect(`/profile/${user_id}`);
+  } catch (err) {
+    req.flash("error", "Failed to update profile.");
+    res.redirect(`/profile/${user_id}`);
+  }
+};
+
 //register a  new user
 
 module.exports.renderRegisterForm = (req, res) => {

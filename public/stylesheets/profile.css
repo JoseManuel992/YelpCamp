@@ -1,0 +1,41 @@
+
+/* Apply flexbox to center content vertically and horizontally */
+body {
+  display: flex;
+
+  height: 100vh; /* Set to 100% of viewport height */
+  margin: 0; /* Remove default margin */
+}
+
+
+
+
+.user-profile-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 1px solid #ccc;
+  padding: 20px;
+  background-color: #f7f7f7;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-right: 2rem;
+
+}
+
+.avatar-profile {
+  width: 16rem;
+  height: 16rem;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  object-fit: cover;
+}
+
+.user-name {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.user-profile-content-card{
+ margin-left: 2rem;
+}
