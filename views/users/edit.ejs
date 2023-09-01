@@ -1,2 +1,63 @@
 <% layout("./layouts/boilerplate") %>
-<h1>HELLO!</h1>
+<link rel="stylesheet" href="/stylesheets/profile.css">
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="user-edit-profile-card">
+        <!-- Avatar image display -->
+        <% if (!user.avatar.url) { %>
+          <img src="<%= '/images/default-user-image.png' %>" alt="Default Avatar" class="avatar-profile">
+        <% } else { %>
+          <img src="<%= user.avatar.url %>" alt="Avatar of <%= user.username %>" class="avatar-profile">
+        <% } %>
+
+        <!-- Edit button -->
+        <button id="editAvatarBtn" class="btn btn-secondary mt-3">Edit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const editAvatarBtn = document.getElementById('editAvatarBtn');
+    const avatarImage = document.querySelector('.avatar-profile');
+    const user = <%- JSON.stringify(user) %>; // Include the user object here
+
+    editAvatarBtn.addEventListener('click', () => {
+      // Trigger click event on file input
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.style.display = 'none';
+
+      fileInput.addEventListener('change', async (event) => {
+        const selectedFile = event.target.files[0];
+        const imageUrl = URL.createObjectURL(selectedFile);
+        avatarImage.src = imageUrl;
+
+        // Upload selected image to Cloudinary
+        const formData = new FormData();
+        formData.append('avatar', selectedFile);
+        try {
+          const response = await fetch(`/profile/${user._id}/edit`, {
+            method: 'POST',
+            body: formData,
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            avatarImage.src = data.avatarUrl;
+          }
+        } catch (error) {
+          console.error('Error updating avatar:', error);
+        }
+      });
+
+      document.body.appendChild(fileInput);
+      fileInput.click();
+    });
+  });
+</script>

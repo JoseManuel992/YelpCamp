@@ -1,4 +1,5 @@
 const User = require("../model/user");
+const { cloudinary } = require("../cloudinary");
 
 
 // Get User Profile
@@ -17,48 +18,6 @@ module.exports.getUserProfile = async (req, res) => {
   }
 };
 
-// Render Edit Profile Form
-module.exports.renderEditProfileForm = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.user_id);
-    if (!user) {
-      req.flash('error', 'User not found');
-      return res.redirect('/campgrounds');
-    }
-
-    res.render('users/edit', { user });
-  } catch (err) {
-    req.flash('error', 'Something went wrong');
-    res.redirect('/campgrounds');
-  }
-};
-
-// Update User Profile
-// module.exports.updateUserProfile = async (req, res) => {
-//   try {
-//     const { email, username } = req.body;
-//     const user = await User.findByIdAndUpdate(req.params.user_id, { email, username }, { new: true });
-//     req.flash('success', 'Profile updated successfully');
-//     res.redirect(`/profile/${user._id}`);
-//   } catch (err) {
-//     req.flash('error', 'Something went wrong');
-//     res.redirect('/campgrounds');
-//   }
-// };
-
-// Update User Profile
-module.exports.updateUserProfile = async (req, res) => {
-  try {
-    const { user_id } = req.params;
-    const user = await User.findByIdAndUpdate(user_id, req.body, { new: true });
-
-    req.flash("success", "Profile updated successfully!");
-    res.redirect(`/profile/${user_id}`);
-  } catch (err) {
-    req.flash("error", "Failed to update profile.");
-    res.redirect(`/profile/${user_id}`);
-  }
-};
 
 //register a  new user
 
@@ -119,3 +78,72 @@ module.exports.logout = (req, res, next) => {
       res.redirect('/campgrounds');
   });
 }
+
+
+// Render Edit Profile Form
+module.exports.renderEditProfileForm = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.user_id);
+    if (!user) {
+      req.flash('error', 'User not found');
+      return res.redirect('/campgrounds');
+    }
+
+    res.render('users/editProfile', { user });
+  } catch (err) {
+    req.flash('error', 'Something went wrong');
+    res.redirect('/campgrounds');
+  }
+};
+
+// Update User Profile
+module.exports.updateProfile = async (req, res) => {
+  try {
+    const { user_id } = req.params;
+    const { username, email } = req.body.user;
+    const user = await User.findByIdAndUpdate(user_id, { username, email });
+
+    // Update avatar if provided
+    if (req.file) {
+      user.avatar = { url: req.file.path, filename: req.file.filename };
+    }
+
+    await user.save();
+
+    req.flash('success', 'Profile updated successfully');
+    res.redirect(`/profile/${user._id}`); // Use user._id here
+  } catch (err) {
+    req.flash('error', 'Error updating profile');
+    res.redirect(`/profile/${user._id}/edit`);
+  }
+};
+
+
+
+// Update User Profile
+// module.exports.updateProfile = async (req, res) => {
+//   try {
+//     const { user_id } = req.params;
+//     const { username, email } = req.body.user;
+
+//     let avatarData = {};
+//     if (req.file) {
+//       avatarData = { url: req.file.path, filename: req.file.filename };
+//     }
+
+//     const updatedData = {
+//       username,
+//       email,
+//       avatar: avatarData  // Always update the avatar data, whether provided or not
+//     };
+
+//     const user = await User.findByIdAndUpdate(user_id, updatedData);
+//     await user.save();
+
+//     req.flash('success', 'Profile updated successfully');
+//     res.redirect(`/profile/${user_id}`);
+//   } catch (err) {
+//     req.flash('error', 'Error updating profile');
+//     res.redirect(`/profile/${user_id}/edit`);
+//   }
+// };
