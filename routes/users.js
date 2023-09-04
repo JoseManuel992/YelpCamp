@@ -20,7 +20,7 @@ router.route("/profile/:user_id")
   // Edit User Profile
 router.route("/profile/:user_id/edit")
   .get(catchAsync(users.renderEditProfileForm))
-  .put(upload.single('avatar'), catchAsync(users.updateProfile));
+  .post(upload.single('avatar'), catchAsync(users.updateProfile));
 
 
 //register a  new user

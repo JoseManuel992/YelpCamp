@@ -1,39 +1,700 @@
 <% layout("./layouts/boilerplate") %>
-<link rel="stylesheet" href="../../stylesheets/fileInput.css">
+<link rel="stylesheet" href="/stylesheets/profile.css">
 
-<div class="row">
-  <h1 class="text-center">Edit Profile</h1>
-  <div class="col-md-6 offset-md-3 editFormCard">
-    <form action="/profile/<%= user._id %>/edit" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
+<% console.log('User Data:', user); %> <!-- Log the user data -->
 
-    <form action="/profile/<%= user._id %>?_method=PUT" method="POST" novalidate enctype="multipart/form-data">
-      <div class="mb-3">
-        <label class="form-label" for="username">Username</label>
-        <input class="form-control" type="text" name="user[username]" id="username" value="<%= user.username %>" required>
-        <div class="valid-feedback">
-          Looks good!
+
+
+  <!-- here is the general form -->
+  <form action="/profile/<%= user._id %>/edit" method="POST" novalidate enctype="multipart/form-data">
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="mb-3 avatar-edit-container ">
+          <div class="avatar-profile-container">
+            <img src="<%= user.avatar.url %>" alt="Avatar of <%= user.username %>" class="avatar-profile">
+          </div>
+          <div class="form-file custom-file">
+            <label class="form-file-label" for="avatar">
+              <span class="form-file-button-edit-avatar">
+                <i class="fa-solid fa-camera" style="color: #000000;"></i>
+                <span class="edit-text">Edit</span>
+              </span>
+            </label>
+            <input type="file" class="form-file-input" id="avatar" name="avatar" style="display: none;">
+          </div>
         </div>
       </div>
-      <div class="mb-3">
-        <label class="form-label" for="email">Email</label>
-        <input class="form-control" type="email" name="user[email]" id="email" value="<%= user.email %>" required>
-        <div class="valid-feedback">
-          Looks good!
+
+
+      <div class="col-md-8">
+        <p class="edit-profile-title">Your Profile</p>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <input class="form-control" type="text" name="user[username]" id="username" value="<%= user.username %>" required style="display: none;">
+              <button type="button" class="btn btn-outline-secondary edit-profile-button" data-bs-toggle="modal" data-bs-target="#usernameModal">
+                <i class="fa-solid fa-user edit-profile-icon"></i>
+                Username: <span id="generalUsername"><%= user.username %></span>
+                <i class="fa-solid fa-chevron-right edit-profile-arrow"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              <input class="form-control" type="email" name="user[email]" id="email" value="<%= user.email %>" required style="display: none;">
+              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#emailModal">
+                <i class="fa-solid fa-envelope edit-profile-icon"></i>
+                Email: <span id="generalEmail"><%= user.email %></span>
+                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <input class="form-control" type="date" name="user[birthDate]" id="birthDate" value="<%= user.birthDate ? user.birthDate.toISOString().substr(0, 10) : '' %>" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#birthDateModal">
+                <i class="fa-solid fa-cake-candles edit-profile-icon"></i>
+                Date of Birth: <span id="generalBirthDate"><%= user.birthDate ? user.birthDate.toISOString().substr(0, 10) : '' %></span>
+                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              <input class="form-control" type="text" name="user[work]" id="work" value="<%= user.work %>" required style="display: none;">
+              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#workModal">
+                <i class="fa-solid fa-briefcase edit-profile-icon"></i>
+                Work: <span id="generalWork"><%= user.work %></span>
+                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <input class="form-control" type="text" name="user[funFact]" id="funFact" value="<%= user.funFact %>" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#funFactModal">
+                <i class="fa-solid fa-lightbulb edit-profile-icon"></i>
+                Fun Fact: <span id="generalFunFact"><%= user.funFact %></span>
+                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              <input class="form-control" type="text" name="user[favoriteSong]" id="favoriteSong" value="<%= user.favoriteSong %>" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#favoriteSongModal">
+                <i class="fa-solid fa-music edit-profile-icon"></i>
+                Favorite Song: <span id="generalFavoriteSong"><%= user.favoriteSong %></span>
+                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <input class="form-control" type="text" name="user[uselessSkill]" id="uselessSkill" value="<%= user.uselessSkill %>" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#uselessSkillModal">
+                <i class="fa-solid fa-wand-magic-sparkles edit-profile-icon"></i>
+                Useless Skill: <span id="generalUselessSkill"><%= user.uselessSkill %></span>
+                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              <input class="form-control" type="text" name="user[school]" id="school" value="<%= user.school %>" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#schoolModal">
+                <i class="fa-solid fa-graduation-cap edit-profile-icon"></i>
+                School: <span id="generalSchool"><%= user.school %></span>
+                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <input class="form-control" type="text" name="user[spendingHabit]" id="spendingHabit" value="<%= user.spendingHabit %>" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#spendingHabitModal">
+                <i class="fa-regular fa-clock edit-profile-icon"></i>
+                Spending Habit: <span id="generalSpendingHabit"><%= user.spendingHabit %></span>
+                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              <input class="form-control" type="text" name="user[biographyTitle]" id="biographyTitle" value="<%= user.biographyTitle %>" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#biographyTitleModal">
+                <i class="fa-solid fa-book edit-profile-icon"></i>
+                Biography Title: <span id="generalBiographyTitle"><%= user.biographyTitle %></span>
+                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <input class="form-control" type="text" name="user[obsession]" id="obsession" value="<%= user.obsession %>" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#obsessionModal">
+                <i class="fa-solid fa-heart edit-profile-icon"></i>
+                Obsession: <span id="generalObsession"><%= user.obsession %></span>
+                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              <input class="form-control" type="text" name="user[languages]" id="languages" value="<%= user.languages %>" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#languagesModal">
+                <i class="fa-solid fa-globe edit-profile-icon"></i>
+                Languages: <span id="generalLanguages"><%= user.languages %></span>
+                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <input class="form-control" type="text" name="user[location]" id="location" value="<%= user.location %>" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#locationModal">
+                <i class="fa-solid fa-earth-europe edit-profile-icon"></i>
+                Location: <span id="generalLocation"><%= user.location %></span>
+                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              <input class="form-control" type="text" name="user[pets]" id="pets" value="<%= user.pets %>" style="display: none;">
+              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#petsModal">
+                <i class="fa-solid fa-paw edit-profile-icon"></i>
+                Pets: <span id="generalPets"><%= user.pets %></span>
+                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+          <div class="updateButton">
+            <button class="btn btn-info text-white">Update Profile</button>
+          </div>
         </div>
       </div>
-      <div class="mb-3">
-        <div class="form-file custom-file">
-          <input type="file" class="form-file-input" id="avatar" name="avatar">
-          <label class="form-file-label" for="avatar">
-            <span class="form-file-text custom-file-label">Upload Avatar...</span>
-            <span class="form-file-button">Browse</span>
-          </label>
+    </div>
+  </form>
+  <a class="Back-To-Profile-Link" href="/profile/<%= user._id %>">Back to Profile</a>
+
+
+
+
+
+
+  <!-- this is the modal that has also a form to update a particular user's profile data, in this case Username  -->
+  <div class="modal fade" id="usernameModal" tabindex="-1" aria-labelledby="usernameModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="usernameModalLabel">Edit Username</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <label class="form-label" for="username" id="username">Username</label>
+          <input class="form-control" type="text" name="user[username]" id="modalUsername" value="<%= user.username %>" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveUsernameButton">Save</button>
         </div>
       </div>
-      <div class="updateButton">
-        <button class="btn btn-info text-white">Update Profile</button>
+    </div>
+  </div>
+
+  <!-- Modal for email -->
+  <div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="emailModalLabel">Edit Email</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <label class="form-label" for="email" id="emailLabel">Email</label>
+          <input class="form-control" type="email" name="user[email]" id="modalEmail" value="<%= user.email %>" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveEmailButton">Save</button>
+        </div>
       </div>
-    </form>
-    <a class="Back-To-Profile-Link" href="/profile/<%= user._id %>">Back to Profile</a>
+    </div>
+  </div>
+
+
+  <!-- Birth Date modal -->
+  <div class="modal fade" id="birthDateModal" tabindex="-1" aria-labelledby="birthDateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="birthDateModalLabel">Edit Birth Date</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <label class="form-label" for="birthDate" id="birthDateLabel">Date of Birth</label>
+          <input class="form-control" type="date" name="user[birthDate]" id="modalBirthDate" value="<%= user.birthDate ? user.birthDate.toISOString().substr(0, 10) : '' %>">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveBirthDateButton">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Work modal -->
+<div class="modal fade" id="workModal" tabindex="-1" aria-labelledby="workModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="workModalLabel">What do you do for work? </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Tell us what your profession is or tell us your life’s calling.</p>
+        <label class="form-label" for="work" id="workLabel">Work</label>
+        <input class="form-control" type="text" name="user[work]" id="modalWork" value="<%= user.work %>" required >
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveWorkButton">Save</button>
+      </div>
+    </div>
   </div>
 </div>
+
+
+<!-- Fun Fact  modal-->
+<div class="modal fade" id="funFactModal" tabindex="-1" aria-labelledby="funFactModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="funFactModalLabel">What’s a fun fact about you?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Share something unique or unexpected about you. Example: I was in a music video or I’m a juggler.</p>
+        <label class="form-label" for="funFact" id="funFactLabel">Fun Fact</label>
+        <input class="form-control" type="text" name="user[funFact]" id="modalFunFact" value="<%= user.funFact %>">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveFunFactButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  Favorite Song modal -->
+<div class="modal fade" id="favoriteSongModal" tabindex="-1" aria-labelledby="favoriteSongModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="favoriteSongModalLabel">What is your favourite song?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Share with us your favorite song, tune or music band.</p>
+        <label class="form-label" for="favoriteSong" id="favoriteSongLabel">Favorite Song</label>
+        <input class="form-control" type="text" name="user[favoriteSong]" id="modalFavoriteSong" value="<%= user.favoriteSong %>">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveFavoriteSongButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--  Useless Skill modal-->
+<div class="modal fade" id="uselessSkillModal" tabindex="-1" aria-labelledby="uselessSkillModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uselessSkillModalLabel">What’s your most useless skill?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Share a surprising but pointless talent you have. Example: Shuffling cards with one hand.</p>
+        <label class="form-label" for="uselessSkill" id="uselessSkillLabel">Useless Skill</label>
+        <input class="form-control" type="text" name="user[uselessSkill]" id="modalUselessSkill" value="<%= user.uselessSkill %>">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveUselessSkillButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- School modal -->
+<div class="modal fade" id="schoolModal" tabindex="-1" aria-labelledby="schoolModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="schoolModalLabel">Where did you go to school?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Whether it’s home school, secondary school or university, name the school that made you who you are.</p>
+        <label class="form-label" for="school" id="schoolLabel">School</label>
+        <input class="form-control" type="text" name="user[school]" id="modalSchool" value="<%= user.school %>">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveSchoolButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--  Spending Habit modal -->
+<div class="modal fade" id="spendingHabitModal" tabindex="-1" aria-labelledby="spendingHabitModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="spendingHabitModalLabel">What do you spend too much time doing?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Share an activity or hobby you spend lots of free time on. Example: Watching cat videos or playing chess.</p>
+        <label class="form-label" for="spendingHabit" id="spendingHabitLabel">Spending Habit</label>
+        <input class="form-control" type="text" name="user[spendingHabit]" id="modalSpendingHabit" value="<%= user.spendingHabit %>">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveSpendingHabitButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--  Biography Title modal-->
+<div class="modal fade" id="biographyTitleModal" tabindex="-1" aria-labelledby="biographyTitleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="biographyTitleModalLabel">What would your biography title be?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>If someone wrote a book about your life, what would they call it? Example: Born to Roam or Chronicles of a Dog Mum.</p>
+        <label class="form-label" for="biographyTitle" id="biographyTitleLabel">Biography Title</label>
+        <input class="form-control" type="text" name="user[biographyTitle]" id="modalBiographyTitle" value="<%= user.biographyTitle %>">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveBiographyTitleButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Obsession modal-->
+<div class="modal fade" id="obsessionModal" tabindex="-1" aria-labelledby="obsessionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="obsessionModalLabel">Edit Obsession</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Share whatever you can’t get enough of – in a good way. Example: Baking rosemary focaccia.</p>
+        <label class="form-label" for="obsession" id="obsessionLabel">What are you obsessed with?</label>
+        <input class="form-control" type="text" name="user[obsession]" id="modalObsession" value="<%= user.obsession %>">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveObsessionButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  Languages modal-->
+<div class="modal fade" id="languagesModal" tabindex="-1" aria-labelledby="languagesModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="languagesModalLabel">Languages you speak</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label" for="languages" id="languagesLabel">Languages</label>
+        <input class="form-control" type="text" name="user[languages]" id="modalLanguages" value="<%= user.languages %>">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveLanguagesButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Location modal-->
+<div class="modal fade" id="locationModal" tabindex="-1" aria-labelledby="locationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="locationModalLabel">Where you live?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label" for="location" id="locationLabel">Location</label>
+        <input class="form-control" type="text" name="user[location]" id="modalLocation" value="<%= user.location %>">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="saveLocationButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pets modal-->
+<div class="modal fade" id="petsModal" tabindex="-1" aria-labelledby="petsModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="petsModalLabel">Do you have any pets in your life?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Share any pets you have and their names. Example: My calico cat Whiskers or my speedy tortoise Leonardo.</p>
+        <label class="form-label" for="pets" id="petsLabel">Pets</label>
+        <input class="form-control" type="text" name="user[pets]" id="modalPets" value="<%= user.pets %>">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="savePetsButton">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Inside your modal's Save button click event
+    const saveUsernameButton = document.getElementById('saveUsernameButton');
+
+    saveUsernameButton.addEventListener('click', function () {
+      const newUsername = document.getElementById('modalUsername').value; // Use the ID from the modal input
+      const generalUsernameField = document.getElementById('generalUsername'); // ID of the username field in the general form
+      const generalUsernameInput = document.getElementById('username'); // ID of the username input field in the general form
+
+      generalUsernameField.textContent = newUsername; // Update the span in the general form
+      generalUsernameInput.value = newUsername; // Update the input value in the general form
+    });
+
+    // email javascript
+    const saveEmailButton = document.getElementById('saveEmailButton'); // Add this line
+
+    saveEmailButton.addEventListener('click', function () {
+      const newEmail = document.getElementById('modalEmail').value;
+      const generalEmailField = document.getElementById('generalEmail');
+      const generalEmailInput = document.getElementById('email');
+
+      generalEmailField.textContent = newEmail;
+      generalEmailInput.value = newEmail;
+    });
+
+    // Birth Date javascript
+    const saveBirthDateButton = document.getElementById('saveBirthDateButton');
+
+    saveBirthDateButton.addEventListener('click', function () {
+      const newBirthDate = document.getElementById('modalBirthDate').value; // Use the ID from the modal input
+      const generalBirthDateField = document.getElementById('generalBirthDate'); // ID of the birthDate field in the general form
+      const generalBirthDateInput = document.getElementById('birthDate'); // ID of the birthDate input field in the general form
+
+      generalBirthDateField.textContent = newBirthDate; // Update the span in the general form
+      generalBirthDateInput.value = newBirthDate; // Update the input value in the general form
+    });
+
+    // work javascript
+    const saveWorkButton = document.getElementById('saveWorkButton');
+
+    saveWorkButton.addEventListener('click', function () {
+      const newWork = document.getElementById('modalWork').value; // Use the ID from the modal input
+      const generalWorkField = document.getElementById('generalWork'); // ID of the work field in the general form
+      const generalWorkInput = document.getElementById('work'); // ID of the work input field in the general form
+
+      generalWorkField.textContent = newWork; // Update the span in the general form
+      generalWorkInput.value = newWork; // Update the input value in the general form
+    });
+
+    // fun fact javascript
+    const saveFunFactButton = document.getElementById('saveFunFactButton');
+
+    saveFunFactButton.addEventListener('click', function () {
+      const newFunFact = document.getElementById('modalFunFact').value; // Use the ID from the modal input
+      const generalFunFactField = document.getElementById('generalFunFact'); // ID of the fun fact field in the general form
+      const generalFunFactInput = document.getElementById('funFact'); // ID of the fun fact input field in the general form
+
+      generalFunFactField.textContent = newFunFact; // Update the span in the general form
+      generalFunFactInput.value = newFunFact; // Update the input value in the general form
+    });
+
+    // Favorite Song javascript
+    const saveFavoriteSongButton = document.getElementById('saveFavoriteSongButton');
+
+    saveFavoriteSongButton.addEventListener('click', function () {
+      const newFavoriteSong = document.getElementById('modalFavoriteSong').value; // Use the ID from the modal input
+      const generalFavoriteSongField = document.getElementById('generalFavoriteSong'); // ID of the favorite song field in the general form
+      const generalFavoriteSongInput = document.getElementById('favoriteSong'); // ID of the favorite song input field in the general form
+
+      generalFavoriteSongField.textContent = newFavoriteSong; // Update the span in the general form
+      generalFavoriteSongInput.value = newFavoriteSong; // Update the input value in the general form
+    });
+
+
+    // Useless Skill javascript
+    const saveUselessSkillButton = document.getElementById('saveUselessSkillButton');
+
+    saveUselessSkillButton.addEventListener('click', function () {
+      const newUselessSkill = document.getElementById('modalUselessSkill').value; // Use the ID from the modal input
+      const generalUselessSkillField = document.getElementById('generalUselessSkill'); // ID of the useless skill field in the general form
+      const generalUselessSkillInput = document.getElementById('uselessSkill'); // ID of the useless skill input field in the general form
+
+      generalUselessSkillField.textContent = newUselessSkill; // Update the span in the general form
+      generalUselessSkillInput.value = newUselessSkill; // Update the input value in the general form
+    });
+
+    // School javascript
+    const saveSchoolButton = document.getElementById('saveSchoolButton');
+
+    saveSchoolButton.addEventListener('click', function () {
+      const newSchool = document.getElementById('modalSchool').value; // Use the ID from the modal input
+      const generalSchoolField = document.getElementById('generalSchool'); // ID of the school field in the general form
+      const generalSchoolInput = document.getElementById('school'); // ID of the school input field in the general form
+
+      generalSchoolField.textContent = newSchool; // Update the span in the general form
+      generalSchoolInput.value = newSchool; // Update the input value in the general form
+    });
+
+    // Spending Habit javascript
+    const saveSpendingHabitButton = document.getElementById('saveSpendingHabitButton');
+
+    saveSpendingHabitButton.addEventListener('click', function () {
+      const newSpendingHabit = document.getElementById('modalSpendingHabit').value; // Use the ID from the modal input
+      const generalSpendingHabitField = document.getElementById('generalSpendingHabit'); // ID of the spending habit field in the general form
+      const generalSpendingHabitInput = document.getElementById('spendingHabit'); // ID of the spending habit input field in the general form
+
+      generalSpendingHabitField.textContent = newSpendingHabit; // Update the span in the general form
+      generalSpendingHabitInput.value = newSpendingHabit; // Update the input value in the general form
+    });
+
+    // Biography Title javascript
+    const saveBiographyTitleButton = document.getElementById('saveBiographyTitleButton');
+
+    saveBiographyTitleButton.addEventListener('click', function () {
+      const newBiographyTitle = document.getElementById('modalBiographyTitle').value; // Use the ID from the modal input
+      const generalBiographyTitleField = document.getElementById('generalBiographyTitle'); // ID of the biography title field in the general form
+      const generalBiographyTitleInput = document.getElementById('biographyTitle'); // ID of the biography title input field in the general form
+
+      generalBiographyTitleField.textContent = newBiographyTitle; // Update the span in the general form
+      generalBiographyTitleInput.value = newBiographyTitle; // Update the input value in the general form
+    });
+
+    // Obsession javascript
+    const saveObsessionButton = document.getElementById('saveObsessionButton');
+
+    saveObsessionButton.addEventListener('click', function () {
+      const newObsession = document.getElementById('modalObsession').value; // Use the ID from the modal input
+      const generalObsessionField = document.getElementById('generalObsession'); // ID of the obsession field in the general form
+      const generalObsessionInput = document.getElementById('obsession'); // ID of the obsession input field in the general form
+
+      generalObsessionField.textContent = newObsession; // Update the span in the general form
+      generalObsessionInput.value = newObsession; // Update the input value in the general form
+    });
+
+    // Languages javascript
+    const saveLanguagesButton = document.getElementById('saveLanguagesButton');
+
+    saveLanguagesButton.addEventListener('click', function () {
+      const newLanguages = document.getElementById('modalLanguages').value; // Use the ID from the modal input
+      const generalLanguagesField = document.getElementById('generalLanguages'); // ID of the languages field in the general form
+      const generalLanguagesInput = document.getElementById('languages'); // ID of the languages input field in the general form
+
+      generalLanguagesField.textContent = newLanguages; // Update the span in the general form
+      generalLanguagesInput.value = newLanguages; // Update the input value in the general form
+    });
+
+    // Location javascript
+    const saveLocationButton = document.getElementById('saveLocationButton');
+
+    saveLocationButton.addEventListener('click', function () {
+      const newLocation = document.getElementById('modalLocation').value; // Use the ID from the modal input
+      const generalLocationField = document.getElementById('generalLocation'); // ID of the location field in the general form
+      const generalLocationInput = document.getElementById('location'); // ID of the location input field in the general form
+
+      generalLocationField.textContent = newLocation; // Update the span in the general form
+      generalLocationInput.value = newLocation; // Update the input value in the general form
+    });
+
+    // Pets javascript
+    const savePetsButton = document.getElementById('savePetsButton');
+
+    savePetsButton.addEventListener('click', function () {
+      const newPets = document.getElementById('modalPets').value; // Use the ID from the modal input
+      const generalPetsField = document.getElementById('generalPets'); // ID of the pets field in the general form
+      const generalPetsInput = document.getElementById('pets'); // ID of the pets input field in the general form
+
+      generalPetsField.textContent = newPets; // Update the span in the general form
+      generalPetsInput.value = newPets; // Update the input value in the general form
+    });
+  });
+
+
+
+  function updateEmail() {
+  const input = document.getElementById('email');
+  const emailField = document.getElementById('email');
+  emailField.textContent = input.value;
+}
+
+
+
+
+</script>

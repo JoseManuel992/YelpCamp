@@ -6,6 +6,7 @@ const { cloudinary } = require("../cloudinary");
 module.exports.getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.params.user_id);
+
     if (!user) {
       req.flash('error', 'User not found');
       return res.redirect('/campgrounds');
@@ -15,6 +16,109 @@ module.exports.getUserProfile = async (req, res) => {
   } catch (err) {
     req.flash('error', 'Something went wrong');
     res.redirect('/campgrounds');
+  }
+};
+
+
+
+// Render Edit Profile Form
+module.exports.renderEditProfileForm = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.user_id);
+    if (!user) {
+      req.flash('error', 'User not found');
+      return res.redirect('/campgrounds');
+    }
+
+    res.render('users/editProfile', { user });
+  } catch (err) {
+    req.flash('error', 'Something went wrong');
+    res.redirect('/campgrounds');
+  }
+};
+
+// Update User Profile
+module.exports.updateProfile = async (req, res) => {
+  try {
+    console.log('Update Profile Controller');
+
+    const { user_id } = req.params;
+    console.log('User ID:', user_id);
+
+    let {
+      username,
+      email,
+      birthDate,
+      work,
+      funFact,
+      favoriteSong,
+      uselessSkill,
+      school,
+      spendingHabit,
+      biographyTitle,
+      obsession,
+      languages,
+      location,
+      pets
+    } = req.body.user;
+
+    const user = await User.findByIdAndUpdate(user_id, { username, email });
+
+
+    if (!user) {
+      req.flash('error', 'User not found');
+      return res.redirect('/campgrounds');
+    }
+
+    console.log('Username:', username);
+    console.log('Email:', email);
+    console.log('Birth Date:', birthDate);
+    console.log('Work:', work);
+    console.log('Fun Fact:', funFact);
+    console.log('Favorite Song:', favoriteSong);
+    console.log('Useless Skill:', uselessSkill);
+    console.log('School:', school);
+    console.log('Spending Habit:', spendingHabit);
+    console.log('Biography Title:', biographyTitle);
+    console.log('Obsession:', obsession);
+    console.log('Languages:', languages);
+    console.log('Location:', location);
+    console.log('Pets:', pets);
+
+    username = username.trim();
+    email = email.trim();
+    user.birthDate = birthDate;
+    user.work = work;
+    user.funFact = funFact;
+    user.favoriteSong = favoriteSong;
+    user.uselessSkill = uselessSkill;
+    user.school = school;
+    user.spendingHabit = spendingHabit;
+    user.biographyTitle = biographyTitle;
+    user.obsession = obsession;
+    user.languages = languages;
+    user.location = location;
+    user.pets = pets;
+
+    console.log('User Updated:', user);
+
+    // Update avatar if provided
+    if (req.file) {
+      user.avatar = { url: req.file.path, filename: req.file.filename };
+      console.log('Avatar Updated:', user.avatar);
+
+    }
+
+    await user.save();
+
+    console.log('User Saved:', user);
+
+
+    req.flash('success', 'Profile updated successfully');
+    res.redirect(`/profile/${user._id}`); // Use user._id here
+  } catch (err) {
+    req.flash('error', 'Error updating profile');
+    res.redirect(`/profile/${user._id}/edit`);
   }
 };
 
@@ -78,72 +182,3 @@ module.exports.logout = (req, res, next) => {
       res.redirect('/campgrounds');
   });
 }
-
-
-// Render Edit Profile Form
-module.exports.renderEditProfileForm = async (req, res) => {
-  try {
-    const user = await User.findById(req.params.user_id);
-    if (!user) {
-      req.flash('error', 'User not found');
-      return res.redirect('/campgrounds');
-    }
-
-    res.render('users/editProfile', { user });
-  } catch (err) {
-    req.flash('error', 'Something went wrong');
-    res.redirect('/campgrounds');
-  }
-};
-
-// Update User Profile
-module.exports.updateProfile = async (req, res) => {
-  try {
-    const { user_id } = req.params;
-    const { username, email } = req.body.user;
-    const user = await User.findByIdAndUpdate(user_id, { username, email });
-
-    // Update avatar if provided
-    if (req.file) {
-      user.avatar = { url: req.file.path, filename: req.file.filename };
-    }
-
-    await user.save();
-
-    req.flash('success', 'Profile updated successfully');
-    res.redirect(`/profile/${user._id}`); // Use user._id here
-  } catch (err) {
-    req.flash('error', 'Error updating profile');
-    res.redirect(`/profile/${user._id}/edit`);
-  }
-};
-
-
-
-// Update User Profile
-// module.exports.updateProfile = async (req, res) => {
-//   try {
-//     const { user_id } = req.params;
-//     const { username, email } = req.body.user;
-
-//     let avatarData = {};
-//     if (req.file) {
-//       avatarData = { url: req.file.path, filename: req.file.filename };
-//     }
-
-//     const updatedData = {
-//       username,
-//       email,
-//       avatar: avatarData  // Always update the avatar data, whether provided or not
-//     };
-
-//     const user = await User.findByIdAndUpdate(user_id, updatedData);
-//     await user.save();
-
-//     req.flash('success', 'Profile updated successfully');
-//     res.redirect(`/profile/${user_id}`);
-//   } catch (err) {
-//     req.flash('error', 'Error updating profile');
-//     res.redirect(`/profile/${user_id}/edit`);
-//   }
-// };
