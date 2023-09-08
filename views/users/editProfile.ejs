@@ -21,7 +21,7 @@
                 <span class="edit-text">Edit</span>
               </span>
             </label>
-            <input type="file" class="form-file-input" id="avatar" name="avatar" >
+            <input type="file" class="form-file-input" id="avatar" name="avatar" style="display: none;">
           </div>
         </div>
       </div>
@@ -368,18 +368,19 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
 
-
-
-
-
-
-
-
+  // Function to update character count on the editProfile page
+  function updateCharacterCountOnProfilePage(modalData, newValue) {
+    // Update the character count element on the profile page
+    const currentCharCountElement = document.getElementById(`currentCharCount-${modalData.inputId}`);
+    const maxCharCountElement = document.getElementById(`maxCharCount-${modalData.inputId}`);
+    currentCharCountElement.textContent = newValue.length; // Update character count based on the length of the new value
+    maxCharCountElement.textContent = '40'; // Update the max char count if needed
+  }
 
 
   // Function to generate modal HTML
   function generateModal(modalData) {
-    const initialCharCount = modalData.value ? modalData.value.length : 0;
+    const initialCharCount = modalData.value.length;
 
     return `
       <div class="modal fade" id="${modalData.id}" tabindex="-1" aria-labelledby="${modalData.id}Label" aria-hidden="true">
@@ -393,7 +394,7 @@ document.addEventListener('DOMContentLoaded', function () {
               <label class="form-label" for="${modalData.inputId}" id="${modalData.inputId}Label">${modalData.label}</label>
               <input class="form-control input-form" type="text" name="user[${modalData.inputId}]" id="${modalData.inputId}" value="${modalData.value}" ${modalData.maxLength ? `maxlength="${modalData.maxLength}"` : ''} required>
               <div class="character-count">
-                <span id="currentCharCount-${modalData.inputId}">${initialCharCount}</span>/<span id="maxCharCount-${modalData.inputId}">${modalData.maxLength || '40'}</span>
+                <span class="modal-character-count" id="currentCharCount-${modalData.inputId}">${initialCharCount}</span>/<span id="maxCharCount-${modalData.inputId}">${modalData.maxLength || '40'}</span>
               </div>
             </div>
             <div class="modal-footer">
@@ -406,10 +407,14 @@ document.addEventListener('DOMContentLoaded', function () {
     `;
   }
 
+
+
+
   // Function to add modals to the container
   function addModalsToContainer() {
     const modalContainer = document.getElementById('modalContainer');
     console.log('Adding modals...');
+
 
     modals.forEach((modalData) => {
       console.log(`Setting up modal for ${modalData.inputId}`);
@@ -417,9 +422,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const modalHTML = generateModal(modalData);
       modalContainer.innerHTML += modalHTML;
 
-
     });
-
 
 
     // Select all elements with the class 'modal-save-button'
@@ -454,6 +457,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (inputField) {
           inputField.value = newValue;
           console.log(`Updated inputField (${mappedInputId}) value: ${inputField.value}`);
+
         } else {
           console.log(`Input field not found for ${modalData.inputId}`);
         }
@@ -467,6 +471,8 @@ document.addEventListener('DOMContentLoaded', function () {
         } else {
           console.log(`Span field not found for ${modalData.inputId}`);
         }
+        // Now, update the character count in both the modal and the profile page
+        updateCharacterCountOnProfilePage(modalData, newValue);
       });
     });
   }
@@ -476,6 +482,5 @@ document.addEventListener('DOMContentLoaded', function () {
   addModalsToContainer();
 
 });
-
 
 </script>
