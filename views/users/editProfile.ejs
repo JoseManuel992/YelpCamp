@@ -217,10 +217,6 @@
   <a class="Back-To-Profile-Link" href="/profile/<%= user._id %>">Back to Profile</a>
 
 
-
-
-
-
   <div id="modalContainer"></div>
 
 
@@ -369,13 +365,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
   // Function to update character count on the editProfile page
-  function updateCharacterCountOnProfilePage(modalData, newValue) {
-    // Update the character count element on the profile page
-    const currentCharCountElement = document.getElementById(`currentCharCount-${modalData.inputId}`);
-    const maxCharCountElement = document.getElementById(`maxCharCount-${modalData.inputId}`);
-    currentCharCountElement.textContent = newValue.length; // Update character count based on the length of the new value
-    maxCharCountElement.textContent = '40'; // Update the max char count if needed
-  }
 
 
   // Function to generate modal HTML
@@ -415,12 +404,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const modalContainer = document.getElementById('modalContainer');
     console.log('Adding modals...');
 
-
     modals.forEach((modalData) => {
       console.log(`Setting up modal for ${modalData.inputId}`);
 
       const modalHTML = generateModal(modalData);
       modalContainer.innerHTML += modalHTML;
+
+      const nameField = document.querySelector('.input-form');
+      const counter = document.querySelector('.modal-character-count');
+      nameField.addEventListener('input', (e) => {
+        counter.textContent = `${e.target.value.length}`
+      })
 
     });
 
@@ -472,7 +466,6 @@ document.addEventListener('DOMContentLoaded', function () {
           console.log(`Span field not found for ${modalData.inputId}`);
         }
         // Now, update the character count in both the modal and the profile page
-        updateCharacterCountOnProfilePage(modalData, newValue);
       });
     });
   }
@@ -484,3 +477,23 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 </script>
+
+
+<!-- //primero, obten una referencia al elemento input y al span
+const inputElement = document.querySelector('input');
+const spanElement = document.querySelector('span');
+
+//Inicializa la variable chars
+let chars = 0;
+
+//Agrega un event listener para el evento 'input'
+inputElement.addEventListener('input', (e) => {
+  chars = e.target.value.length;
+  spanElement.textCount = `${chars}/40`
+
+}) -->
+const nameField = document.querySelector('#name')
+const counter = document.querySelector('#counter')
+nameField.addEventListener('input', (e) => {
+  counter.textContent = `${e.target.value.length}/40`
+})
