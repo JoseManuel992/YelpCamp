@@ -9,8 +9,8 @@
   <form action="/profile/<%= user._id %>/edit" method="POST" novalidate enctype="multipart/form-data">
 
     <div class="row">
-      <div class="col-md-4">
-        <div class="mb-3 avatar-edit-container ">
+      <div class="col-md-2">
+        <div class="avatar-edit-container ">
           <div class="avatar-profile-container">
             <img src="<%= user.avatar.url %>" alt="Avatar of <%= user.username %>" class="avatar-profile">
           </div>
@@ -27,13 +27,13 @@
       </div>
 
 
-      <div class="col-md-8">
+      <div class="col-md-10">
         <p class="edit-profile-title">Your Profile</p>
 
         <div class="row">
           <div class="col-md-6">
-            <div class="mb-3">
-              <input class="form-control profile-field  type="text" name="user[username]" id="username" value="<%= user.username %>" required ">
+            <div class="left-edit-userProfile-container">
+              <input class="form-control profile-field  type="text" name="user[username]" id="username" value="<%= user.username %>" required style="display: none;">
               <button type="button" class="btn btn-outline-secondary edit-profile-button" data-bs-toggle="modal" data-bs-target="#usernameModal">
                 <div class="flex-container">
                   <i class="fa-solid fa-user edit-profile-icon"></i>
@@ -47,12 +47,16 @@
           </div>
 
           <div class="col-md-6">
-            <div class="mb-3">
-              <input class="form-control profile-field" type="email" name="user[email]" id="email" value="<%= user.email %>" required ">
-              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#emailModal">
-                <i class="fa-solid fa-envelope edit-profile-icon"></i>
-                Email: <span id="generalEmail"><%= user.email %></span>
-                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+            <div class="right-edit-userProfile-container">
+              <input class="form-control profile-field" type="email" name="user[email]" id="email" value="<%= user.email %>" required style="display: none;">
+              <button type="button" class="btn edit-profile-button" data-bs-toggle="modal" data-bs-target="#emailModal">
+                <div class="flex-container">
+                  <i class="fa-solid fa-envelope edit-profile-icon"></i>
+                  <div>
+                    Email: <span id="generalEmail"><%= user.email %></span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                </div>
               </button>
             </div>
           </div>
@@ -60,23 +64,31 @@
 
         <div class="row">
           <div class="col-md-6">
-            <div class="mb-3">
-              <input class="form-control" type="date" name="user[birthDate]" id="birthDate" value="<%= user.birthDate ? user.birthDate.toISOString().substr(0, 10) : '' %>" >
+            <div class="left-edit-userProfile-container">
+              <input class="form-control" type="date" name="user[birthDate]" id="birthDate" value="<%= user.birthDate ? user.birthDate.toISOString().substr(0, 10) : '' %>" style="display: none;">
               <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#birthDateModal">
-                <i class="fa-solid fa-cake-candles edit-profile-icon"></i>
-                Date of Birth: <span id="generalBirthDate"><%= user.birthDate ? user.birthDate.toISOString().substr(0, 10) : '' %></span>
-                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                <div class="flex-container">
+                  <i class="fa-solid fa-cake-candles edit-profile-icon"></i>
+                  <div>
+                    Date of Birth: <span id="generalBirthDate"><%= user.birthDate ? user.birthDate.toISOString().substr(0, 10) : '' %></span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                 </div>
               </button>
             </div>
           </div>
 
           <div class="col-md-6">
-            <div class="mb-3">
-              <input class="form-control" type="text" name="user[work]" id="work" value="<%= user.work %>" required >
+            <div class="right-edit-userProfile-container">
+              <input class="form-control" type="text" name="user[work]" id="work" value="<%= user.work %>" required style="display: none;">
               <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#workModal">
-                <i class="fa-solid fa-briefcase edit-profile-icon"></i>
-                Work: <span id="generalWork"><%= user.work %></span>
-                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                <div class="flex-container">
+                  <i class="fa-solid fa-briefcase edit-profile-icon"></i>
+                  <div>
+                    Work: <span id="generalWork"><%= user.work %></span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                </div>
               </button>
             </div>
           </div>
@@ -84,23 +96,31 @@
 
         <div class="row">
           <div class="col-md-6">
-            <div class="mb-3">
-              <input class="form-control" type="text" name="user[funFact]" id="funFact" value="<%= user.funFact %>" >
+            <div class="left-edit-userProfile-container">
+              <input class="form-control" type="text" name="user[funFact]" id="funFact" value="<%= user.funFact %>" style="display: none;">
               <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#funFactModal">
-                <i class="fa-solid fa-lightbulb edit-profile-icon"></i>
-                Fun Fact: <span id="generalFunFact"><%= user.funFact %></span>
-                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                <div class="flex-container">
+                  <i class="fa-solid fa-lightbulb edit-profile-icon"></i>
+                  <div>
+                    Fun Fact: <span id="generalFunFact"><%= user.funFact %></span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                </div>
               </button>
             </div>
           </div>
 
           <div class="col-md-6">
-            <div class="mb-3">
-              <input class="form-control" type="text" name="user[favoriteSong]" id="favoriteSong" value="<%= user.favoriteSong %>" >
+            <div class="right-edit-userProfile-container">
+              <input class="form-control" type="text" name="user[favoriteSong]" id="favoriteSong" value="<%= user.favoriteSong %>" style="display: none;">
               <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#favoriteSongModal">
-                <i class="fa-solid fa-music edit-profile-icon"></i>
-                Favorite Song: <span id="generalFavoriteSong"><%= user.favoriteSong %></span>
-                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                <div class="flex-container">
+                  <i class="fa-solid fa-music edit-profile-icon"></i>
+                  <div>
+                    Favorite Song: <span id="generalFavoriteSong"><%= user.favoriteSong %></span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                </div>
               </button>
             </div>
           </div>
@@ -109,23 +129,31 @@
 
         <div class="row">
           <div class="col-md-6">
-            <div class="mb-3">
-              <input class="form-control" type="text" name="user[uselessSkill]" id="uselessSkill" value="<%= user.uselessSkill %>" >
+            <div class="left-edit-userProfile-container">
+              <input class="form-control" type="text" name="user[uselessSkill]" id="uselessSkill" value="<%= user.uselessSkill %>" style="display: none;">
               <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#uselessSkillModal">
-                <i class="fa-solid fa-wand-magic-sparkles edit-profile-icon"></i>
-                Useless Skill: <span id="generalUselessSkill"><%= user.uselessSkill %></span>
-                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                <div class="flex-container">
+                  <i class="fa-solid fa-wand-magic-sparkles edit-profile-icon"></i>
+                  <div>
+                    Useless Skill: <span id="generalUselessSkill"><%= user.uselessSkill %></span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                </div>
               </button>
             </div>
           </div>
 
           <div class="col-md-6">
-            <div class="mb-3">
-              <input class="form-control" type="text" name="user[school]" id="school" value="<%= user.school %>" >
+            <div class="right-edit-userProfile-container">
+              <input class="form-control" type="text" name="user[school]" id="school" value="<%= user.school %>" style="display: none;">
               <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#schoolModal">
-                <i class="fa-solid fa-graduation-cap edit-profile-icon"></i>
-                School: <span id="generalSchool"><%= user.school %></span>
-                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                <div class="flex-container">
+                  <i class="fa-solid fa-graduation-cap edit-profile-icon"></i>
+                  <div>
+                    School: <span id="generalSchool"><%= user.school %></span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                </div>
               </button>
             </div>
           </div>
@@ -134,23 +162,31 @@
 
         <div class="row">
           <div class="col-md-6">
-            <div class="mb-3">
-              <input class="form-control" type="text" name="user[spendingHabit]" id="spendingHabit" value="<%= user.spendingHabit %>" >
+            <div class="left-edit-userProfile-container">
+              <input class="form-control" type="text" name="user[spendingHabit]" id="spendingHabit" value="<%= user.spendingHabit %>" style="display: none;">
               <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#spendingHabitModal">
-                <i class="fa-regular fa-clock edit-profile-icon"></i>
-                Spending Habit: <span id="generalSpendingHabit"><%= user.spendingHabit %></span>
-                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                <div class="flex-container">
+                  <i class="fa-regular fa-clock edit-profile-icon"></i>
+                  <div>
+                    Spending Habit: <span id="generalSpendingHabit"><%= user.spendingHabit %></span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                </div>
               </button>
             </div>
           </div>
 
           <div class="col-md-6">
-            <div class="mb-3">
-              <input class="form-control" type="text" name="user[biographyTitle]" id="biographyTitle" value="<%= user.biographyTitle %>" >
+            <div class="right-edit-userProfile-container">
+              <input class="form-control" type="text" name="user[biographyTitle]" id="biographyTitle" value="<%= user.biographyTitle %>" style="display: none;">
               <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#biographyTitleModal">
-                <i class="fa-solid fa-book edit-profile-icon"></i>
-                Biography Title: <span id="generalBiographyTitle"><%= user.biographyTitle %></span>
-                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                <div class="flex-container">
+                  <i class="fa-solid fa-book edit-profile-icon"></i>
+                  <div>
+                    Biography Title: <span id="generalBiographyTitle"><%= user.biographyTitle %></span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                </div>
               </button>
             </div>
           </div>
@@ -159,23 +195,31 @@
 
         <div class="row">
           <div class="col-md-6">
-            <div class="mb-3">
-              <input class="form-control" type="text" name="user[obsession]" id="obsession" value="<%= user.obsession %>" >
+            <div class="left-edit-userProfile-container">
+              <input class="form-control" type="text" name="user[obsession]" id="obsession" value="<%= user.obsession %>" style="display: none;">
               <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#obsessionModal">
-                <i class="fa-solid fa-heart edit-profile-icon"></i>
-                Obsession: <span id="generalObsession"><%= user.obsession %></span>
-                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                <div class="flex-container">
+                  <i class="fa-solid fa-heart edit-profile-icon"></i>
+                  <div>
+                    Obsession: <span id="generalObsession"><%= user.obsession %></span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                </div>
               </button>
             </div>
           </div>
 
           <div class="col-md-6">
-            <div class="mb-3">
-              <input class="form-control" type="text" name="user[languages]" id="languages" value="<%= user.languages %>" >
+            <div class="right-edit-userProfile-container">
+              <input class="form-control" type="text" name="user[languages]" id="languages" value="<%= user.languages %>" style="display: none;">
               <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#languagesModal">
-                <i class="fa-solid fa-globe edit-profile-icon"></i>
-                Languages: <span id="generalLanguages"><%= user.languages %></span>
-                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                <div class="flex-container">
+                  <i class="fa-solid fa-globe edit-profile-icon"></i>
+                  <div>
+                    Languages: <span id="generalLanguages"><%= user.languages %></span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                </div>
               </button>
             </div>
           </div>
@@ -184,31 +228,53 @@
 
         <div class="row">
           <div class="col-md-6">
-            <div class="mb-3">
-              <input class="form-control" type="text" name="user[location]" id="location" value="<%= user.location %>" >
+            <div class="left-edit-userProfile-container">
+              <input class="form-control" type="text" name="user[location]" id="location" value="<%= user.location %>" style="display: none;">
               <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#locationModal">
-                <i class="fa-solid fa-earth-europe edit-profile-icon"></i>
-                Location: <span id="generalLocation"><%= user.location %></span>
-                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                <div class="flex-container">
+                  <i class="fa-solid fa-earth-europe edit-profile-icon"></i>
+                  <div>
+                    Location: <span id="generalLocation"><%= user.location %></span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                </div>
               </button>
             </div>
           </div>
 
           <div class="col-md-6">
-            <div class="mb-3">
-              <input class="form-control" type="text" name="user[pets]" id="pets" value="<%= user.pets %>" >
+            <div class="right-edit-userProfile-container">
+              <input class="form-control" type="text" name="user[pets]" id="pets" value="<%= user.pets %>" style="display: none;">
               <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#petsModal">
-                <i class="fa-solid fa-paw edit-profile-icon"></i>
-                Pets: <span id="generalPets"><%= user.pets %></span>
-                <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                <div class="flex-container">
+                  <i class="fa-solid fa-paw edit-profile-icon"></i>
+                  <div>
+                    Pets: <span id="generalPets"><%= user.pets %></span>
+                  </div>
+                  <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
+                </div>
               </button>
             </div>
           </div>
+        </div>
+
+        <div class="form-group">
+          <label for="aboutYou">About You</label>
+          <textarea
+            class="form-control"
+            id="aboutYou"
+            name="user[aboutYou]"
+            rows="4"
+            placeholder="Tell us about yourself..."
+          ><%= user.aboutYou %></textarea>
+          <small id="aboutYouHelp" class="form-text text-muted">
+            Character Count: <span id="aboutYouCharacterCount"><%= user.aboutYouCharacterCount %></span>
+          </small>
         </div>
 
 
           <div class="updateButton">
-            <button class="btn btn-info text-white">Update Profile</button>
+            <button class="btn btn-info text-white sticky-done-button">Done</button>
           </div>
         </div>
       </div>
@@ -222,278 +288,301 @@
 
 <script>
 
-document.addEventListener('DOMContentLoaded', function () {
-  console.log('DOMContentLoaded event fired');
-  // Define modal data
-  const modals = [
-    {
-      id: 'usernameModal',
-      title: 'Edit Username',
-      label: 'Username',
-      inputId: 'modalUsername',
-      value: '<%= user.username %>',
-      maxLength: 40,
-    },
-    {
-      id: 'emailModal',
-      title: 'Edit Email',
-      label: 'Email',
-      inputId: 'modalEmail',
-      value: '<%= user.email %>',
-    },
-    {
-      id: 'birthDateModal',
-      title: 'Edit Birth Date',
-      label: 'Date of Birth',
-      inputId: 'modalBirthDate',
-      value: '<%= user.birthDate ? user.birthDate.toISOString().substr(0, 10) : "" %>',
-    },
-    {
-      id: 'workModal',
-      title: 'What do you do for work?',
-      label: 'Work',
-      inputId: 'modalWork',
-      value: '<%= user.work %>',
-    },
-    {
-      id: 'funFactModal',
-      title: 'What’s a fun fact about you?',
-      label: 'Fun Fact',
-      inputId: 'modalFunFact',
-      value: '<%= user.funFact %>',
-    },
-    {
-      id: 'favoriteSongModal',
-      title: 'What is your favorite song?',
-      label: 'Favorite Song',
-      inputId: 'modalFavoriteSong',
-      value: '<%= user.favoriteSong %>',
-    },
-    {
-      id: 'uselessSkillModal',
-      title: 'What’s your most useless skill?',
-      label: 'Useless Skill',
-      inputId: 'modalUselessSkill',
-      value: '<%= user.uselessSkill %>',
-    },
-    {
-      id: 'schoolModal',
-      title: 'Where did you go to school?',
-      label: 'School',
-      inputId: 'modalSchool',
-      value: '<%= user.school %>',
-    },
-    {
-      id: 'spendingHabitModal',
-      title: 'What do you spend too much time doing?',
-      label: 'Spending Habit',
-      inputId: 'modalSpendingHabit',
-      value: '<%= user.spendingHabit %>',
-    },
-    {
-      id: 'biographyTitleModal',
-      title: 'What would your biography title be?',
-      label: 'Biography Title',
-      inputId: 'modalBiographyTitle',
-      value: '<%= user.biographyTitle %>',
-    },
-    {
-      id: 'obsessionModal',
-      title: 'Edit Obsession',
-      label: 'What are you obsessed with?',
-      inputId: 'modalObsession',
-      value: '<%= user.obsession %>',
-    },
-    {
-      id: 'languagesModal',
-      title: 'Languages you speak',
-      label: 'Languages',
-      inputId: 'modalLanguages',
-      value: '<%= user.languages %>',
-    },
-    {
-      id: 'locationModal',
-      title: 'Where you live?',
-      label: 'Location',
-      inputId: 'modalLocation',
-      value: '<%= user.location %>',
-    },
-    {
-      id: 'petsModal',
-      title: 'Do you have any pets in your life?',
-      label: 'Pets',
-      inputId: 'modalPets',
-      value: '<%= user.pets %>',
-    },
-  ];
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log('DOMContentLoaded event fired');
 
-  const inputIdMapping = {
-    modalUsername: 'username',
-    modalEmail: 'email',
-    modalBirthDate: 'birthDate',
-    modalWork: 'work',
-    modalFunFact: 'funFact',
-    modalFavoriteSong: 'favoriteSong',
-    modalUselessSkill: 'uselessSkill',
-    modalSchool: 'school',
-    modalSpendingHabit: 'spendingHabit',
-    modalBiographyTitle: 'biographyTitle',
-    modalObsession: 'obsession',
-    modalLanguages: 'languages',
-    modalLocation: 'location',
-    modalPets: 'pets',
-  };
+     // Define modal data
+    const modals = [
+      {
+        id: 'usernameModal',
+        title: 'Edit Username',
+        label: 'Username',
+        inputId: 'modalUsername',
+        value: '<%= user.username %>',
+        maxLength: 40,
+        inputClass: 'input-form', // Add class for input field
+        counterClass: 'modal-character-count', // Add class for character count
+      },
+      {
+        id: 'emailModal',
+        title: 'Edit Email',
+        label: 'Email',
+        inputId: 'modalEmail',
+        value: '<%= user.email %>',
+        inputClass: 'input-form', // Add class for input field
+        counterClass: 'modal-character-count', // Add class for character count
+      },
+      {
+        id: 'birthDateModal',
+        title: 'Edit Birth Date',
+        label: 'Date of Birth',
+        inputId: 'modalBirthDate',
+        value: '<%= user.birthDate ? user.birthDate.toISOString().substr(0, 10) : "" %>',
+        inputClass: 'input-form', // Add class for input field
+        counterClass: 'modal-character-count', // Add class for character count
+      },
+      {
+        id: 'workModal',
+        title: 'What do you do for work?',
+        label: 'Work',
+        inputId: 'modalWork',
+        value: '<%= user.work %>',
+        inputClass: 'input-form', // Add class for input field
+        counterClass: 'modal-character-count', // Add class for character count
+      },
+      {
+        id: 'funFactModal',
+        title: 'What’s a fun fact about you?',
+        label: 'Fun Fact',
+        inputId: 'modalFunFact',
+        value: '<%= user.funFact %>',
+        inputClass: 'input-form', // Add class for input field
+        counterClass: 'modal-character-count', // Add class for character count
+      },
+      {
+        id: 'favoriteSongModal',
+        title: 'What is your favorite song?',
+        label: 'Favorite Song',
+        inputId: 'modalFavoriteSong',
+        value: '<%= user.favoriteSong %>',
+        inputClass: 'input-form', // Add class for input field
+        counterClass: 'modal-character-count', // Add class for character count
+      },
+      {
+        id: 'uselessSkillModal',
+        title: 'What’s your most useless skill?',
+        label: 'Useless Skill',
+        inputId: 'modalUselessSkill',
+        value: '<%= user.uselessSkill %>',
+        inputClass: 'input-form', // Add class for input field
+        counterClass: 'modal-character-count', // Add class for character count
+      },
+      {
+        id: 'schoolModal',
+        title: 'Where did you go to school?',
+        label: 'School',
+        inputId: 'modalSchool',
+        value: '<%= user.school %>',
+        inputClass: 'input-form', // Add class for input field
+        counterClass: 'modal-character-count', // Add class for character count
+      },
+      {
+        id: 'spendingHabitModal',
+        title: 'What do you spend too much time doing?',
+        label: 'Spending Habit',
+        inputId: 'modalSpendingHabit',
+        value: '<%= user.spendingHabit %>',
+        inputClass: 'input-form', // Add class for input field
+        counterClass: 'modal-character-count', // Add class for character count
+      },
+      {
+        id: 'biographyTitleModal',
+        title: 'What would your biography title be?',
+        label: 'Biography Title',
+        inputId: 'modalBiographyTitle',
+        value: '<%= user.biographyTitle %>',
+        inputClass: 'input-form', // Add class for input field
+        counterClass: 'modal-character-count', // Add class for character count
+      },
+      {
+        id: 'obsessionModal',
+        title: 'Edit Obsession',
+        label: 'What are you obsessed with?',
+        inputId: 'modalObsession',
+        value: '<%= user.obsession %>',
+        inputClass: 'input-form', // Add class for input field
+        counterClass: 'modal-character-count', // Add class for character count
+      },
+      {
+        id: 'languagesModal',
+        title: 'Languages you speak',
+        label: 'Languages',
+        inputId: 'modalLanguages',
+        value: '<%= user.languages %>',
+        inputClass: 'input-form', // Add class for input field
+        counterClass: 'modal-character-count', // Add class for character count
+      },
+      {
+        id: 'locationModal',
+        title: 'Where you live?',
+        label: 'Location',
+        inputId: 'modalLocation',
+        value: '<%= user.location %>',
+        inputClass: 'input-form', // Add class for input field
+        counterClass: 'modal-character-count', // Add class for character count
+      },
+      {
+        id: 'petsModal',
+        title: 'Do you have any pets in your life?',
+        label: 'Pets',
+        inputId: 'modalPets',
+        value: '<%= user.pets %>',
+        inputClass: 'input-form', // Add class for input field
+        counterClass: 'modal-character-count', // Add class for character count
+      },
+    ];
 
-  const spanIdMapping = {
+    const inputIdMapping = {
+      modalUsername: 'username',
+      modalEmail: 'email',
+      modalBirthDate: 'birthDate',
+      modalWork: 'work',
+      modalFunFact: 'funFact',
+      modalFavoriteSong: 'favoriteSong',
+      modalUselessSkill: 'uselessSkill',
+      modalSchool: 'school',
+      modalSpendingHabit: 'spendingHabit',
+      modalBiographyTitle: 'biographyTitle',
+      modalObsession: 'obsession',
+      modalLanguages: 'languages',
+      modalLocation: 'location',
+      modalPets: 'pets',
+    };
 
-    modalUsername:'generalUsername',
-    modalEmail: 'generalEmail',
-    modalBirthDate: 'generalBirthDate',
-    modalWork: 'generalWork',
-    modalFunFact: 'generalFunFact',
-    modalFavoriteSong: 'generalFavoriteSong',
-    modalUselessSkill: 'generalUselessSkill',
-    modalSchool: 'generalSchool',
-    modalSpendingHabit: 'generalSpendingHabit',
-    modalBiographyTitle: 'generalBiographyTitle',
-    modalObsession: 'generalObsession',
-    modalLanguages: 'generalLanguages',
-    modalLocation: 'generalLocation',
-    modalPets: 'generalPets',
+    const spanIdMapping = {
 
-  };
+      modalUsername:'generalUsername',
+      modalEmail: 'generalEmail',
+      modalBirthDate: 'generalBirthDate',
+      modalWork: 'generalWork',
+      modalFunFact: 'generalFunFact',
+      modalFavoriteSong: 'generalFavoriteSong',
+      modalUselessSkill: 'generalUselessSkill',
+      modalSchool: 'generalSchool',
+      modalSpendingHabit: 'generalSpendingHabit',
+      modalBiographyTitle: 'generalBiographyTitle',
+      modalObsession: 'generalObsession',
+      modalLanguages: 'generalLanguages',
+      modalLocation: 'generalLocation',
+      modalPets: 'generalPets',
+
+    };
 
 
-  // Function to update character count on the editProfile page
+    // Function to update character count on the editProfile page
 
 
-  // Function to generate modal HTML
-  function generateModal(modalData) {
-    const initialCharCount = modalData.value.length;
+    // Function to generate modal HTML
+    function generateModal(modalData) {
+      const initialCharCount = modalData.value.length;
 
-    return `
-      <div class="modal fade" id="${modalData.id}" tabindex="-1" aria-labelledby="${modalData.id}Label" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="${modalData.id}Label">${modalData.title}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <label class="form-label" for="${modalData.inputId}" id="${modalData.inputId}Label">${modalData.label}</label>
-              <input class="form-control input-form" type="text" name="user[${modalData.inputId}]" id="${modalData.inputId}" value="${modalData.value}" ${modalData.maxLength ? `maxlength="${modalData.maxLength}"` : ''} required>
-              <div class="character-count">
-                <span class="modal-character-count" id="currentCharCount-${modalData.inputId}">${initialCharCount}</span>/<span id="maxCharCount-${modalData.inputId}">${modalData.maxLength || '40'}</span>
+      return `
+        <div class="modal fade" id="${modalData.id}" tabindex="-1" aria-labelledby="${modalData.id}Label" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="${modalData.id}Label">${modalData.title}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary modal-save-button" data-bs-dismiss="modal" id="save${modalData.inputId}Button" data-modal-input="${modalData.inputId}">Save</button>
+              <div class="modal-body">
+                <label class="form-label" for="${modalData.inputId}" id="${modalData.inputId}Label">${modalData.label}</label>
+                <input class="form-control ${modalData.inputClass}" type="text" name="user[${modalData.inputId}]" id="${modalData.inputId}" value="${modalData.value}"  ${modalData.maxLength ? `maxlength="${modalData.maxLength}"` : 'maxlength="40"'} required>
+                <div class="character-count">
+                  <span class="${modalData.counterClass}" id="currentCharCount-${modalData.inputId}">${initialCharCount}</span>/<span id="maxCharCount-${modalData.inputId}">${modalData.maxLength || '40'}</span>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary modal-save-button" data-bs-dismiss="modal" id="save${modalData.inputId}Button" data-modal-input="${modalData.inputId}">Save</button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    `;
-  }
+      `;
+    }
 
 
 
 
-  // Function to add modals to the container
-  function addModalsToContainer() {
-    const modalContainer = document.getElementById('modalContainer');
-    console.log('Adding modals...');
+    // Function to add modals to the container
+    function addModalsToContainer() {
+      const modalContainer = document.getElementById('modalContainer');
+      console.log('Adding modals...');
 
-    modals.forEach((modalData) => {
-      console.log(`Setting up modal for ${modalData.inputId}`);
+      // Loop through each modal
+      modals.forEach((modalData) => {
+        console.log(`Setting up modal for ${modalData.inputId}`);
 
-      const modalHTML = generateModal(modalData);
-      modalContainer.innerHTML += modalHTML;
+        const modalHTML = generateModal(modalData);
+        modalContainer.innerHTML += modalHTML;
 
-      const nameField = document.querySelector('.input-form');
-      const counter = document.querySelector('.modal-character-count');
-      nameField.addEventListener('input', (e) => {
-        counter.textContent = `${e.target.value.length}`
-      })
+        // Select the input field(s) with class 'input-form'
+        const inputFields = document.querySelectorAll(`.${modalData.inputClass}`);
 
-    });
+        // Select the counter element(s) with class 'modal-character-count'
+        const counterElements = document.querySelectorAll(`.${modalData.counterClass}`);
 
+        // Now, you can work with inputFields and counterElements
+        // For example, if there are multiple input fields and counters, you can loop through them:
+        inputFields.forEach((inputField, index) => {
+          const counterElement = counterElements[index]; // Get the corresponding counter element
 
-    // Select all elements with the class 'modal-save-button'
-    const saveButtons = document.querySelectorAll('.modal-save-button');
+          // Add event listener to update character count
+          inputField.addEventListener('input', (e) => {
+            counterElement.textContent = `${e.target.value.length}`;
+          });
 
-    // Loop through each save button and add an event listener
-    saveButtons.forEach(function (saveButton) {
-      saveButton.addEventListener('click', function () {
-        // Find the associated modalData
-        const modalId = saveButton.getAttribute('data-modal-input');
-        const modalData = modals.find(data => data.inputId === modalId);
-
-        if (!modalData) {
-          console.log('Error: Modal data not found for button');
-          return;
-        }
-        console.log(`Clicked button ID: ${saveButton.id}`);
-        console.log(`Extracted modal ID: ${modalId}`);
-        console.log(`Matching modal data: ${modalData.inputId}`);
-
-        console.log(`Save button clicked for ${modalData.inputId}`);
-
-        const newValue = document.getElementById(`${modalData.inputId}`).value;
-
-        // Log the new value to the console
-        console.log(`New value for ${modalData.label}: ${newValue}`);
-
-        // Update the input value and span content based on the mapping
-        const mappedInputId = inputIdMapping[modalData.inputId];
-        const inputField = document.getElementById(mappedInputId);
-
-        if (inputField) {
-          inputField.value = newValue;
-          console.log(`Updated inputField (${mappedInputId}) value: ${inputField.value}`);
-
-        } else {
-          console.log(`Input field not found for ${modalData.inputId}`);
-        }
-
-        const mappedSpanId = spanIdMapping[modalData.inputId];
-        const spanField = document.getElementById(mappedSpanId); // Use mappedSpanId here
-
-        if (spanField) {
-          spanField.textContent = newValue;
-          console.log(`Updated spanField (${spanField.id}) content: ${spanField.textContent}`);
-        } else {
-          console.log(`Span field not found for ${modalData.inputId}`);
-        }
-        // Now, update the character count in both the modal and the profile page
+          // You can also use these elements for other purposes related to this modal
+        });
       });
-    });
-  }
 
 
-  // Add modals to the container
-  addModalsToContainer();
 
-});
+      // Select all elements with the class 'modal-save-button'
+      const saveButtons = document.querySelectorAll('.modal-save-button');
+
+      // Loop through each save button and add an event listener
+      saveButtons.forEach(function (saveButton) {
+        saveButton.addEventListener('click', function () {
+          // Find the associated modalData
+          const modalId = saveButton.getAttribute('data-modal-input');
+          const modalData = modals.find(data => data.inputId === modalId);
+
+          if (!modalData) {
+            console.log('Error: Modal data not found for button');
+            return;
+          }
+          console.log(`Clicked button ID: ${saveButton.id}`);
+          console.log(`Extracted modal ID: ${modalId}`);
+          console.log(`Matching modal data: ${modalData.inputId}`);
+
+          console.log(`Save button clicked for ${modalData.inputId}`);
+
+          const newValue = document.getElementById(`${modalData.inputId}`).value;
+
+          // Log the new value to the console
+          console.log(`New value for ${modalData.label}: ${newValue}`);
+
+          // Update the input value and span content based on the mapping
+          const mappedInputId = inputIdMapping[modalData.inputId];
+          const inputField = document.getElementById(mappedInputId);
+
+          if (inputField) {
+            inputField.value = newValue;
+            console.log(`Updated inputField (${mappedInputId}) value: ${inputField.value}`);
+
+          } else {
+            console.log(`Input field not found for ${modalData.inputId}`);
+          }
+
+          const mappedSpanId = spanIdMapping[modalData.inputId];
+          const spanField = document.getElementById(mappedSpanId); // Use mappedSpanId here
+
+          if (spanField) {
+            spanField.textContent = newValue;
+            console.log(`Updated spanField (${spanField.id}) content: ${spanField.textContent}`);
+          } else {
+            console.log(`Span field not found for ${modalData.inputId}`);
+          }
+          // Now, update the character count in both the modal and the profile page
+        });
+      });
+    }
+
+
+    // Add modals to the container
+    addModalsToContainer();
+
+  });
 
 </script>
-
-
-<!-- //primero, obten una referencia al elemento input y al span
-const inputElement = document.querySelector('input');
-const spanElement = document.querySelector('span');
-
-//Inicializa la variable chars
-let chars = 0;
-
-//Agrega un event listener para el evento 'input'
-inputElement.addEventListener('input', (e) => {
-  chars = e.target.value.length;
-  spanElement.textCount = `${chars}/40`
-
-}) -->
-const nameField = document.querySelector('#name')
-const counter = document.querySelector('#counter')
-nameField.addEventListener('input', (e) => {
-  counter.textContent = `${e.target.value.length}/40`
-})

@@ -34,6 +34,8 @@ body {
 .user-name, .edit-profile-title {
   font-size: 3rem;
   font-weight: 700;
+  margin-left: 4.5rem;
+  margin-bottom: 4rem;
 }
 
 .user-profile-content-card{
@@ -100,9 +102,33 @@ body {
 
 .edit-profile-button{
   color: black !important;
-  padding: 0.5rem 2.5rem;
+  padding: 1rem 2.5rem;
   /* cambia el padding o quitalo me voy a dormir en breves, para manana */
+  width:30rem;
+  height: 7rem;
+  border: none;
+}
 
+.edit-profile-button:hover{
+  color: black !important;
+  padding: 1rem 2.5rem;
+  background-color: #f7f7f7;
+}
+
+
+
+.left-edit-userProfile-container, .right-edit-userProfile-container {
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Stack children vertically */
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+}
+
+.left-edit-userProfile-container, .right-edit-userProfile-container{
+  margin-left: 5rem;
+  margin-right: 3rem;
+  width: 29rem;
+  border-bottom: 1px solid #ccc;
 }
 
 .edit-profile-icon{
@@ -123,10 +149,6 @@ body {
   align-items: center; /* Vertically center align items */
 }
 
-.flex-container i,
-.flex-container div {
-  margin-right: 5px; /* Add a small margin between icon and text */
-}
 
 
 .form-control-modal {
@@ -174,11 +196,7 @@ body {
   text-align: left;
 }
 
-/* Add style for title when character count exceeds maxCharCount */
-.title.title-error {
-  color: red; /* Change to red color */
-  font-weight: bold; /* Apply bold font weight */
-}
+
 
 .input-with-character-count {
   display: flex;
@@ -187,10 +205,10 @@ body {
   flex-direction: column; /* Display input and count below each other */
 }
 
-.char-limit-exceeded{
-  color:red;
-}
-
-.char-count-error {
-  color: red; /* Change color to red */
+/* Style for the sticky button */
+.updateButton {
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  z-index: 1;
 }

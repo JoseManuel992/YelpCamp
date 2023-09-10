@@ -59,7 +59,8 @@ module.exports.updateProfile = async (req, res) => {
       obsession,
       languages,
       location,
-      pets
+      pets,
+      aboutYou
     } = req.body.user;
 
     const user = await User.findByIdAndUpdate(user_id, { username, email });
@@ -84,6 +85,7 @@ module.exports.updateProfile = async (req, res) => {
     console.log('Languages:', languages);
     console.log('Location:', location);
     console.log('Pets:', pets);
+    console.log('About you:', aboutYou);
 
     username = username.trim();
     email = email.trim();
@@ -99,6 +101,8 @@ module.exports.updateProfile = async (req, res) => {
     user.languages = languages;
     user.location = location;
     user.pets = pets;
+    user.aboutYou = aboutYou; // Update the 'aboutYou' field
+
 
     console.log('User Updated:', user);
 

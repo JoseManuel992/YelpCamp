@@ -27,7 +27,9 @@ const UserSchema = new Schema({
   obsession: String,
   languages: String,
   location: String,
-  pets: String
+  pets: String,
+  aboutYou: String, // Add this field
+  aboutYouCharacterCount: Number, // Add character count field
 });
 
 UserSchema.plugin(passportLocalMongoose)
