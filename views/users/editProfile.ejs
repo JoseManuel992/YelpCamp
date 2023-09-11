@@ -10,9 +10,9 @@
 
     <div class="row">
       <div class="col-md-2">
-        <div class="avatar-edit-container ">
+        <div class="avatar-edit-container sticky-avatar">
           <div class="avatar-profile-container">
-            <img src="<%= user.avatar.url %>" alt="Avatar of <%= user.username %>" class="avatar-profile">
+            <img id="avatar-preview"  src="<%= user.avatar.url %>" alt="Avatar of <%= user.username %>" class="avatar-profile">
           </div>
           <div class="form-file custom-file">
             <label class="form-file-label" for="avatar">
@@ -262,10 +262,10 @@
           <h2 for="aboutYou">About You</h2>
           <!-- Add a new div for the button and text from the modal -->
           <div id="introDisplay">
-            <button type="button" class="btn btn-primary modal-save-button" id="addIntroButton" data-modal-input="modalIntroduction">Add Intro</button>
-
-
             <div id="introTextDisplay"></div>
+            <label id="emptyTextareaLabel" style="display: none;">Write something fun and punchy.</label>
+            <a href="#" id="addIntroLink" class="btn-link" data-modal-input="modalIntroduction">Add Intro</a>
+            <a href="#" id="editIntroLink" class="btn-link" data-modal-input="modalIntroduction" style="display: none;">Edit Intro</a>
           </div>
           <textarea
             class="form-control about-you-text-container"
@@ -273,14 +273,15 @@
             name="user[aboutYou]"
             rows="4"
             placeholder="Write something fun and punchy."
+            style="display: none;"
           ><%= user.aboutYou %></textarea>
-          <small id="aboutYouHelp" class="form-text text-muted">
+          <!-- <small id="aboutYouHelp" class="form-text text-muted">
             Character Count: <span id="aboutYouCharacterCount"><%= user.aboutYouCharacterCount %></span>
-          </small>
+          </small> -->
         </div>
 
-          <div class="updateButton">
-            <button class="btn btn-info text-white sticky-done-button">Done</button>
+          <div class="updateButtonContainer">
+            <button class="btn text-white submit-generalForm-button">Done</button>
           </div>
         </div>
       </div>
@@ -296,6 +297,63 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     console.log('DOMContentLoaded event fired');
+    // JavaScript code to update the avatar preview
+    const avatarInput = document.getElementById('avatar');
+    const avatarPreview = document.getElementById('avatar-preview');
+    const editSpan = document.querySelector('.form-file-button-edit-avatar');
+
+    // Dynamically create a style element for the border animation and append it to the head
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    style.innerHTML = `
+      @keyframes borderAnimation {
+        0% {
+          border: 2px solid transparent; /* Initial transparent border */
+        }
+        50% {
+          border: 2px solid #000; /* Black border */
+        }
+        100% {
+          border: 2px solid transparent; /* Final transparent border */
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    avatarInput.addEventListener('change', (event) => {
+      const selectedFile = event.target.files[0];
+
+      if (selectedFile) {
+        // Create a URL for the selected image
+        const objectURL = URL.createObjectURL(selectedFile);
+
+        // Hide the "Edit" span
+        editSpan.style.display = 'none';
+
+        // Add a class to make the previous avatar image more transparent
+        avatarPreview.classList.add('avatar-fade-out');
+
+        // Apply the border animation class
+        avatarPreview.classList.add('avatar-border-animation');
+
+        // Delay for 1 second (adjust the time as needed)
+        const delayMilliseconds = 1000;
+
+        setTimeout(() => {
+          // Update the src attribute of the avatar preview
+          avatarPreview.src = objectURL;
+
+          // Remove the class to reset the opacity
+          avatarPreview.classList.remove('avatar-fade-out');
+          // Display the "Edit" span again
+          editSpan.style.display = 'inline-block';
+
+          // Remove the border animation class
+          avatarPreview.classList.remove('avatar-border-animation');
+
+        }, delayMilliseconds);
+      }
+    });
 
      // Define modal data
     const modals = [
@@ -602,91 +660,137 @@
     }
 
     // Initialize variables to store the initial content and the modal element
-let initialContent = '';
-let addIntroModal = null;
-let aboutYouTextarea = null; // Declare aboutYouTextarea in the global scope
-let modal = null; // Declare modal in the global scope
+    let initialContent = '';
+    let addIntroModal = null;
+    let aboutYouTextarea = null; // Declare aboutYouTextarea in the global scope
+    let modal = null; // Declare modal in the global scope
 
-// Initialize the introTextDisplay with the initial content from the "aboutYou" textarea
-const introTextDisplay = document.getElementById('introTextDisplay');
-introTextDisplay.textContent = document.getElementById('aboutYou').value;
 
-// Function to update the intro text display
-function updateIntroTextDisplay() {
-  if (aboutYouTextarea) { // Check if aboutYouTextarea is defined
-    const introText = aboutYouTextarea.value;
-    introTextDisplay.textContent = introText;
-  }
-}
 
-// Separate function to handle the "Save" button click for the intro modal textarea
-function handleIntroModalSave() {
-  if (aboutYouTextarea) { // Check if aboutYouTextarea is defined
-    const introTextarea = document.getElementById('introTextarea'); // Update this to match your modal textarea ID
-    const introText = introTextarea.value;
+    // Function to update the intro text display and links
+    function updateIntroTextDisplayAndLinks() {
+      const aboutYouTextarea = document.getElementById('aboutYou');
+      const introDisplay = document.getElementById('introDisplay');
+      const addIntroLink = document.getElementById('addIntroLink');
+      const editIntroLink = document.getElementById('editIntroLink');
+      const emptyTextareaLabel = document.getElementById('emptyTextareaLabel');
 
-    // Update the content of the general form's textarea
-    aboutYouTextarea.value = introText;
-    updateIntroTextDisplay(); // Update the display below the heading
+      if (aboutYouTextarea) {
+        const introText = aboutYouTextarea.value;
+        introTextDisplay.textContent = introText;
 
-    // Hide the modal
-    modal.hide();
-  }
-}
+        if (introText.trim() === '') {
+          introDisplay.style.border = '2px dotted #b7b7b7';
+          introDisplay.style.borderRadius = '1rem';
+          introDisplay.style.padding = '2rem';
+          emptyTextareaLabel.style.display = 'block';
+          emptyTextareaLabel.style.color = '#a1a0a0';
 
-// Function to create and show the modal
-function createAndShowModal() {
-  // Get the content from the general form's textarea
-  aboutYouTextarea = document.getElementById('aboutYou'); // Assign the value here
-  initialContent = aboutYouTextarea.value;
+          // Show "Add Intro" link and hide "Edit Intro" link
+          addIntroLink.style.display = 'inline-block';
+          editIntroLink.style.display = 'none';
+        } else {
+          introDisplay.style.border = 'none';
+          introDisplay.style.borderRadius = 'none';
+          introDisplay.style.padding = '0';
+          emptyTextareaLabel.style.display = 'none';
+          emptyTextareaLabel.style.color = 'none';
 
-  // Create the modal element if it doesn't exist
-  if (!addIntroModal) {
-    addIntroModal = document.createElement('div');
-    addIntroModal.className = 'modal fade';
-    addIntroModal.innerHTML = `
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Add Intro</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+          // Hide "Add Intro" link and show "Edit Intro" link
+          addIntroLink.style.display = 'none';
+          editIntroLink.style.display = 'inline-block';
+        }
+      }
+    }
+
+    // Separate function to handle the "Save" button click for the intro modal textarea
+    function handleIntroModalSave() {
+      if (aboutYouTextarea) { // Check if aboutYouTextarea is defined
+        const introTextarea = document.getElementById('introTextarea'); // Update this to match your modal textarea ID
+        const introText = introTextarea.value;
+
+        // Update the content of the general form's textarea
+        aboutYouTextarea.value = introText;
+        updateIntroTextDisplayAndLinks(); // Update the display below the heading
+
+        // Hide the modal
+        modal.hide();
+      }
+    }
+
+    // Function to create and show the modal
+    function createAndShowModal() {
+      // Get the content from the general form's textarea
+      aboutYouTextarea = document.getElementById('aboutYou'); // Assign the value here
+      initialContent = aboutYouTextarea.value;
+
+      // Create the modal element if it doesn't exist
+      if (!addIntroModal) {
+        addIntroModal = document.createElement('div');
+        addIntroModal.className = 'modal fade';
+        addIntroModal.innerHTML = `
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Add Intro</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <label class="form-label" for="introTextarea">Intro</label>
+                <textarea class="form-control" id="introTextarea" rows="4" placeholder="Write your intro here...">${initialContent}</textarea>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary modal-save-button" id="saveIntroButton">Save</button>
+              </div>
+            </div>
           </div>
-          <div class="modal-body">
-            <label class="form-label" for="introTextarea">Intro</label>
-            <textarea class="form-control" id="introTextarea" rows="4" placeholder="Write your intro here...">${initialContent}</textarea>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary modal-save-button" id="saveIntroButton">Save</button>
-          </div>
-        </div>
-      </div>
-    `;
+        `;
 
-    // Append the modal to the document body
-    document.body.appendChild(addIntroModal);
+        // Append the modal to the document body
+        document.body.appendChild(addIntroModal);
 
-    // Initialize the modal using Bootstrap
-    modal = new bootstrap.Modal(addIntroModal);
-  }
+        // Initialize the modal using Bootstrap
+        modal = new bootstrap.Modal(addIntroModal);
+      }
 
-  // Show the modal
-  modal.show();
-}
+      // Show the modal
+      modal.show();
+    }
 
-// Add an event listener to open the intro modal when the button is clicked
-const addIntroButton = document.getElementById('addIntroButton');
-addIntroButton.addEventListener('click', function() {
-  createAndShowModal();
+    // Add an event listener to open the intro modal when the "Add Intro" link is clicked
+    const addIntroLink = document.getElementById('addIntroLink');
+    addIntroLink.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent the default behavior of the link (e.g., navigating to a new page)
+      createAndShowModal();
 
-  // Assign the handleIntroModalSave function to the "Save" button click event
-  const saveIntroButton = document.getElementById('saveIntroButton');
-  saveIntroButton.addEventListener('click', handleIntroModalSave);
-});
+      // Assign the handleIntroModalSave function to the "Save" button click event
+      const saveIntroButton = document.getElementById('saveIntroButton');
+      saveIntroButton.addEventListener('click', handleIntroModalSave);
+    });
+
+    // Add an event listener to open the intro modal when the "Edit Intro" link is clicked
+    const editIntroLink = document.getElementById('editIntroLink');
+    editIntroLink.addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent the default behavior of the link (e.g., navigating to a new page)
+      createAndShowModal(); // Open the modal when the link is clicked
+
+      // Initialize the modal using Bootstrap if it's not already initialized
+      if (!modal) {
+        modal = new bootstrap.Modal(addIntroModal);
+      }
+
+      // Assign the handleIntroModalSave function to the "Save" button click event
+      const saveIntroButton = document.getElementById('saveIntroButton');
+      saveIntroButton.addEventListener('click', handleIntroModalSave);
+    });
 
 
+
+    // Call the function initially to set the label's initial state
+    updateIntroTextDisplayAndLinks();
     // Add modals to the container
     addModalsToContainer();
 

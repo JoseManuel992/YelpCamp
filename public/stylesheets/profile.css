@@ -65,9 +65,11 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-
 }
-
+.sticky-avatar {
+  position: sticky;
+  top: 0; /* Adjust this value as needed */
+}
 
 .avatar-profile-container{
   position: relative;
@@ -75,7 +77,10 @@ body {
   margin-right: 2.5rem;
 }
 
-
+.fa-camera{
+  margin-top: 0.3rem;
+  margin-right: 0.5rem;
+}
 
 .form-file-button-edit-avatar {
   display: flex;
@@ -85,14 +90,44 @@ body {
   font-size: 1.3rem;
   box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
   position: absolute;
-  top: 22.5rem;
-  left: 21.5rem;
+  top: 16.5rem;
+  left: 1.5rem;
   background-color: white;
+  transition: transform 0.3s ease;
 }
-.fa-camera{
-  margin-top: 0.3rem;
-  margin-right: 0.5rem;
+
+
+.form-file-button-edit-avatar:active {
+  transform: scale(0.8);
 }
+
+.avatar-fade-out {
+  opacity: 0.5; /* Adjust the opacity value as needed (0.5 for 50% transparency) */
+  transition: opacity 1s; /* Adjust the transition duration as needed */
+}
+
+/* Define the border animation */
+@keyframes borderAnimation {
+  0% {
+    border: 5px solid transparent; /* Initial transparent border */
+  }
+
+  50% {
+    border: 5px solid #000; /* Black border */
+  }
+  100% {
+    border: 5px solid transparent; /* Final transparent border */
+  }
+}
+
+/* Apply the border animation dynamically */
+.avatar-border-animation {
+  animation: borderAnimation 1s linear infinite;
+}
+
+
+
+
 
 .edit-text {
   font-size: 1.1rem;
@@ -207,14 +242,36 @@ body {
 
 .about-you-container{
   margin-left: 4.5rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid #ccc;
 }
 .about-you-text-container{
   width: 60vw;
 }
+
+
+#addIntroLink, #editIntroLink{
+  color: black;
+}
 /* Style for the sticky button */
-.updateButton {
+.updateButtonContainer {
+  display: flex;
+  justify-content: flex-end; /* Align content to the left */
   position: sticky;
   bottom: 0;
   width: 100%;
   z-index: 1;
+  margin-top: 4rem;
+}
+.submit-generalForm-button {
+  background-color: rgb(33, 33, 33);
+  border-radius: 1rem;
+  padding:1.2rem 2.5rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 4rem;
+}
+
+.submit-generalForm-button:hover{
+  background-color: black;
 }
