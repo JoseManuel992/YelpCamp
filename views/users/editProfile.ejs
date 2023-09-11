@@ -258,20 +258,26 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="aboutYou">About You</label>
+        <div class="form-group about-you-container">
+          <h2 for="aboutYou">About You</h2>
+          <!-- Add a new div for the button and text from the modal -->
+          <div id="introDisplay">
+            <button type="button" class="btn btn-primary modal-save-button" id="addIntroButton" data-modal-input="modalIntroduction">Add Intro</button>
+
+
+            <div id="introTextDisplay"></div>
+          </div>
           <textarea
-            class="form-control"
+            class="form-control about-you-text-container"
             id="aboutYou"
             name="user[aboutYou]"
             rows="4"
-            placeholder="Tell us about yourself..."
+            placeholder="Write something fun and punchy."
           ><%= user.aboutYou %></textarea>
           <small id="aboutYouHelp" class="form-text text-muted">
             Character Count: <span id="aboutYouCharacterCount"><%= user.aboutYouCharacterCount %></span>
           </small>
         </div>
-
 
           <div class="updateButton">
             <button class="btn btn-info text-white sticky-done-button">Done</button>
@@ -419,6 +425,16 @@
         value: '<%= user.pets %>',
         inputClass: 'input-form', // Add class for input field
         counterClass: 'modal-character-count', // Add class for character count
+      },
+      {
+        id: 'introModal', // Unique ID for the introduction modal
+        title: 'Edit Introduction', // Title for the modal
+        label: 'Introduction', // Label for the input field
+        inputId: 'modalIntroduction', // Unique input ID for the introduction modal
+        value: '<%= user.introduction %>', // Initial value for the input field
+        inputClass: 'input-form', // Add class for the input field
+        counterClass: 'modal-character-count', // Add class for character count
+        maxLength: 500, // Set the maximum length if needed
       },
     ];
 
@@ -577,11 +593,105 @@
           // Now, update the character count in both the modal and the profile page
         });
       });
+
+
+
+
+
+
     }
+
+    // Initialize variables to store the initial content and the modal element
+let initialContent = '';
+let addIntroModal = null;
+let aboutYouTextarea = null; // Declare aboutYouTextarea in the global scope
+let modal = null; // Declare modal in the global scope
+
+// Initialize the introTextDisplay with the initial content from the "aboutYou" textarea
+const introTextDisplay = document.getElementById('introTextDisplay');
+introTextDisplay.textContent = document.getElementById('aboutYou').value;
+
+// Function to update the intro text display
+function updateIntroTextDisplay() {
+  if (aboutYouTextarea) { // Check if aboutYouTextarea is defined
+    const introText = aboutYouTextarea.value;
+    introTextDisplay.textContent = introText;
+  }
+}
+
+// Separate function to handle the "Save" button click for the intro modal textarea
+function handleIntroModalSave() {
+  if (aboutYouTextarea) { // Check if aboutYouTextarea is defined
+    const introTextarea = document.getElementById('introTextarea'); // Update this to match your modal textarea ID
+    const introText = introTextarea.value;
+
+    // Update the content of the general form's textarea
+    aboutYouTextarea.value = introText;
+    updateIntroTextDisplay(); // Update the display below the heading
+
+    // Hide the modal
+    modal.hide();
+  }
+}
+
+// Function to create and show the modal
+function createAndShowModal() {
+  // Get the content from the general form's textarea
+  aboutYouTextarea = document.getElementById('aboutYou'); // Assign the value here
+  initialContent = aboutYouTextarea.value;
+
+  // Create the modal element if it doesn't exist
+  if (!addIntroModal) {
+    addIntroModal = document.createElement('div');
+    addIntroModal.className = 'modal fade';
+    addIntroModal.innerHTML = `
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add Intro</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <label class="form-label" for="introTextarea">Intro</label>
+            <textarea class="form-control" id="introTextarea" rows="4" placeholder="Write your intro here...">${initialContent}</textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary modal-save-button" id="saveIntroButton">Save</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Append the modal to the document body
+    document.body.appendChild(addIntroModal);
+
+    // Initialize the modal using Bootstrap
+    modal = new bootstrap.Modal(addIntroModal);
+  }
+
+  // Show the modal
+  modal.show();
+}
+
+// Add an event listener to open the intro modal when the button is clicked
+const addIntroButton = document.getElementById('addIntroButton');
+addIntroButton.addEventListener('click', function() {
+  createAndShowModal();
+
+  // Assign the handleIntroModalSave function to the "Save" button click event
+  const saveIntroButton = document.getElementById('saveIntroButton');
+  saveIntroButton.addEventListener('click', handleIntroModalSave);
+});
 
 
     // Add modals to the container
     addModalsToContainer();
+
+
+
 
   });
 

@@ -205,6 +205,12 @@ body {
   flex-direction: column; /* Display input and count below each other */
 }
 
+.about-you-container{
+  margin-left: 4.5rem;
+}
+.about-you-text-container{
+  width: 60vw;
+}
 /* Style for the sticky button */
 .updateButton {
   position: sticky;
