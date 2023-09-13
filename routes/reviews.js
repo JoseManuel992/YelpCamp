@@ -17,7 +17,6 @@ router.post("/", isLoggedIn, validateReview, catchAsync(reviews.createReview))
 router.get('/:reviewId', catchAsync(reviews.showReview));
 
 
-
 //delete
 
 router.delete("/:reviewId", isLoggedIn, isReviewAuthor, catchAsync(reviews.deleteReview))

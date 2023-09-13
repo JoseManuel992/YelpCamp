@@ -3,35 +3,226 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="user-profile-card">
         <img src="<%= user.avatar.url %>" alt="Avatar of <%= user.username %>" class="avatar-profile">
         <p class="user-name"><%= user.username %></p>
       </div>
     </div>
-    <div class="col-md-8">
+    <div class="col-md-9">
       <div class="user-profile-content-card">
         <p class="user-name"> About: <%= user.username %></p>
-        <div class="text-center mt-4">
-          <a href="/profile/<%= user._id %>/edit" class="btn btn-primary">Edit Profile</a>
+        <div class="mt-4">
+          <a href="/profile/<%= user._id %>/edit" class="btn editProfile-button-profilePage">Edit Profile</a>
         </div>
-        <p>Date of Birth: <%= user.birthDate %></p>
-        <p>Work: <%= user.work %></p>
-        <p>funFact: <%= user.funFact %></p>
-        <p>favoriteSong: <%= user.favoriteSong %></p>
-        <p>uselessSkill: <%= user.uselessSkill  %></p>
-        <p>school: <%= user.school  %></p>
-        <p>spendingHabit: <%= user.spendingHabit  %></p>
-        <p>biographyTitle <%= user.biographyTitle  %></p>
-        <p>obsession: <%= user.obsession  %></p>
-        <p>languages: <%= user.languages  %></p>
-        <p>location: <%= user.location  %></p>
-        <p>pets: <%= user.pets %></p>
-        <p>About You: <%= user.aboutYou %></p>
+
+        <div class="row">
+          <div class="col-md-6 left-userProfile-container">
+            <% if (user.birthDate) {%>
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-cake-candles edit-profile-icon"></i>
+                <div style="flex-grow: 1;">
+                  <p class="user-profile-data-profilePage">
+                    I was born in: <%= user.birthDate ? user.birthDate.toISOString().substr(0, 10) : '' %>
+                  </p>
+
+                </div>
+              </div>
+
+              <% } %>
+          </div>
+
+          <div class="col-md-6 right-userProfile-container">
+            <% if (user.work) {%>
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-briefcase edit-profile-icon"></i>
+                <div style="flex-grow: 1;">
+                  <p class="user-profile-data-profilePage">
+                    My work: <%= user.work %>
+                  </p>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 left-userProfile-container">
+            <% if (user.funFact ) {%>
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-lightbulb edit-profile-icon"></i>
+                <div style="flex-grow: 1;">
+                  <p class="user-profile-data-profilePage">
+                    My fun fact: <%= user.funFact %>
+                  </p>
+                </div>
+              </div>
+            <% } %>
+          </div>
+
+          <div class="col-md-6 right-userProfile-container">
+            <% if (user.favoriteSong ) {%>
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-music edit-profile-icon"></i>
+                <div style="flex-grow: 1;">
+                  <p class="user-profile-data-profilePage">
+                    My favorite song: <%= user.favoriteSong %>
+                  </p>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 left-userProfile-container">
+            <% if (user.uselessSkill ) {%>
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-wand-magic-sparkles edit-profile-icon"  style="margin-right: 1.5rem;"></i>
+                <div style="flex-grow: 1;">
+                  <p class="user-profile-data-profilePage">
+                    My most useless skill: <%= user.uselessSkill %>
+                  </p>
+                </div>
+              </div>
+            <% } %>
+          </div>
+
+          <div class="col-md-6 right-userProfile-container">
+            <% if (user.school ) {%>
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-graduation-cap edit-profile-icon"  style="margin-right: 1.5rem;"></i>
+                <div style="flex-grow: 1;">
+                  <p class="user-profile-data-profilePage">
+                    Where I went to school: <%= user.school %>
+                  </p>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 left-userProfile-container">
+            <% if (user.spendingHabit) {%>
+              <div class="d-flex align-items-center">
+                <i class="fa-regular fa-clock edit-profile-icon"></i>
+                <div style="flex-grow: 1;">
+                  <p class="user-profile-data-profilePage">
+                    I spend too much time: <%= user.spendingHabit %>
+                  </p>
+                </div>
+              </div>
+            <% } %>
+          </div>
+
+          <div class="col-md-6 right-userProfile-container">
+            <% if (user.biographyTitle) {%>
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-book edit-profile-icon"></i>
+                <div style="flex-grow: 1;">
+                  <p class="user-profile-data-profilePage">
+                    My biography title would be: <%= user.biographyTitle %>
+                  </p>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 left-userProfile-container">
+            <% if (user.obsession) {%>
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-heart edit-profile-icon"></i>
+                <div style="flex-grow: 1;">
+                  <p class="user-profile-data-profilePage">
+                    I'm obsessed with: <%= user.obsession %>
+                  </p>
+                </div>
+              </div>
+            <% } %>
+          </div>
+
+          <div class="col-md-6 right-userProfile-container">
+            <% if (user.languages) {%>
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-globe edit-profile-icon"></i>
+                <div style="flex-grow: 1;">
+                  <p class="user-profile-data-profilePage">
+                    Languages I speak: <%= user.languages %>
+                  </p>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-md-6 left-userProfile-container">
+            <% if (user.location) {%>
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-earth-europe edit-profile-icon"></i>
+                <div style="flex-grow: 1;">
+                  <p class="user-profile-data-profilePage">
+                    Where I live: <%= user.location %>
+                  </p>
+                </div>
+              </div>
+            <% } %>
+          </div>
+
+          <div class="col-md-6 right-userProfile-container">
+            <% if (user.pets) {%>
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-paw edit-profile-icon"></i>
+                <div style="flex-grow: 1;">
+                  <p class="user-profile-data-profilePage">
+                    Pets: <%= user.pets %>
+                  </p>
+                </div>
+              </div>
+            <% } %>
+          </div>
+        </div>
+        <div class="aboutYou-container-profilePage">
+          <% if (user.aboutYou) {%>
+            <p>About You: <span class="profile-text"><%= user.aboutYou %></span>
+            <a href="#" class="read-more-btn btn-link" style="color: black; font-weight:600 ;">Read more</a>
+            <a href="#" class="read-less-btn btn-link" style="color: black; font-weight: 600; display: none;">Read less</a></p>
+          <% } %>
+          </div>
 
       </div>
     </div>
   </div>
 </div>
 
-<!-- ...other user information -->
+
+<script>
+  $(document).ready(function() {
+    var maxCharacters = 250;
+    var profileText = $(".profile-text").text();
+
+    if (profileText.length > maxCharacters) {
+      var trimmedText = profileText.substring(0, maxCharacters);
+      $(".profile-text").text(trimmedText + "...");
+      $(".read-more-btn").show();
+
+      $(".read-more-btn").click(function(e) {
+        e.preventDefault();
+        $(".profile-text").text(profileText);
+        $(".read-more-btn").hide();
+        $(".read-less-btn").show();
+      });
+
+      $(".read-less-btn").click(function(e) {
+        e.preventDefault();
+        $(".profile-text").text(trimmedText + "...");
+        $(".read-less-btn").hide();
+        $(".read-more-btn").show();
+      });
+    }
+  });
+  </script>

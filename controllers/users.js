@@ -39,6 +39,7 @@ module.exports.renderEditProfileForm = async (req, res) => {
 
 // Update User Profile
 module.exports.updateProfile = async (req, res) => {
+
   try {
     console.log('Update Profile Controller');
 

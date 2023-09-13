@@ -866,3 +866,7 @@ h2{
 .newCampgroundFormContainer{
   margin-bottom: 3rem;
 }
+
+.show {
+  display: block !important; /* You can use !important to ensure it overrides other styles */
+}

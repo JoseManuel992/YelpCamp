@@ -38,7 +38,7 @@
                 <div class="flex-container">
                   <i class="fa-solid fa-user edit-profile-icon"></i>
                   <div>
-                    Username: <span id="generalUsername"><%= user.username %></span>
+                    My name is: <span id="generalUsername"><%= user.username %></span>
                   </div>
                   <i class="fa-solid fa-chevron-right edit-profile-arrow"></i>
                 </div>
@@ -53,7 +53,7 @@
                 <div class="flex-container">
                   <i class="fa-solid fa-envelope edit-profile-icon"></i>
                   <div>
-                    Email: <span id="generalEmail"><%= user.email %></span>
+                    My email is: <span id="generalEmail"><%= user.email %></span>
                   </div>
                   <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
                 </div>
@@ -70,7 +70,7 @@
                 <div class="flex-container">
                   <i class="fa-solid fa-cake-candles edit-profile-icon"></i>
                   <div>
-                    Date of Birth: <span id="generalBirthDate"><%= user.birthDate ? user.birthDate.toISOString().substr(0, 10) : '' %></span>
+                    I was born in: <span id="generalBirthDate"><%= user.birthDate ? user.birthDate.toISOString().substr(0, 10) : '' %></span>
                   </div>
                   <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
                  </div>
@@ -85,7 +85,7 @@
                 <div class="flex-container">
                   <i class="fa-solid fa-briefcase edit-profile-icon"></i>
                   <div>
-                    Work: <span id="generalWork"><%= user.work %></span>
+                    My work: <span id="generalWork"><%= user.work %></span>
                   </div>
                   <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
                 </div>
@@ -102,7 +102,7 @@
                 <div class="flex-container">
                   <i class="fa-solid fa-lightbulb edit-profile-icon"></i>
                   <div>
-                    Fun Fact: <span id="generalFunFact"><%= user.funFact %></span>
+                    My fun fact: <span id="generalFunFact"><%= user.funFact %></span>
                   </div>
                   <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
                 </div>
@@ -117,7 +117,7 @@
                 <div class="flex-container">
                   <i class="fa-solid fa-music edit-profile-icon"></i>
                   <div>
-                    Favorite Song: <span id="generalFavoriteSong"><%= user.favoriteSong %></span>
+                    My favorite song: <span id="generalFavoriteSong"><%= user.favoriteSong %></span>
                   </div>
                   <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
                 </div>
@@ -135,7 +135,7 @@
                 <div class="flex-container">
                   <i class="fa-solid fa-wand-magic-sparkles edit-profile-icon"></i>
                   <div>
-                    Useless Skill: <span id="generalUselessSkill"><%= user.uselessSkill %></span>
+                    My most useless skill: <span id="generalUselessSkill"><%= user.uselessSkill %></span>
                   </div>
                   <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
                 </div>
@@ -150,7 +150,7 @@
                 <div class="flex-container">
                   <i class="fa-solid fa-graduation-cap edit-profile-icon"></i>
                   <div>
-                    School: <span id="generalSchool"><%= user.school %></span>
+                   Where I went to school: <span id="generalSchool"><%= user.school %></span>
                   </div>
                   <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
                 </div>
@@ -168,7 +168,7 @@
                 <div class="flex-container">
                   <i class="fa-regular fa-clock edit-profile-icon"></i>
                   <div>
-                    Spending Habit: <span id="generalSpendingHabit"><%= user.spendingHabit %></span>
+                    I spend too much time: <span id="generalSpendingHabit"><%= user.spendingHabit %></span>
                   </div>
                   <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
                 </div>
@@ -183,7 +183,7 @@
                 <div class="flex-container">
                   <i class="fa-solid fa-book edit-profile-icon"></i>
                   <div>
-                    Biography Title: <span id="generalBiographyTitle"><%= user.biographyTitle %></span>
+                    My biography title would be: <span id="generalBiographyTitle"><%= user.biographyTitle %></span>
                   </div>
                   <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
                 </div>
@@ -201,7 +201,7 @@
                 <div class="flex-container">
                   <i class="fa-solid fa-heart edit-profile-icon"></i>
                   <div>
-                    Obsession: <span id="generalObsession"><%= user.obsession %></span>
+                    I'm obsessed with: <span id="generalObsession"><%= user.obsession %></span>
                   </div>
                   <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
                 </div>
@@ -216,7 +216,7 @@
                 <div class="flex-container">
                   <i class="fa-solid fa-globe edit-profile-icon"></i>
                   <div>
-                    Languages: <span id="generalLanguages"><%= user.languages %></span>
+                    Languages I speak: <span id="generalLanguages"><%= user.languages %></span>
                   </div>
                   <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
                 </div>
@@ -234,7 +234,7 @@
                 <div class="flex-container">
                   <i class="fa-solid fa-earth-europe edit-profile-icon"></i>
                   <div>
-                    Location: <span id="generalLocation"><%= user.location %></span>
+                    Where I live: <span id="generalLocation"><%= user.location %></span>
                   </div>
                   <i class="fa-solid fa-chevron-right edit-profile-arrow""></i>
                 </div>
@@ -260,13 +260,17 @@
 
         <div class="form-group about-you-container">
           <h2 for="aboutYou">About You</h2>
-          <!-- Add a new div for the button and text from the modal -->
           <div id="introDisplay">
-            <div id="introTextDisplay"></div>
+            <div class="intro-text-container">
+              <div id="introTextDisplay"></div>
+              <a href="javascript:void(0);" id="readMoreLink" class="btn-link" style="display: none;">Read more</a>
+              <a href="javascript:void(0);" id="readLessLink" class="btn-link" style="display: none;">Read less</a>
+            </div>
             <label id="emptyTextareaLabel" style="display: none;">Write something fun and punchy.</label>
             <a href="#" id="addIntroLink" class="btn-link" data-modal-input="modalIntroduction">Add Intro</a>
             <a href="#" id="editIntroLink" class="btn-link" data-modal-input="modalIntroduction" style="display: none;">Edit Intro</a>
           </div>
+
           <textarea
             class="form-control about-you-text-container"
             id="aboutYou"
@@ -275,9 +279,7 @@
             placeholder="Write something fun and punchy."
             style="display: none;"
           ><%= user.aboutYou %></textarea>
-          <!-- <small id="aboutYouHelp" class="form-text text-muted">
-            Character Count: <span id="aboutYouCharacterCount"><%= user.aboutYouCharacterCount %></span>
-          </small> -->
+
         </div>
 
           <div class="updateButtonContainer">
@@ -287,7 +289,9 @@
       </div>
     </div>
   </form>
-  <a class="Back-To-Profile-Link" href="/profile/<%= user._id %>">Back to Profile</a>
+  <div class="Back-To-Profile-Container">
+    <a class="Back-To-Profile-Link" href="/profile/<%= user._id %>"><i class="fa-solid fa-circle-arrow-left" style="color: #000000;"></i> Back to Profile</a>
+  </div>
 
 
   <div id="modalContainer"></div>
@@ -302,23 +306,7 @@
     const avatarPreview = document.getElementById('avatar-preview');
     const editSpan = document.querySelector('.form-file-button-edit-avatar');
 
-    // Dynamically create a style element for the border animation and append it to the head
-    const style = document.createElement('style');
-    style.type = 'text/css';
-    style.innerHTML = `
-      @keyframes borderAnimation {
-        0% {
-          border: 2px solid transparent; /* Initial transparent border */
-        }
-        50% {
-          border: 2px solid #000; /* Black border */
-        }
-        100% {
-          border: 2px solid transparent; /* Final transparent border */
-        }
-      }
-    `;
-    document.head.appendChild(style);
+
 
     avatarInput.addEventListener('change', (event) => {
       const selectedFile = event.target.files[0];
@@ -359,8 +347,8 @@
     const modals = [
       {
         id: 'usernameModal',
-        title: 'Edit Username',
-        label: 'Username',
+        title: 'Your Username',
+        label: 'What is your name or nickname?',
         inputId: 'modalUsername',
         value: '<%= user.username %>',
         maxLength: 40,
@@ -369,8 +357,8 @@
       },
       {
         id: 'emailModal',
-        title: 'Edit Email',
-        label: 'Email',
+        title: ' Your Email',
+        label: 'What is your email?',
         inputId: 'modalEmail',
         value: '<%= user.email %>',
         inputClass: 'input-form', // Add class for input field
@@ -378,8 +366,8 @@
       },
       {
         id: 'birthDateModal',
-        title: 'Edit Birth Date',
-        label: 'Date of Birth',
+        title: 'When did you born?',
+        label: 'This is one of the most important days in your live and we would love very much to know it!',
         inputId: 'modalBirthDate',
         value: '<%= user.birthDate ? user.birthDate.toISOString().substr(0, 10) : "" %>',
         inputClass: 'input-form', // Add class for input field
@@ -388,7 +376,7 @@
       {
         id: 'workModal',
         title: 'What do you do for work?',
-        label: 'Work',
+        label: 'Tell us what your profession is or what is your life’s calling.',
         inputId: 'modalWork',
         value: '<%= user.work %>',
         inputClass: 'input-form', // Add class for input field
@@ -397,7 +385,7 @@
       {
         id: 'funFactModal',
         title: 'What’s a fun fact about you?',
-        label: 'Fun Fact',
+        label: 'Share something unique or unexpected about you. Example: I was in a music video or I’m a juggler.',
         inputId: 'modalFunFact',
         value: '<%= user.funFact %>',
         inputClass: 'input-form', // Add class for input field
@@ -406,7 +394,7 @@
       {
         id: 'favoriteSongModal',
         title: 'What is your favorite song?',
-        label: 'Favorite Song',
+        label: 'Share with us your favorite song or music band.',
         inputId: 'modalFavoriteSong',
         value: '<%= user.favoriteSong %>',
         inputClass: 'input-form', // Add class for input field
@@ -415,7 +403,7 @@
       {
         id: 'uselessSkillModal',
         title: 'What’s your most useless skill?',
-        label: 'Useless Skill',
+        label: 'Share a surprising but pointless talent you have. Example: Shuffling cards with one hand.',
         inputId: 'modalUselessSkill',
         value: '<%= user.uselessSkill %>',
         inputClass: 'input-form', // Add class for input field
@@ -424,7 +412,7 @@
       {
         id: 'schoolModal',
         title: 'Where did you go to school?',
-        label: 'School',
+        label: 'Share with us the school that made you who you are. It could be your home school, secondary school or university.',
         inputId: 'modalSchool',
         value: '<%= user.school %>',
         inputClass: 'input-form', // Add class for input field
@@ -433,7 +421,7 @@
       {
         id: 'spendingHabitModal',
         title: 'What do you spend too much time doing?',
-        label: 'Spending Habit',
+        label: 'Share an activity or hobby you spend lots of free time on. Example: Watching cat videos or playing chess.',
         inputId: 'modalSpendingHabit',
         value: '<%= user.spendingHabit %>',
         inputClass: 'input-form', // Add class for input field
@@ -442,7 +430,7 @@
       {
         id: 'biographyTitleModal',
         title: 'What would your biography title be?',
-        label: 'Biography Title',
+        label: 'If someone wrote a book about your life, what would they call it?',
         inputId: 'modalBiographyTitle',
         value: '<%= user.biographyTitle %>',
         inputClass: 'input-form', // Add class for input field
@@ -450,8 +438,8 @@
       },
       {
         id: 'obsessionModal',
-        title: 'Edit Obsession',
-        label: 'What are you obsessed with?',
+        title: 'What are you obsessed with?',
+        label: 'Share whatever you can’t get enough of – in a good way. Example: Baking rosemary focaccia.',
         inputId: 'modalObsession',
         value: '<%= user.obsession %>',
         inputClass: 'input-form', // Add class for input field
@@ -460,7 +448,7 @@
       {
         id: 'languagesModal',
         title: 'Languages you speak',
-        label: 'Languages',
+        label: 'What languages do you speak?',
         inputId: 'modalLanguages',
         value: '<%= user.languages %>',
         inputClass: 'input-form', // Add class for input field
@@ -469,7 +457,7 @@
       {
         id: 'locationModal',
         title: 'Where you live?',
-        label: 'Location',
+        label: 'What city or country do you live in?',
         inputId: 'modalLocation',
         value: '<%= user.location %>',
         inputClass: 'input-form', // Add class for input field
@@ -478,7 +466,7 @@
       {
         id: 'petsModal',
         title: 'Do you have any pets in your life?',
-        label: 'Pets',
+        label: 'Share any pets you have and their names. Example: My calico cat Whiskers or my speedy tortoise Leonardo.',
         inputId: 'modalPets',
         value: '<%= user.pets %>',
         inputClass: 'input-form', // Add class for input field
@@ -495,6 +483,8 @@
         maxLength: 500, // Set the maximum length if needed
       },
     ];
+
+
 
     const inputIdMapping = {
       modalUsername: 'username',
@@ -533,20 +523,18 @@
     };
 
 
-    // Function to update character count on the editProfile page
-
 
     // Function to generate modal HTML
     function generateModal(modalData) {
       const initialCharCount = modalData.value.length;
 
       return `
-        <div class="modal fade" id="${modalData.id}" tabindex="-1" aria-labelledby="${modalData.id}Label" aria-hidden="true">
+        <div class="modal fade custom-modal-slide" id="${modalData.id}" tabindex="-1" aria-labelledby="${modalData.id}Label" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title" id="${modalData.id}Label">${modalData.title}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button  type="button" class="btn-close close-top-bottom" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 <label class="form-label" for="${modalData.inputId}" id="${modalData.inputId}Label">${modalData.label}</label>
@@ -652,12 +640,8 @@
         });
       });
 
-
-
-
-
-
     }
+
 
     // Initialize variables to store the initial content and the modal element
     let initialContent = '';
@@ -666,14 +650,46 @@
     let modal = null; // Declare modal in the global scope
 
 
+    // Attach an event listener to show the full text when "Read more" is clicked
+    const readMoreLink = document.getElementById('readMoreLink');
+    readMoreLink.addEventListener('click', function () {
+      const aboutYouTextarea = document.getElementById('aboutYou');
+      const introTextDisplay = document.getElementById('introTextDisplay');
+      const introText = aboutYouTextarea.value;
+
+      introTextDisplay.textContent = introText;
+      readMoreLink.style.display = 'none';
+      readLessLink.style.display = 'inline-block'; // Show "Read less" link
+
+    });
+
+    // Attach an event listener to show the truncated text when "Read less" is clicked
+    const readLessLink = document.getElementById('readLessLink');
+    readLessLink.addEventListener('click', function () {
+      const aboutYouTextarea = document.getElementById('aboutYou');
+      const introTextDisplay = document.getElementById('introTextDisplay');
+      const introText = aboutYouTextarea.value;
+
+      // Check if text exceeds 250 characters for truncation
+      if (introText.length > 250) {
+        introTextDisplay.textContent = introText.substring(0, 250) + '...';
+        readMoreLink.style.display = 'inline-block'; // Show "Read more" link
+      } else {
+        readMoreLink.style.display = 'none'; // Hide "Read more" link if not needed
+      }
+
+      readLessLink.style.display = 'none'; // Hide "Read less" link
+    });
 
     // Function to update the intro text display and links
     function updateIntroTextDisplayAndLinks() {
       const aboutYouTextarea = document.getElementById('aboutYou');
       const introDisplay = document.getElementById('introDisplay');
+      const introTextDisplay = document.getElementById('introTextDisplay');
       const addIntroLink = document.getElementById('addIntroLink');
       const editIntroLink = document.getElementById('editIntroLink');
       const emptyTextareaLabel = document.getElementById('emptyTextareaLabel');
+
 
       if (aboutYouTextarea) {
         const introText = aboutYouTextarea.value;
@@ -689,6 +705,8 @@
           // Show "Add Intro" link and hide "Edit Intro" link
           addIntroLink.style.display = 'inline-block';
           editIntroLink.style.display = 'none';
+          readMoreLink.style.display = 'none';
+
         } else {
           introDisplay.style.border = 'none';
           introDisplay.style.borderRadius = 'none';
@@ -699,15 +717,33 @@
           // Hide "Add Intro" link and show "Edit Intro" link
           addIntroLink.style.display = 'none';
           editIntroLink.style.display = 'inline-block';
+
+          // Check if text exceeds 250 characters for truncation
+          if (introText.length > 250) {
+            introTextDisplay.textContent = introText.substring(0, 250) + '...';
+            readMoreLink.style.display = 'inline-block';
+          } else {
+            readMoreLink.style.display = 'none';
+          }
         }
       }
     }
+
+
+
+
+
 
     // Separate function to handle the "Save" button click for the intro modal textarea
     function handleIntroModalSave() {
       if (aboutYouTextarea) { // Check if aboutYouTextarea is defined
         const introTextarea = document.getElementById('introTextarea'); // Update this to match your modal textarea ID
         const introText = introTextarea.value;
+
+        // Update the character count
+        const currentCharCount = document.getElementById('currentCharCount');
+        const maxCharCount = document.getElementById('maxCharCount');
+        currentCharCount.textContent = introText.length;
 
         // Update the content of the general form's textarea
         aboutYouTextarea.value = introText;
@@ -724,25 +760,29 @@
       aboutYouTextarea = document.getElementById('aboutYou'); // Assign the value here
       initialContent = aboutYouTextarea.value;
 
+      // Get the initial character count
+       const initialCharCount = initialContent.length;
+
       // Create the modal element if it doesn't exist
       if (!addIntroModal) {
         addIntroModal = document.createElement('div');
-        addIntroModal.className = 'modal fade';
+        addIntroModal.className = 'modal fade custom-modal-slide';
         addIntroModal.innerHTML = `
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title">Add Intro</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
+                <button id="close-modal-button" type="button" class="btn-close close-top-bottom" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
                 <label class="form-label" for="introTextarea">Intro</label>
                 <textarea class="form-control" id="introTextarea" rows="4" placeholder="Write your intro here...">${initialContent}</textarea>
+                <div class="character-count">
+                  <span id="currentCharCount">${initialCharCount}</span>/<span id="maxCharCount">500</span>
+                </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary modal-save-button" id="saveIntroButton">Save</button>
               </div>
             </div>
@@ -758,6 +798,23 @@
 
       // Show the modal
       modal.show();
+
+      // Add an input event listener to the textarea for real-time character count
+      const introTextarea = document.getElementById('introTextarea');
+      const currentCharCount = document.getElementById('currentCharCount');
+      const maxCharCount = document.getElementById('maxCharCount');
+
+      introTextarea.addEventListener('input', function () {
+        const introText = introTextarea.value;
+        currentCharCount.textContent = introText.length;
+
+        // Check if the character count exceeds the maximum limit (500)
+        if (introText.length > 500) {
+          // If the character count is greater than 500, truncate the text to 500 characters
+          introTextarea.value = introText.substring(0, 500);
+          currentCharCount.textContent = 500; // Update the character count display to 500
+        }
+      });
     }
 
     // Add an event listener to open the intro modal when the "Add Intro" link is clicked
@@ -770,6 +827,7 @@
       const saveIntroButton = document.getElementById('saveIntroButton');
       saveIntroButton.addEventListener('click', handleIntroModalSave);
     });
+
 
     // Add an event listener to open the intro modal when the "Edit Intro" link is clicked
     const editIntroLink = document.getElementById('editIntroLink');
@@ -788,13 +846,31 @@
     });
 
 
+    // Add an event listener to close the modal with animation
+    const closeButtons = document.querySelectorAll('.modal-dialog > .close-top-bottom');
+
+    closeButtons.forEach(function (closeButton) {
+      closeButton.addEventListener('click', function () {
+        const modal = closeButton.closest('.modal');
+
+        // Add CSS styles to animate the modal closing from top to bottom
+        modal.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
+        modal.style.transform = 'translateY(-100%)';
+        modal.style.opacity = '0';
+
+        // After a delay (adjust as needed), remove the modal
+        setTimeout(function () {
+          modal.remove();
+        }, 300); // 300 milliseconds matches the transition duration
+      });
+    });
+
+
 
     // Call the function initially to set the label's initial state
     updateIntroTextDisplayAndLinks();
     // Add modals to the container
     addModalsToContainer();
-
-
 
 
   });

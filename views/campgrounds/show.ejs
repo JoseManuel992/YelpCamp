@@ -153,6 +153,15 @@
                 <% if (review && review.body && review.body.length > 4) { %>
                   <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more ></a>
                 <% } %>
+                <% if(currentUser && campground.author.equals(currentUser._id)) { %>
+                  <!-- Only show the reply button if the current user is not the campground owner -->
+                  <button class="btn btn-sm btn-info reply-button">Reply</button>
+                  <!-- Hidden input field for replying to the review -->
+                  <div class="reply-input" style="display: none;">
+                    <textarea class="form-control" placeholder="Write your reply"></textarea>
+                    <button class="btn btn-primary submit-reply">Submit</button>
+                  </div>
+                <% } %>
 
               </div>
             </div>
@@ -205,6 +214,16 @@
               Review: <%= review.body  %>
             </p>
 
+
+            <!-- Display existing replies -->
+            <% for (let reply of review.replies) { %>
+              <div class="reply">
+                <!-- Reply content here -->
+                <p><%= reply.text %></p>
+              </div>
+            <% } %>
+
+
             <%  if( currentUser && review.author.equals(currentUser._id))  {%>
               <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
                 <button class="btn btn-sm btn-danger delete-review">Delete</button>
@@ -213,6 +232,17 @@
 
             <% if(review.body.length > 4) { %>
               <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more ></a>
+            <% } %>
+
+            <% if(currentUser && campground.author.equals(currentUser._id)) { %>
+              <!-- Only show the reply button if the current user is not the campground owner -->
+              <button class="btn btn-sm btn-info reply-button" data-review-id="<%= review._id %>">Reply</button>
+
+              <!-- Hidden input field for replying to the review -->
+              <div class="reply-input" style="display: none;">
+                <textarea class="form-control" placeholder="Write your reply"></textarea>
+                <button class="btn btn-primary submit-reply">Submit</button>
+              </div>
             <% } %>
           </div>
         </div>
@@ -315,6 +345,67 @@
 
 
   document.addEventListener('DOMContentLoaded', function() {
+
+    const replyButtons = document.querySelectorAll('.reply-button');
+
+replyButtons.forEach(function (button) {
+  button.addEventListener('click', function () {
+    const replyInput = button.nextElementSibling; // Get the reply input field
+    if (replyInput) {
+      if (!replyInput.classList.contains('show')) {
+        // Show the reply input field
+        replyInput.classList.add('show');
+      } else {
+        // Hide the reply input field
+        replyInput.classList.remove('show');
+      }
+    }
+
+    // Extract the reviewId from the data attribute in the button
+    const reviewId = button.getAttribute('data-review-id');
+
+    const submitBtn = replyInput.querySelector('.submit-reply');
+    submitBtn.addEventListener('click', async function (event) {
+      event.preventDefault(); // Prevent the default form submission behavior
+
+      const replyInput = submitBtn.parentElement.querySelector('textarea');
+      const replyText = replyInput.value;
+
+      // Send the replyText to the server using AJAX or fetch API
+      try {
+        const response = await fetch(`/campgrounds/${campgroundId}/reviews/${reviewId}/replies`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ replyText }), // Send the reply text as JSON data
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to submit reply');
+        }
+
+        // Assuming the server responds with the newly created reply data
+        const replyData = await response.json();
+
+        // Create an HTML element for the reply
+        const replyElement = document.createElement('div');
+        replyElement.classList.add('reply');
+        replyElement.innerHTML = `<p>${replyData.text}</p>`; // Adjust this based on your reply data structure
+
+        // Append the reply element to the appropriate location on your show page
+        const showPageContainer = document.querySelector('.show-page-container'); // Adjust this selector
+        showPageContainer.appendChild(replyElement);
+
+        // Clear the reply input field
+        replyInput.value = '';
+      } catch (error) {
+        console.error('Error submitting reply:', error);
+      }
+    });
+  });
+});
+
     const modal = document.getElementById('reviewsModal');
     const closeButton = document.getElementById('close-modal-button');
     const reviewSearch = document.getElementById('reviewSearch');

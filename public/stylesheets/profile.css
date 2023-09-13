@@ -15,12 +15,11 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  border: 1px solid #ccc;
+  border-radius: 2rem;
   padding: 20px;
-  background-color: #f7f7f7;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 0px 2rem rgba(0, 0, 0, 0.14);
   margin-right: 2rem;
-
+  width: 18vw;
 }
 
 .avatar-profile {
@@ -34,12 +33,45 @@ body {
 .user-name, .edit-profile-title {
   font-size: 3rem;
   font-weight: 700;
-  margin-left: 4.5rem;
   margin-bottom: 4rem;
 }
 
+.edit-profile-title{
+  margin-left: 5rem;
+}
+
 .user-profile-content-card{
- margin-left: 6.6rem;
+ margin-left: 4rem;
+}
+
+.editProfile-button-profilePage{
+  border-radius: 1rem;
+  border: 2px solid black;
+  padding: 0.6rem 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  margin: 4px 2px;
+  cursor: pointer;
+  margin-bottom: 3rem;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.editProfile-button-profilePage:hover{
+  border: 2px solid black;
+ background-color:#f7f7f7 ;
+}
+
+
+.user-profile-data-profilePage{
+  font-size: 1.2rem;
+}
+
+.aboutYou-container-profilePage{
+  margin-top:2rem ;
+  margin-bottom: 4rem;
 }
 
 
@@ -181,8 +213,10 @@ body {
 
 .flex-container {
   display: flex;
-  align-items: center; /* Vertically center align items */
+  justify-content: space-between;
+  align-items: center;
 }
+
 
 
 
@@ -249,9 +283,25 @@ body {
   width: 60vw;
 }
 
+.about-you-text-container {
+  overflow: hidden;
+  max-height: 3.6em; /* Adjust to control the number of lines displayed */
+  position: relative;
+  line-height: 1.2em;
+}
+
+
+#readMoreLink,
+#readLessLink {
+  color: black;
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+}
+
 
 #addIntroLink, #editIntroLink{
   color: black;
+  font-size: 1.2rem;
 }
 /* Style for the sticky button */
 .updateButtonContainer {
@@ -274,4 +324,30 @@ body {
 
 .submit-generalForm-button:hover{
   background-color: black;
+}
+
+.Back-To-Profile-Container{
+  margin-bottom: 4rem;
+}
+
+.Back-To-Profile-Link{
+  color: black;
+  font-size: 1.5rem;
+}
+
+
+
+/* Custom CSS for modal animation */
+.custom-modal-slide .modal-dialog {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(50%);
+  }
 }
