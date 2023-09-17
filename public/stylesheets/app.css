@@ -449,6 +449,58 @@ h2{
 
 }
 
+/* Add these CSS styles to your app.css or a separate CSS file */
+.reply {
+  position: relative; /* Set the parent div to relative positioning */
+  padding: 15px; /* Add some padding for spacing */
+}
+
+.reply-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative; /* Set the container to relative positioning */
+}
+
+.reply-head {
+  display: flex;
+}
+
+.ellipsis-icon {
+  cursor: pointer;
+  font-size: 1.4rem;
+}
+.fas, .fa-ellipsis-vertical .ellipsis-icon{
+  margin-bottom: 1.1rem;
+}
+
+.dropdown {
+  position: absolute; /* Set the dropdown div to absolute positioning */
+  top: 5px; /* Adjust top and right values as needed */
+  right: 10rem; /* Adjust top and right values as needed */
+}
+
+.bin-reply-icon{
+  margin-right: 1.1rem;
+  margin-left: 0.6rem;
+}
+/* Style for the delete button */
+.delete-reply {
+  background-color: transparent;
+  width: 10rem;
+  height: 3rem;
+  border: none; /* Remove the button's default border */
+  border-radius: 1rem;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1); /* Add a box shadow */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Add smooth transitions for background color, text color, and transform */
+}
+
+.delete-reply:hover {
+  background-color: #f5f3f3;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); /* Add a box shadow */
+  transform: scale(1.1); /* Scale the button by 10% on hover */
+}
 /* modal styling to show all the reviews  */
 
 .reviews-modal {

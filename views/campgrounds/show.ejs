@@ -195,7 +195,7 @@
 
       <div class="col-md-6" id="review-<%= review._id %>">
 
-        <div class="card reviewCard">
+        <div class="card reviewCard" style="margin-bottom: 11rem;">
           <div class="card-body">
             <div class="reviewCardImageAndTitlewithRatingstars">
               <img src="<%= review.author.avatar.url %>" alt="Avatar of <%= review.author.username %>" class="avatar mr-3"> <!-- Added margin-right -->
@@ -203,6 +203,8 @@
               <div>
                 <h5 class="card-title">
                   <%= review.author.username  %>
+
+
                 </h5>
                 <p><%= formattedDate %></p>
               </div>
@@ -215,15 +217,6 @@
             </p>
 
 
-            <!-- Display existing replies -->
-            <% for (let reply of review.replies) { %>
-              <div class="reply">
-                <!-- Reply content here -->
-                <p><%= reply.text %></p>
-              </div>
-            <% } %>
-
-
             <%  if( currentUser && review.author.equals(currentUser._id))  {%>
               <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
                 <button class="btn btn-sm btn-danger delete-review">Delete</button>
@@ -234,16 +227,69 @@
               <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more ></a>
             <% } %>
 
-            <% if(currentUser && campground.author.equals(currentUser._id)) { %>
-              <!-- Only show the reply button if the current user is not the campground owner -->
-              <button class="btn btn-sm btn-info reply-button" data-review-id="<%= review._id %>">Reply</button>
+            <!-- Display replies for this review -->
+            <div class="replies">
+              <% for (let reply of review.replies) { %>
+                <div class="reply">
+                  <!-- Add a container for the icon and content -->
+                  <div class="reply-container">
+                    <!-- Display the reply author's avatar -->
+                    <div class="reply-head">
+                      <img src="<%= reply.author.avatar.url %>" alt="<%= reply.author.username %> Avatar" class="avatar">
+                      <p>Author: <%= reply.author.username %></p>
+                    </div>
+                    <!-- Add the three dots icon here -->
+                    <div class="dropdown">
+                      <i class="fas fa-ellipsis-vertical ellipsis-icon" data-reply-id="<%= reply._id %>"></i>
+                      <!-- Conditionally show the "Delete Reply" button -->
+                      <% if (currentUser && reply.author.equals(currentUser._id)) { %>
+                        <!-- Add a "Delete Reply" option -->
+                        <form id="delete-form-<%= reply._id %>" action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>/replies/<%= reply._id %>?_method=DELETE" method="POST" class="delete-reply" style="display: none; position: absolute;">
+                          <button class=" delete-reply"><i class="fa-solid fa-trash-can bin-reply-icon" style="color: #000000;"></i>Delete Reply</button>
+                        </form>
+                      <% } %>
+                    </div>
+                  </div>
+                  <!-- Display the reply content here -->
+                  <div class="reply-content">
+                    <p>reply: <%= reply.text %></p>
+                  </div>
+                </div>
+              <% } %>
+            </div>
 
-              <!-- Hidden input field for replying to the review -->
-              <div class="reply-input" style="display: none;">
-                <textarea class="form-control" placeholder="Write your reply"></textarea>
-                <button class="btn btn-primary submit-reply">Submit</button>
-              </div>
+
+
+
+
+
+            <!-- Add a reply form for this review (restricted to campground author) -->
+            <% if (currentUser && campground.author.equals(currentUser._id)) { %>
+              <!-- Only show the reply button if the user is the campground owner -->
+              <button class="btn btn-sm btn-info reply-button" id="review-<%= review._id %>-reply">Reply</button>
+
+              <!-- Reply Form (initially hidden) -->
+              <form action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>/replies" method="POST"
+                class="validated-form reply-form" novalidate id="review-<%= review._id %>-form" style="display: none;">
+
+                <div class="form-group">
+                  <div class="reviewTextCard">
+                    <label for="reply[body]">Reply:</label>
+                    <textarea class="form-control" name="reply[text]" id="textarea-reply"
+                    cols="30" rows="3" required></textarea>
+                  </div>
+                </div>
+                <button
+                  type="submit"
+                  id="reply-submit-button"
+                  class="btn btn-info text-white btnSubmit"
+                  data-campground-id="<%= campground._id %>"
+                >
+                  Submit Reply
+                </button>
+              </form>
             <% } %>
+
           </div>
         </div>
 
@@ -339,6 +385,13 @@
 
 <script src="/javascripts/showPageValidateStarsRating.js"></script>
 
+
+
+
+
+
+
+
 <script>
   const mapToken = "<%-process.env.MAPBOX_TOKEN %>";
   const campground = <%- JSON.stringify(campground) %>
@@ -348,63 +401,54 @@
 
     const replyButtons = document.querySelectorAll('.reply-button');
 
-replyButtons.forEach(function (button) {
-  button.addEventListener('click', function () {
-    const replyInput = button.nextElementSibling; // Get the reply input field
-    if (replyInput) {
-      if (!replyInput.classList.contains('show')) {
-        // Show the reply input field
-        replyInput.classList.add('show');
-      } else {
-        // Hide the reply input field
-        replyInput.classList.remove('show');
-      }
-    }
+    // Add a click event listener to each reply button
+    replyButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Extract the reviewId from the button's id
+        const reviewId = button.id.split('-')[1]; // Assumes the ID is in the format 'review-<reviewId>-reply'
+        // Log the ID of the clicked reply button
+        console.log(`Button with ID: ${button.id} clicked`);
 
-    // Extract the reviewId from the data attribute in the button
-    const reviewId = button.getAttribute('data-review-id');
+        // Get the form ID from the button's ID
+        const formId = `review-${reviewId}-form`;
+        // Log the ID of the form
+        console.log(`Form ID from button's ID: ${formId}`);
+        // Get the corresponding form element
+        const form = document.getElementById(formId);
 
-    const submitBtn = replyInput.querySelector('.submit-reply');
-    submitBtn.addEventListener('click', async function (event) {
-      event.preventDefault(); // Prevent the default form submission behavior
-
-      const replyInput = submitBtn.parentElement.querySelector('textarea');
-      const replyText = replyInput.value;
-
-      // Send the replyText to the server using AJAX or fetch API
-      try {
-        const response = await fetch(`/campgrounds/${campgroundId}/reviews/${reviewId}/replies`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ replyText }), // Send the reply text as JSON data
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to submit reply');
+       // Toggle the visibility of the form
+        if (form.style.display === 'block') {
+          form.style.display = 'none';
+          console.log(`Hiding form with ID: ${formId}`);
+        } else {
+          form.style.display = 'block';
+          console.log(`Showing form with ID: ${formId}`);
         }
 
-        // Assuming the server responds with the newly created reply data
-        const replyData = await response.json();
-
-        // Create an HTML element for the reply
-        const replyElement = document.createElement('div');
-        replyElement.classList.add('reply');
-        replyElement.innerHTML = `<p>${replyData.text}</p>`; // Adjust this based on your reply data structure
-
-        // Append the reply element to the appropriate location on your show page
-        const showPageContainer = document.querySelector('.show-page-container'); // Adjust this selector
-        showPageContainer.appendChild(replyElement);
-
-        // Clear the reply input field
-        replyInput.value = '';
-      } catch (error) {
-        console.error('Error submitting reply:', error);
-      }
+      });
     });
-  });
-});
+
+
+    const ellipsisIcons = document.querySelectorAll('.ellipsis-icon');
+
+    ellipsisIcons.forEach(icon => {
+      icon.addEventListener('click', () => {
+        // Get the reply ID from the data-reply-id attribute
+        const replyId = icon.getAttribute('data-reply-id');
+        // Get the corresponding delete form
+        const deleteForm = document.getElementById(`delete-form-${replyId}`);
+
+        // Toggle the visibility of the delete form
+        if (deleteForm.style.display === 'block') {
+          deleteForm.style.display = 'none';
+        } else {
+          deleteForm.style.display = 'block';
+        }
+      });
+    });
+
+
+
 
     const modal = document.getElementById('reviewsModal');
     const closeButton = document.getElementById('close-modal-button');

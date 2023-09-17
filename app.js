@@ -23,6 +23,7 @@ const campgroundsRoutes = require("./routes/campgrounds");
 const reviewsRoutes = require("./routes/reviews");
 
 
+
 // const { MongoClient, ServerApiVersion } = require('mongodb');
 // const dbUrl = process.env.DB_URL
 
@@ -201,6 +202,7 @@ app.use((req, res, next) => {
 app.use("/", userRoutes);
 app.use("/campgrounds", campgroundsRoutes);
 app.use("/campgrounds/:id/reviews", reviewsRoutes);
+
 
 
 app.get("/", (req, res) => {

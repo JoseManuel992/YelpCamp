@@ -4,6 +4,8 @@ const passportLocalMongoose = require("passport-local-mongoose");
 
 
 const UserSchema = new Schema({
+  username: String, // Add this field for the username
+
   email: {
     type: String,
     required: true,
