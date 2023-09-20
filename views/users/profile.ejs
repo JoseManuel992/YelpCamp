@@ -187,13 +187,16 @@
           </div>
         </div>
 
-        <div class="aboutYou-container-profilePage">
-          <% if (user.aboutYou) {%>
-            <p>About You: <span class="profile-text"><%= user.aboutYou %></span>
-            <a href="#" class="read-more-btn btn-link" style="color: black; font-weight:600 ;">Read more</a>
-            <a href="#" class="read-less-btn btn-link" style="color: black; font-weight: 600; display: none;">Read less</a></p>
-          <% } %>
+        <div class="aboutYou-parent-container">
+          <div class="aboutYou-container-profilePage">
+            <% if (user.aboutYou) {%>
+              <h5>About You:</h5>
+              <p><span class="profile-text"><%= user.aboutYou %></span>
+              <a href="#" class="read-more-btn btn-link" style="color: black; font-weight:600 ;">Read more</a>
+              <a href="#" class="read-less-btn btn-link" style="color: black; font-weight: 600; display: none;">Read less</a></p>
+            <% } %>
           </div>
+        </div>
 
       </div>
     </div>

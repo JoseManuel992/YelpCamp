@@ -7,9 +7,6 @@ body {
   margin: 0; /* Remove default margin */
 }
 
-
-
-
 .user-profile-card {
   display: flex;
   flex-direction: column;
@@ -66,6 +63,10 @@ body {
 
 .icon-and-user-profile-data {
   display: flex;
+  align-items: center;
+}
+.edit-profile-icon {
+  font-size: 2rem;
 }
 .user-profile-data-profilePage{
   font-size: 1.2rem;
@@ -92,12 +93,17 @@ body {
     text-align: center;
   }
 
+  .edit-profile-icon {
+    margin-right: 0 !important;
+  }
+
   .user-name {
     font-size: 2.5rem;
   }
 
-
-
+  .user-profile-data-profilePage-title{
+    display: block;
+  }
   .left-userProfile-container, .right-userProfile-container {
     margin-bottom: 2rem;
     width: 100%;
@@ -106,7 +112,19 @@ body {
     display: block;
   }
 
+  .aboutYou-parent-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100%; /* Set the container to full height of its parent */
+  }
 
+  .aboutYou-container-profilePage {
+    max-height: 400px; /* Set a maximum height as needed */
+    /* Your existing styles for the .aboutYou-container-profilePage */
+  }
+
+}
 
 
 
@@ -380,5 +398,61 @@ body {
   }
   to {
     transform: translateY(50%);
+  }
+}
+
+@media (max-width: 576px) {
+
+  .avatar-profile-container{
+    margin-right: 0;
+  }
+  .form-file-button-edit-avatar {
+    left: 7.5rem;
+  }
+  .edit-profile-title {
+    text-align: center;
+    margin-left: 0;
+  }
+
+  .left-edit-userProfile-container,
+  .right-edit-userProfile-container {
+    display: block;
+    margin-left: 0; /* Remove left margin */
+    margin-right: 0; /* Remove right margin */
+    width: auto; /* Allow content to occupy full width */
+    border-bottom: none; /* Remove borders */
+  }
+
+  .flex-container {
+    display: block;
+  }
+  .edit-profile-button {
+    width: 24rem;
+  }
+  .edit-profile-arrow {
+    display: none;
+  }
+
+  .col-md-6 {
+    padding-left: 0;
+  }
+  .about-you-container{
+    border-bottom: none ;
+  }
+  .updateButtonContainer {
+    background-color: white;
+    padding-top: 2rem;
+    margin-top: 1rem;
+    border-top: 1px solid #ccc;
+  }
+  .submit-generalForm-button {
+    padding: 1rem 8.5rem;
+  }
+
+  .left-edit-userProfile-container, .right-edit-userProfile-container{
+    margin-left: 0.8rem;
+    margin-right: 0;
+    width: 21.9rem;
+    border-bottom:1px solid #ccc;
   }
 }
