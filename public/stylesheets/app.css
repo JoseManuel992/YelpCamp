@@ -113,7 +113,7 @@
     object-fit: cover;
   } */
 
-  .card-title {
+  .card-title, .reply-title {
     font-size: 1.4rem;
   }
 
@@ -424,6 +424,7 @@ h2{
 .show-more-link{
   color: black;
   font-size: 1.2rem;
+  font-weight: 600;
 }
 
 
@@ -453,6 +454,8 @@ h2{
 .reply {
   position: relative; /* Set the parent div to relative positioning */
   padding: 15px; /* Add some padding for spacing */
+  margin-left: 2rem;
+  margin-top: 2rem;
 }
 
 .reply-container {
@@ -469,38 +472,58 @@ h2{
 .ellipsis-icon {
   cursor: pointer;
   font-size: 1.4rem;
-}
-.fas, .fa-ellipsis-vertical .ellipsis-icon{
-  margin-bottom: 1.1rem;
+  padding: 1.5rem; /* Add padding to increase clickable area */
+  padding-top: 0;
+  margin-bottom: 0.2rem;
 }
 
 .dropdown {
-  position: absolute; /* Set the dropdown div to absolute positioning */
-  top: 5px; /* Adjust top and right values as needed */
-  right: 10rem; /* Adjust top and right values as needed */
+  position: absolute;
+  right: 6rem;
 }
 
 .bin-reply-icon{
   margin-right: 1.1rem;
-  margin-left: 0.6rem;
+  margin-left: 0.4rem;
 }
 /* Style for the delete button */
+
 .delete-reply {
   background-color: transparent;
-  width: 10rem;
+  width: 8rem;
   height: 3rem;
-  border: none; /* Remove the button's default border */
+  border: none;
   border-radius: 1rem;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1); /* Add a box shadow */
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Add smooth transitions for background color, text color, and transform */
+  transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 .delete-reply:hover {
   background-color: #f5f3f3;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); /* Add a box shadow */
-  transform: scale(1.1); /* Scale the button by 10% on hover */
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
 }
+
+.reply-content{
+  margin-top: 2rem;
+}
+
+.reply-button {
+  background-color: transparent;
+  border-radius: 5rem;
+  width: 6rem;
+  height: 3rem;
+  text-align: center;
+  font-weight: 600;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Add smooth transitions for background color, text color, and transform */
+}
+
+.reply-button:hover{
+  background-color: #dfdede;
+  border-radius: 5rem;
+}
+
+
 /* modal styling to show all the reviews  */
 
 .reviews-modal {
@@ -540,6 +563,7 @@ h2{
 .reviews-modal-content.active {
   transform: translateY(0); /* Move it to its normal position */
 }
+
 
 .sticky-header {
   position: -webkit-sticky; /* For Safari */
@@ -764,9 +788,12 @@ h2{
     border-radius:  1rem;
     height: 24.5rem;
     margin-bottom: 3rem;
+    position: relative;
   }
 
-  .delete-review{
+
+
+  .delete-reply, .delete-review {
     margin-top: 1.5rem;
     margin-bottom: 1.5rem;
   }

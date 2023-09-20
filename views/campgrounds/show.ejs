@@ -151,17 +151,9 @@
                   </form>
                 <% } %>
                 <% if (review && review.body && review.body.length > 4) { %>
-                  <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more ></a>
+                  <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more <i class="fa-solid fa-chevron-right" style="color: #000000; margin-left: 0.6rem; font-size: 1rem;"></i></a>
                 <% } %>
-                <% if(currentUser && campground.author.equals(currentUser._id)) { %>
-                  <!-- Only show the reply button if the current user is not the campground owner -->
-                  <button class="btn btn-sm btn-info reply-button">Reply</button>
-                  <!-- Hidden input field for replying to the review -->
-                  <div class="reply-input" style="display: none;">
-                    <textarea class="form-control" placeholder="Write your reply"></textarea>
-                    <button class="btn btn-primary submit-reply">Submit</button>
-                  </div>
-                <% } %>
+
 
               </div>
             </div>
@@ -195,18 +187,32 @@
 
       <div class="col-md-6" id="review-<%= review._id %>">
 
-        <div class="card reviewCard" style="margin-bottom: 11rem;">
+        <div class="card reviewCard" >
           <div class="card-body">
-            <div class="reviewCardImageAndTitlewithRatingstars">
-              <img src="<%= review.author.avatar.url %>" alt="Avatar of <%= review.author.username %>" class="avatar mr-3"> <!-- Added margin-right -->
+            <div class="d-flex justify-content-between align-items-center">
+              <!-- Avatar and Title -->
+              <div class="reviewCardImageAndTitlewithRatingstars">
+                <img src="<%= review.author.avatar.url %>" alt="Avatar of <%= review.author.username %>" class="avatar mr-3">
+                <div>
+                  <h5 class="card-title">
+                    <%= review.author.username  %>
+                  </h5>
+                  <p><%= formattedDate %></p>
+                </div>
+              </div>
 
-              <div>
-                <h5 class="card-title">
-                  <%= review.author.username  %>
-
-
-                </h5>
-                <p><%= formattedDate %></p>
+              <!-- Container for Ellipsis icon and Delete button -->
+              <div class="ellipsis-container">
+                <!-- Ellipsis icon for review actions -->
+                <div class="review-actions">
+                  <!-- Conditionally show the "Delete Review" button -->
+                  <% if (currentUser && review.author.equals(currentUser._id)) { %>
+                    <i class="fas fa-ellipsis-vertical ellipsis-icon ellipsis-review" data-review-id="<%= review._id %>"></i>
+                    <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST" class="delete-review-form" id="delete-review-form-<%= review._id %>" style="display: none;">
+                      <button class="delete-reply"><i class="fa-solid fa-trash-can bin-reply-icon" style="color: #000000;"></i>Delete</button>
+                    </form>
+                  <% } %>
+                </div>
               </div>
             </div>
             <p class="starability-result" data-rating="<%= review.rating %>">
@@ -217,15 +223,7 @@
             </p>
 
 
-            <%  if( currentUser && review.author.equals(currentUser._id))  {%>
-              <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
-                <button class="btn btn-sm btn-danger delete-review">Delete</button>
-              </form>
-            <% } %>
 
-            <% if(review.body.length > 4) { %>
-              <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more ></a>
-            <% } %>
 
             <!-- Display replies for this review -->
             <div class="replies">
@@ -236,7 +234,12 @@
                     <!-- Display the reply author's avatar -->
                     <div class="reply-head">
                       <img src="<%= reply.author.avatar.url %>" alt="<%= reply.author.username %> Avatar" class="avatar">
-                      <p>Author: <%= reply.author.username %></p>
+                      <div>
+                        <h5 class="card-title"><%= reply.author.username %></h5>
+                        <p><%= formattedDate %></p>
+
+                      </div>
+
                     </div>
                     <!-- Add the three dots icon here -->
                     <div class="dropdown">
@@ -245,7 +248,7 @@
                       <% if (currentUser && reply.author.equals(currentUser._id)) { %>
                         <!-- Add a "Delete Reply" option -->
                         <form id="delete-form-<%= reply._id %>" action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>/replies/<%= reply._id %>?_method=DELETE" method="POST" class="delete-reply" style="display: none; position: absolute;">
-                          <button class=" delete-reply"><i class="fa-solid fa-trash-can bin-reply-icon" style="color: #000000;"></i>Delete Reply</button>
+                          <button class="delete-reply"><i class="fa-solid fa-trash-can bin-reply-icon" style="color: #000000;"></i>Delete</button>
                         </form>
                       <% } %>
                     </div>
@@ -260,34 +263,42 @@
 
 
 
-
-
-
             <!-- Add a reply form for this review (restricted to campground author) -->
-            <% if (currentUser && campground.author.equals(currentUser._id)) { %>
-              <!-- Only show the reply button if the user is the campground owner -->
-              <button class="btn btn-sm btn-info reply-button" id="review-<%= review._id %>-reply">Reply</button>
+            <% if (currentUser && campground.author.equals(currentUser._id) && review.replies.length === 0) { %>
+              <div class="reply-form-container">
+                <div class="reply-form-container">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <!-- Show more link -->
+                    <% if(review.body.length > 4) { %>
+                      <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more <i class="fa-solid fa-chevron-right" style="color: #000000; margin-left: 0.6rem; font-size: 1rem;"></i></a>
+                    <% } %>
 
-              <!-- Reply Form (initially hidden) -->
-              <form action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>/replies" method="POST"
-                class="validated-form reply-form" novalidate id="review-<%= review._id %>-form" style="display: none;">
-
-                <div class="form-group">
-                  <div class="reviewTextCard">
-                    <label for="reply[body]">Reply:</label>
-                    <textarea class="form-control" name="reply[text]" id="textarea-reply"
-                    cols="30" rows="3" required></textarea>
+                    <!-- Only show the reply button if the user is the campground owner -->
+                    <button class="btn reply-button" id="review-<%= review._id %>-reply">Reply</button>
                   </div>
                 </div>
-                <button
-                  type="submit"
-                  id="reply-submit-button"
-                  class="btn btn-info text-white btnSubmit"
-                  data-campground-id="<%= campground._id %>"
-                >
-                  Submit Reply
-                </button>
-              </form>
+
+                <!-- Reply Form (initially hidden) -->
+                <form action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>/replies" method="POST"
+                  class="validated-form reply-form" novalidate id="review-<%= review._id %>-form" style="display: none;">
+
+                  <div class="form-group">
+                    <div class="reviewTextCard">
+                      <label for="reply[body]">Reply:</label>
+                      <textarea class="form-control" name="reply[text]" id="textarea-reply"
+                      cols="30" rows="3" required></textarea>
+                    </div>
+                  </div>
+                  <button
+                    type="submit"
+                    id="reply-submit-button"
+                    class="btn btn-info text-white btnSubmit"
+                    data-campground-id="<%= campground._id %>"
+                  >
+                    Submit Reply
+                  </button>
+                </form>
+              </div>
             <% } %>
 
           </div>
@@ -303,12 +314,14 @@
     <% } %>
   </div>
 
+
   <!-- Add a button for showing all reviews after the first six -->
   <div id="showAllReviewsContainer">
     <% if(campground.reviews.length > 6) { %>
       <button id="showAllReviews">Show all <%= campground.reviews.length %> reviews</button>
     <% } %>
   </div>
+
 
 </div>
 
@@ -367,6 +380,7 @@
               <p class="card-text">
                   Review: <%= review.body  %>
               </p>
+
               <%  if( currentUser && review.author.equals(currentUser._id))  {%>
                 <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
                   <button class="btn btn-sm btn-danger">Delete</button>
@@ -386,69 +400,13 @@
 <script src="/javascripts/showPageValidateStarsRating.js"></script>
 
 
-
-
-
-
-
-
 <script>
   const mapToken = "<%-process.env.MAPBOX_TOKEN %>";
   const campground = <%- JSON.stringify(campground) %>
 
 
+
   document.addEventListener('DOMContentLoaded', function() {
-
-    const replyButtons = document.querySelectorAll('.reply-button');
-
-    // Add a click event listener to each reply button
-    replyButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        // Extract the reviewId from the button's id
-        const reviewId = button.id.split('-')[1]; // Assumes the ID is in the format 'review-<reviewId>-reply'
-        // Log the ID of the clicked reply button
-        console.log(`Button with ID: ${button.id} clicked`);
-
-        // Get the form ID from the button's ID
-        const formId = `review-${reviewId}-form`;
-        // Log the ID of the form
-        console.log(`Form ID from button's ID: ${formId}`);
-        // Get the corresponding form element
-        const form = document.getElementById(formId);
-
-       // Toggle the visibility of the form
-        if (form.style.display === 'block') {
-          form.style.display = 'none';
-          console.log(`Hiding form with ID: ${formId}`);
-        } else {
-          form.style.display = 'block';
-          console.log(`Showing form with ID: ${formId}`);
-        }
-
-      });
-    });
-
-
-    const ellipsisIcons = document.querySelectorAll('.ellipsis-icon');
-
-    ellipsisIcons.forEach(icon => {
-      icon.addEventListener('click', () => {
-        // Get the reply ID from the data-reply-id attribute
-        const replyId = icon.getAttribute('data-reply-id');
-        // Get the corresponding delete form
-        const deleteForm = document.getElementById(`delete-form-${replyId}`);
-
-        // Toggle the visibility of the delete form
-        if (deleteForm.style.display === 'block') {
-          deleteForm.style.display = 'none';
-        } else {
-          deleteForm.style.display = 'block';
-        }
-      });
-    });
-
-
-
 
     const modal = document.getElementById('reviewsModal');
     const closeButton = document.getElementById('close-modal-button');
@@ -457,8 +415,10 @@
     const showMoreLinks = document.querySelectorAll('.show-more-link');
     const campgroundId = campground._id;
 
-    // Add a click event listener for the "Show All Reviews" button
-    let showAllButton = document.getElementById('showAllReviews');
+    // Add a click event listener for the "Show All Reviews" button and
+    // Check if the "Show All Reviews" button exists
+    const showAllButton = document.getElementById('showAllReviews');
+
     if (showAllButton) {
       showAllButton.addEventListener('click', function() {
        // Query for all cloned reviews within the modal
@@ -529,24 +489,97 @@
       });
     });
 
+    const replyButtons = document.querySelectorAll('.reply-button');
 
+    // Add a click event listener to each reply button
+    replyButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Extract the reviewId from the button's id
+        const reviewId = button.id.split('-')[1]; // Assumes the ID is in the format 'review-<reviewId>-reply'
+        // Log the ID of the clicked reply button
+        console.log(`Button with ID: ${button.id} clicked`);
+
+        // Get the form ID from the button's ID
+        const formId = `review-${reviewId}-form`;
+        // Log the ID of the form
+        console.log(`Form ID from button's ID: ${formId}`);
+        // Get the corresponding form element
+        const form = document.getElementById(formId);
+
+      // Toggle the visibility of the form
+        if (form.style.display === 'block') {
+          form.style.display = 'none';
+          console.log(`Hiding form with ID: ${formId}`);
+        } else {
+          form.style.display = 'block';
+          console.log(`Showing form with ID: ${formId}`);
+        }
+
+      });
+    });
+
+
+    // Function to toggle the display of a delete form
+    function toggleDeleteForm(formId) {
+      const deleteForm = document.getElementById(formId);
+      if (deleteForm.style.display === 'block') {
+        deleteForm.style.display = 'none';
+      } else {
+        deleteForm.style.display = 'block';
+      }
+    }
+
+    // Select all ellipsis icons for replies
+    const ellipsisReplyIcons = document.querySelectorAll('.ellipsis-icon');
+
+    // Loop through each ellipsis icon for replies and add a click event listener
+    ellipsisReplyIcons.forEach(ellipsisIcon => {
+      ellipsisIcon.addEventListener('click', () => {
+        // Get the reply ID from the data-reply-id attribute
+        const replyId = ellipsisIcon.getAttribute('data-reply-id');
+        // Construct the form ID for deleting the reply
+        const formId = `delete-form-${replyId}`;
+        // Toggle the display of the delete form
+        toggleDeleteForm(formId);
+      });
+    });
+
+    // Select all ellipsis icons for reviews
+    const ellipsisReviewIcons = document.querySelectorAll('.ellipsis-review');
+
+    // Loop through each ellipsis icon for reviews and add a click event listener
+    ellipsisReviewIcons.forEach(ellipsisIcon => {
+      ellipsisIcon.addEventListener('click', () => {
+        // Get the review ID from the data-review-id attribute
+        const reviewId = ellipsisIcon.getAttribute('data-review-id');
+        // Construct the form ID for deleting the review
+        const formId = `delete-review-form-${reviewId}`;
+        // Toggle the display of the delete form
+        toggleDeleteForm(formId);
+      });
+    });
 
   });
 
-
-
   function initializeModalControls(modal, campgroundId) {
+    // Check if the "Show All Reviews" button exists
     const btn = document.getElementById("showAllReviews");
-    const span = document.getElementsByClassName("close-modal")[0];
-    const originalReviewsContainer = document.querySelector('.original-reviews-container');
 
-    btn.addEventListener('click', () => openModal(modal, originalReviewsContainer));
-    span.addEventListener('click', () => closeModal(modal, campgroundId));
+    if (btn) {
+      const span = document.getElementsByClassName("close-modal")[0];
+      const originalReviewsContainer = document.querySelector('.original-reviews-container');
 
-    document.getElementById('localReviewSearch').addEventListener('submit', (e) => {
-      e.preventDefault();
-    });
+      btn.addEventListener('click', () => openModal(modal, originalReviewsContainer));
+      span.addEventListener('click', () => closeModal(modal, campgroundId));
+
+      document.getElementById('localReviewSearch').addEventListener('submit', (e) => {
+        e.preventDefault();
+      });
+    }
   }
+
+
+
 
   function attachModalEventListeners(modal, closeButton, clearSearchFn, campgroundId) {
     // Wrap the clearSearch call in another function to ensure parameters are always passed.
@@ -583,8 +616,12 @@
         const deleteButton = clonedReview.querySelector('.btn-danger'); // Get the delete button
 
 
-        // Update the avatar image source to use the correct path
-        avatar.src = '/images/default-user-image.png'; // Make sure the path is correct
+        // Check if the user has a custom avatar image URL, and if not, use the default image URL
+        const customAvatarUrl = avatar.getAttribute('src');
+        if (!customAvatarUrl || customAvatarUrl === '/default-avatar.png') {
+          // Set the default avatar image URL
+          avatar.src = '/default-avatar.png'; // Replace with your default avatar URL
+        }
 
         // Remove the delete button from the cloned review
         if (deleteButton) {
@@ -603,76 +640,75 @@
         clonedReview.style.height = `${totalHeight}px`;
       });
 
-
-
-
-
       document.body.classList.add('no-scroll');
     }, 10);
     // Call the updateUrl function to update the URL
-    updateUrl("showAllReviews", null);
+    // updateUrl("showAllReviews", null);
   }
 
    // Function to handle closing the modal
-   function closeModal(modal, campgroundId) {
-    const modalContent = modal.querySelector('.reviews-modal-content');
+   // Function to handle closing the modal
+function closeModal(modal, campgroundId) {
+  const modalContent = modal.querySelector('.reviews-modal-content');
+  const reviewsModal = document.getElementById('reviewsModal'); // Select the reviewsModal div
 
-    // Remove the 'active' class from modal content
-    modalContent.classList.remove('active');
+  // Remove the 'active' class from modal content
+  modalContent.classList.remove('active');
 
-    // Apply the closing animation to the modal content
-    modalContent.style.animation = 'slideDown 0.3s ease-out';
-    modalContent.style.opacity = '0';
-
-    // After the animation, reset styles and hide the modal
-    setTimeout(() => {
-      modalContent.style.animation = 'none'; // Reset animation
-      modalContent.style.opacity = '1'; // Reset opacity
-
-      modal.style.display = 'none'; // Hide the modal container
-      document.body.classList.remove('no-scroll'); // Enable scrolling on main page
-    }, 300); // Adjust the duration as needed
+  // Apply the closing animation to the modal content
+  modalContent.style.animation = 'slideDown 0.3s ease-out';
+  modalContent.style.opacity = '0';
 
 
+  // After the animation, reset styles and hide the modal
+  setTimeout(() => {
+    modalContent.style.animation = 'none'; // Reset animation
+    modalContent.style.opacity = '1'; // Reset opacity
 
+    // Hide the modal container and the reviewsModal div
+    modal.style.display = 'none';
+    reviewsModal.style.display = 'none';
 
+    document.body.classList.remove('no-scroll'); // Enable scrolling on the main page
+  }, 300); // Adjust the duration as needed
 
-    // Clear the search input
-    const reviewSearchInput = document.getElementById('reviewSearch');
-    reviewSearchInput.value = '';
+  // Clear the search input
+  const reviewSearchInput = document.getElementById('reviewSearch');
+  reviewSearchInput.value = '';
 
-    // Manually trigger the input event on reviewSearch input to handle clear icon visibility
-    const inputEvent = new Event('input', {
-      'bubbles': true,
-      'cancelable': true
-    });
-    reviewSearchInput.dispatchEvent(inputEvent);
+  // Manually trigger the input event on reviewSearch input to handle clear icon visibility
+  const inputEvent = new Event('input', {
+    'bubbles': true,
+    'cancelable': true
+  });
+  reviewSearchInput.dispatchEvent(inputEvent);
 
-    // Manually trigger the keyup event on reviewSearch input to reset reviews
-    const keyupEvent = new Event('keyup', {
-      'bubbles': true,
-      'cancelable': true
-    });
-    reviewSearchInput.dispatchEvent(keyupEvent);
+  // Manually trigger the keyup event on reviewSearch input to reset reviews
+  const keyupEvent = new Event('keyup', {
+    'bubbles': true,
+    'cancelable': true
+  });
+  reviewSearchInput.dispatchEvent(keyupEvent);
 
-    // Update URL
+  // Update URL
+  if (campgroundId) {
     history.replaceState({}, document.title, `/campgrounds/${campgroundId}`);
-
   }
+}
 
-  function updateUrl(action, reviewId) {
-    let baseUrl = window.location.origin + `/campgrounds/${campground._id}`; // replace 'yourCampgroundId' with the actual ID
-    let currentParams = window.location.search;
+  // function updateUrl(action, reviewId) {
+  //   let baseUrl = window.location.origin + `/campgrounds/${campground._id}`; // replace 'yourCampgroundId' with the actual ID
+  //   let currentParams = window.location.search;
 
-    switch (action) {
-        case "showMoreOnReview":
-            history.pushState({}, '', baseUrl + "/reviews" + currentParams + "&scroll_to_review=" + reviewId);
-            break;
-        case "showAllReviews":
-            history.pushState({}, '', baseUrl + "/reviews" + currentParams);
-            break;
-    }
-  }
+  //   switch (action) {
+  //       case "showMoreOnReview":
+  //           history.pushState({}, '', baseUrl + "/reviews" + currentParams + "&scroll_to_review=" + reviewId);
+  //           break;
+  //       case "showAllReviews":
+  //           history.pushState({}, '', baseUrl + "/reviews" + currentParams);
+  //           break;
+  //   }
+  // }
 
 
 
@@ -685,8 +721,6 @@
     while (reviewsContainer.firstChild) {
       reviewsContainer.removeChild(reviewsContainer.firstChild);
     }
-
-
 
     originalReviews.forEach((review, index) => {
         const clone = review.cloneNode(true);
@@ -817,9 +851,13 @@
         const reviewId = this.getAttribute('data-review-id');
         displayReviewInModal(reviewId);
 
-         // Open the modal and add the active class
-        const reviewsModal = document.getElementById('reviewsModal');
-        reviewsModal.classList.add('show');
+
+        // Add an event listener to the close button within the modal
+        const closeModalButton = document.getElementById('close-modal-button');
+        closeModalButton.addEventListener('click', () => {
+          closeModal(reviewsModal);
+        });
+
 
         setTimeout(() => {
           const reviewsModalContent = document.querySelector('.reviews-modal-content');
@@ -839,7 +877,7 @@
               const reviewContentOffset = reviewContent.offsetTop - containerOffset;
 
               // Calculate the duration for smooth scrolling (constant duration)
-              const scrollSpeed = 0.2; // Adjust this value for the desired speed
+              const scrollSpeed = 1.2; // Adjust this value for the desired speed
               const duration = Math.abs(reviewContentOffset - container.scrollTop) / scrollSpeed;
 
               let startTime = null;
@@ -856,7 +894,7 @@
                 } else {
                   // Scroll animation complete
                   // Call the updateUrl function to update the URL
-                  updateUrl("showMoreOnReview", reviewId);
+                  // updateUrl("showMoreOnReview", reviewId);
                 }
               }
 
@@ -981,8 +1019,12 @@
         const clonedReview = clonedTargetReview.cloneNode(true);
         const avatar = clonedReview.querySelector('.avatar'); // Get the avatar image
 
-        // Update the avatar image source to use the correct path
-        avatar.src = '/images/default-user-image.png'; // Make sure the path is correct
+        // Check if the user has a custom avatar image URL, and if not, use the default image URL
+        const customAvatarUrl = avatar.getAttribute('src');
+        if (!customAvatarUrl || customAvatarUrl === '/default-avatar.png') {
+          // Set the default avatar image URL
+          avatar.src = '/default-avatar.png'; // Replace with your default avatar URL
+        }
 
         clonedReviewsContainer.appendChild(clonedReview); // Append the cloned review
 
@@ -1001,7 +1043,7 @@
     modal.style.display = 'block';
 
     // Update the URL
-    updateUrl("showMoreOnReview", reviewId);
+    // updateUrl("showMoreOnReview", reviewId);
   }
 
 

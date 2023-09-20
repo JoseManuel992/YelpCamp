@@ -64,7 +64,9 @@ body {
  background-color:#f7f7f7 ;
 }
 
-
+.icon-and-user-profile-data {
+  display: flex;
+}
 .user-profile-data-profilePage{
   font-size: 1.2rem;
 }
@@ -74,6 +76,35 @@ body {
   margin-bottom: 4rem;
 }
 
+@media (max-width: 576px) {
+  .body{
+    width: 100%;
+  }
+  .user-profile-card{
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+  .user-profile-content-card {
+    margin-left: 2rem; /* Remove left margin */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    text-align: center;
+  }
+
+  .user-name {
+    font-size: 2.5rem;
+  }
+
+
+
+  .left-userProfile-container, .right-userProfile-container {
+    margin-bottom: 2rem;
+    width: 100%;
+  }
+  .icon-and-user-profile-data {
+    display: block;
+  }
 
 
 
