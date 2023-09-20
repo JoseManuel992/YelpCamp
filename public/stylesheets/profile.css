@@ -7,6 +7,7 @@ body {
   margin: 0; /* Remove default margin */
 }
 
+
 .user-profile-card {
   display: flex;
   flex-direction: column;
@@ -86,7 +87,7 @@ body {
     margin-bottom: 2rem;
   }
   .user-profile-content-card {
-    margin-left: 2rem; /* Remove left margin */
+    margin-left: 0; /* Remove left margin */
     display: flex;
     flex-direction: column;
     align-items: center; /* Center content horizontally */
@@ -233,6 +234,7 @@ body {
 
 
 
+
 .left-edit-userProfile-container, .right-edit-userProfile-container {
   display: flex; /* Use flexbox */
   flex-direction: column; /* Stack children vertically */
@@ -284,19 +286,6 @@ body {
 }
 
 
-
-.form-control-modal.input-error {
-  border: 1px solid red;
-  border-color: red;
-  background-color: rgba(247, 211, 211, 0.372);
-}
-
-.form-control-modal.input-error:focus {
-  border: 2px solid red;
-  border-color: red;
-  background-color: white;
-  outline: red; /* Remove the default focus outline */
-}
 
 
 
@@ -414,20 +403,22 @@ body {
     margin-left: 0;
   }
 
-  .left-edit-userProfile-container,
-  .right-edit-userProfile-container {
-    display: block;
-    margin-left: 0; /* Remove left margin */
-    margin-right: 0; /* Remove right margin */
-    width: auto; /* Allow content to occupy full width */
-    border-bottom: none; /* Remove borders */
+  .left-edit-userProfile-container, .right-edit-userProfile-container{
+    margin-left: 0.77rem;
+    margin-right: 0;
+    width: 21.95rem;
+    border-bottom:1px solid #ccc;
   }
 
   .flex-container {
     display: block;
   }
   .edit-profile-button {
-    width: 24rem;
+    width: 22rem;
+  }
+
+  .edit-profile-button:hover {
+    background-color: #c2c1c1;
   }
   .edit-profile-arrow {
     display: none;
@@ -439,7 +430,11 @@ body {
   .about-you-container{
     border-bottom: none ;
   }
+
+
   .updateButtonContainer {
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
     background-color: white;
     padding-top: 2rem;
     margin-top: 1rem;
@@ -449,10 +444,31 @@ body {
     padding: 1rem 8.5rem;
   }
 
-  .left-edit-userProfile-container, .right-edit-userProfile-container{
-    margin-left: 0.8rem;
-    margin-right: 0;
-    width: 21.9rem;
-    border-bottom:1px solid #ccc;
+
+  .Back-To-Profile-Link {
+    font-size: 1.4rem;
   }
+
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(36%);
+    }
+  }
+
+  .modal-dialog{
+    height: 100%;
+  }
+
+  .modal-content{
+    height: 54%;
+
+  }
+  .modal-header {
+    height:24%;
+  }
+
 }

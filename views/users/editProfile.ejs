@@ -35,7 +35,7 @@
 
             <div class="left-edit-userProfile-container">
               <input class="form-control profile-field  type="text" name="user[username]" id="username" value="<%= user.username %>" required style="display: none;">
-              <button type="button" class="btn btn-outline-secondary edit-profile-button" data-bs-toggle="modal" data-bs-target="#usernameModal">
+              <button type="button" class="btn edit-profile-button" data-bs-toggle="modal" data-bs-target="#usernameModal">
                 <div class="flex-container">
                   <i class="fa-solid fa-user edit-profile-icon"></i>
                   <div>
@@ -67,7 +67,7 @@
           <div class="col-md-6">
             <div class="left-edit-userProfile-container">
               <input class="form-control" type="date" name="user[birthDate]" id="birthDate" value="<%= user.birthDate ? user.birthDate.toISOString().substr(0, 10) : '' %>" style="display: none;">
-              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#birthDateModal">
+              <button type="button" class="btn  edit-profile-button" data-bs-toggle="modal" data-bs-target="#birthDateModal">
                 <div class="flex-container">
                   <i class="fa-solid fa-cake-candles edit-profile-icon"></i>
                   <div>
@@ -82,7 +82,7 @@
           <div class="col-md-6">
             <div class="right-edit-userProfile-container">
               <input class="form-control" type="text" name="user[work]" id="work" value="<%= user.work %>" required style="display: none;">
-              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#workModal">
+              <button type="button" class="btn  edit-profile-button" data-bs-toggle="modal" data-bs-target="#workModal">
                 <div class="flex-container">
                   <i class="fa-solid fa-briefcase edit-profile-icon"></i>
                   <div>
@@ -99,7 +99,7 @@
           <div class="col-md-6">
             <div class="left-edit-userProfile-container">
               <input class="form-control" type="text" name="user[funFact]" id="funFact" value="<%= user.funFact %>" style="display: none;">
-              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#funFactModal">
+              <button type="button" class="btn  edit-profile-button" data-bs-toggle="modal" data-bs-target="#funFactModal">
                 <div class="flex-container">
                   <i class="fa-solid fa-lightbulb edit-profile-icon"></i>
                   <div>
@@ -114,7 +114,7 @@
           <div class="col-md-6">
             <div class="right-edit-userProfile-container">
               <input class="form-control" type="text" name="user[favoriteSong]" id="favoriteSong" value="<%= user.favoriteSong %>" style="display: none;">
-              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#favoriteSongModal">
+              <button type="button" class="btn  edit-profile-button" data-bs-toggle="modal" data-bs-target="#favoriteSongModal">
                 <div class="flex-container">
                   <i class="fa-solid fa-music edit-profile-icon"></i>
                   <div>
@@ -132,7 +132,7 @@
           <div class="col-md-6">
             <div class="left-edit-userProfile-container">
               <input class="form-control" type="text" name="user[uselessSkill]" id="uselessSkill" value="<%= user.uselessSkill %>" style="display: none;">
-              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#uselessSkillModal">
+              <button type="button" class="btn  edit-profile-button" data-bs-toggle="modal" data-bs-target="#uselessSkillModal">
                 <div class="flex-container">
                   <i class="fa-solid fa-wand-magic-sparkles edit-profile-icon"></i>
                   <div>
@@ -147,7 +147,7 @@
           <div class="col-md-6">
             <div class="right-edit-userProfile-container">
               <input class="form-control" type="text" name="user[school]" id="school" value="<%= user.school %>" style="display: none;">
-              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#schoolModal">
+              <button type="button" class="btn  edit-profile-button" data-bs-toggle="modal" data-bs-target="#schoolModal">
                 <div class="flex-container">
                   <i class="fa-solid fa-graduation-cap edit-profile-icon"></i>
                   <div>
@@ -165,7 +165,7 @@
           <div class="col-md-6">
             <div class="left-edit-userProfile-container">
               <input class="form-control" type="text" name="user[spendingHabit]" id="spendingHabit" value="<%= user.spendingHabit %>" style="display: none;">
-              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#spendingHabitModal">
+              <button type="button" class="btn  edit-profile-button" data-bs-toggle="modal" data-bs-target="#spendingHabitModal">
                 <div class="flex-container">
                   <i class="fa-regular fa-clock edit-profile-icon"></i>
                   <div>
@@ -180,7 +180,7 @@
           <div class="col-md-6">
             <div class="right-edit-userProfile-container">
               <input class="form-control" type="text" name="user[biographyTitle]" id="biographyTitle" value="<%= user.biographyTitle %>" style="display: none;">
-              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#biographyTitleModal">
+              <button type="button" class="btn  edit-profile-button" data-bs-toggle="modal" data-bs-target="#biographyTitleModal">
                 <div class="flex-container">
                   <i class="fa-solid fa-book edit-profile-icon"></i>
                   <div>
@@ -198,7 +198,7 @@
           <div class="col-md-6">
             <div class="left-edit-userProfile-container">
               <input class="form-control" type="text" name="user[obsession]" id="obsession" value="<%= user.obsession %>" style="display: none;">
-              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#obsessionModal">
+              <button type="button" class="btn  edit-profile-button" data-bs-toggle="modal" data-bs-target="#obsessionModal">
                 <div class="flex-container">
                   <i class="fa-solid fa-heart edit-profile-icon"></i>
                   <div>
@@ -213,7 +213,7 @@
           <div class="col-md-6">
             <div class="right-edit-userProfile-container">
               <input class="form-control" type="text" name="user[languages]" id="languages" value="<%= user.languages %>" style="display: none;">
-              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#languagesModal">
+              <button type="button" class="btn  edit-profile-button" data-bs-toggle="modal" data-bs-target="#languagesModal">
                 <div class="flex-container">
                   <i class="fa-solid fa-globe edit-profile-icon"></i>
                   <div>
@@ -231,7 +231,7 @@
           <div class="col-md-6">
             <div class="left-edit-userProfile-container">
               <input class="form-control" type="text" name="user[location]" id="location" value="<%= user.location %>" style="display: none;">
-              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#locationModal">
+              <button type="button" class="btn  edit-profile-button" data-bs-toggle="modal" data-bs-target="#locationModal">
                 <div class="flex-container">
                   <i class="fa-solid fa-earth-europe edit-profile-icon"></i>
                   <div>
@@ -246,7 +246,7 @@
           <div class="col-md-6">
             <div class="right-edit-userProfile-container">
               <input class="form-control" type="text" name="user[pets]" id="pets" value="<%= user.pets %>" style="display: none;">
-              <button type="button" class="btn btn-outline-secondary  edit-profile-button" data-bs-toggle="modal" data-bs-target="#petsModal">
+              <button type="button" class="btn  edit-profile-button" data-bs-toggle="modal" data-bs-target="#petsModal">
                 <div class="flex-container">
                   <i class="fa-solid fa-paw edit-profile-icon"></i>
                   <div>
@@ -352,7 +352,7 @@
         label: 'What is your name or nickname?',
         inputId: 'modalUsername',
         value: '<%= user.username %>',
-        maxLength: 40,
+        maxLength: 30,
         inputClass: 'input-form', // Add class for input field
         counterClass: 'modal-character-count', // Add class for character count
       },
@@ -539,9 +539,10 @@
               </div>
               <div class="modal-body">
                 <label class="form-label" for="${modalData.inputId}" id="${modalData.inputId}Label">${modalData.label}</label>
-                <input class="form-control ${modalData.inputClass}" type="text" name="user[${modalData.inputId}]" id="${modalData.inputId}" value="${modalData.value}"  ${modalData.maxLength ? `maxlength="${modalData.maxLength}"` : 'maxlength="40"'} required>
+                <input class="form-control ${modalData.inputClass}" type="text" name="user[${modalData.inputId}]" id="${modalData.inputId}" value="${modalData.value}"  ${modalData.maxLength ? `maxlength="${modalData.maxLength}"` : 'maxlength="30"'} required>
                 <div class="character-count">
-                  <span class="${modalData.counterClass}" id="currentCharCount-${modalData.inputId}">${initialCharCount}</span>/<span id="maxCharCount-${modalData.inputId}">${modalData.maxLength || '40'}</span>
+                  <span class="${modalData.counterClass}" id="currentCharCount-${modalData.inputId}">${initialCharCount}</span>/<span id="maxCharCount-${modalData.inputId}">${modalData.maxLength || '30'}</span>
+
                 </div>
               </div>
               <div class="modal-footer">
@@ -729,10 +730,6 @@
         }
       }
     }
-
-
-
-
 
 
     // Separate function to handle the "Save" button click for the intro modal textarea
