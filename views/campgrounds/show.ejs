@@ -1,4 +1,3 @@
-
 <% layout("./layouts/boilerplate") %>
 <link rel="stylesheet" href="/stylesheets/stars.css">
 
@@ -25,14 +24,6 @@
           <span class="visually-hidden"> <i class="fa-solid fa-angle-right" style="color: #000000;"></i></span>
         </button>
       <% } %>
-      <!-- indicators inside the carousel -->
-      <div class="carousel-indicators-container">
-        <ol class="carousel-indicators">
-          <% for(let i=0; i < campground.images.length; i++) { %>
-            <li data-bs-target="#campgroundCarousel" data-bs-slide-to="<%= i %>" class="<%= i === 0 ? 'active' : '' %>"></li>
-          <% } %>
-        </ol>
-      </div>
     </div>
 
     <div class="card CampgroundCardShowPage">
@@ -129,29 +120,111 @@
           <div class="col-md-6">
             <div class="card reviewCard">
               <div class="card-body">
-                <div class="reviewCardImageAndTitlewithRatingstars">
-                  <img src="<%= review.author.avatar.url %>" alt="Avatar of <%= review.author.username %>" class="avatar mr-3"> <!-- Added margin-right -->
+                <div class="d-flex justify-content-between align-items-center">
+                  <!-- Avatar and Title -->
+                  <div class="reviewCardImageAndTitlewithRatingstars">
+                    <img src="<%= review.author.avatar.url %>" alt="Avatar of <%= review.author.username %>" class="avatar mr-3"> <!-- Added margin-right -->
 
-                  <div>
-                    <h5 class="card-title">
-                      <%= review.author.username  %>
-                    </h5>
-                    <p><%= formattedDate %></p>
+                    <div>
+                      <h5 class="card-title">
+                        <%= review.author.username  %>
+                      </h5>
+                      <p><%= formattedDate %></p>
+                    </div>
+                  </div>
+                  <!-- Container for Ellipsis icon and Delete button -->
+                  <div class="dropdown">
+                    <!-- Ellipsis icon for review actions -->
+                    <div class="review-actions">
+                      <!-- Conditionally show the "Delete Review" button -->
+                      <% if (currentUser && review.author.equals(currentUser._id)) { %>
+                        <i class="fas fa-ellipsis-vertical ellipsis-phone-review" data-review-id="<%= review._id %>"></i>
+                        <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST" class="delete-review-form" id="delete-review-phone-form-<%= review._id %>" style="display: none;">
+                          <button class="delete-reply"><i class="fa-solid fa-trash-can bin-reply-icon" style="color: #000000;"></i></button>
+                        </form>
+                      <% } %>
+                    </div>
                   </div>
                 </div>
                 <p class="starability-result" data-rating="<%= review.rating %>">
                   Rated: <%= review.rating %> stars
                 </p>
-                <p class="card-text truncate-paragraph-showpage">
+                <p class="card-text-review truncate-paragraph-showpage">
                     Review: <%= review.body  %>
                 </p>
-                <%  if( currentUser && review.author.equals(currentUser._id))  {%>
-                  <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
-                    <button class="btn btn-sm btn-danger delete-review">Delete</button>
-                  </form>
-                <% } %>
+
                 <% if (review && review.body && review.body.length > 4) { %>
                   <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more <i class="fa-solid fa-chevron-right" style="color: #000000; margin-left: 0.6rem; font-size: 1rem;"></i></a>
+                <% } %>
+
+                <!-- Display replies for this review -->
+                <div class="replies">
+                  <% for (let reply of review.replies) { %>
+                    <div class="reply">
+                      <!-- Add a container for the icon and content -->
+                      <div class="reply-container">
+                        <!-- Display the reply author's avatar -->
+                        <div class="reply-head">
+                          <img src="<%= reply.author.avatar.url %>" alt="<%= reply.author.username %> Avatar" class="avatar">
+                          <div>
+                            <h5 class="card-title"><%= reply.author.username %></h5>
+                            <p><%= formattedDate %></p>
+
+                          </div>
+
+                        </div>
+                        <!-- Add the three dots icon here -->
+                        <div class="dropdown">
+                          <!-- Conditionally show the "Delete Reply" button -->
+                          <% if (currentUser && reply.author.equals(currentUser._id)) { %>
+                            <i class="fas fa-ellipsis-vertical ellipsis-phone-icon" data-reply-id="<%= reply._id %>"></i>
+                            <!-- Add a "Delete Reply" option -->
+                            <form id="delete-form-phone-<%= reply._id %>" action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>/replies/<%= reply._id %>?_method=DELETE" method="POST" class="delete-reply-form" style="display: none; position: absolute;">
+                              <button class="delete-reply"><i class="fa-solid fa-trash-can bin-reply-icon" style="color: #000000;"></i></button>
+                            </form>
+                          <% } %>
+                        </div>
+                      </div>
+                      <!-- Display the reply content here -->
+                      <div class="reply-content">
+                        <p>reply: <%= reply.text %></p>
+                      </div>
+                    </div>
+                  <% } %>
+                </div>
+
+
+                <!-- Add a reply form for this review (restricted to campground author) -->
+                <% if (currentUser && campground.author.equals(currentUser._id) && review.replies.length === 0) { %>
+                  <div class="reply-form-container">
+                    <div class="d-flex justify-content-start">
+                      <!-- Only show the reply button if the user is the campground owner -->
+                      <button class="btn reply-button" id="review-<%= review._id %>-reply">Reply</button>
+                    </div>
+
+
+
+                    <!-- Reply Form (initially hidden) -->
+                    <form action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>/replies" method="POST"
+                      class="validated-form reply-form" novalidate id="review-<%= review._id %>-form-phone" style="display: none;">
+
+                      <div class="form-group">
+                        <div class="reviewTextCard">
+                          <label for="reply[body]">Reply Text:</label>
+                          <textarea class="form-control" name="reply[text]" id="textarea-reply"
+                          cols="30" rows="3" required></textarea>
+                        </div>
+                      </div>
+                      <button
+                        type="submit"
+                        id="reply-submit-button"
+                        class="btn btn-info text-white btnSubmit"
+                        data-campground-id="<%= campground._id %>"
+                      >
+                        Submit Reply
+                      </button>
+                    </form>
+                  </div>
                 <% } %>
 
 
@@ -162,6 +235,8 @@
       <% } %>
 
     </div>
+
+
 
   </div>
 
@@ -202,12 +277,12 @@
               </div>
 
               <!-- Container for Ellipsis icon and Delete button -->
-              <div class="ellipsis-container">
+              <div class="dropdown">
                 <!-- Ellipsis icon for review actions -->
                 <div class="review-actions">
                   <!-- Conditionally show the "Delete Review" button -->
                   <% if (currentUser && review.author.equals(currentUser._id)) { %>
-                    <i class="fas fa-ellipsis-vertical ellipsis-icon ellipsis-review" data-review-id="<%= review._id %>"></i>
+                    <i class="fas fa-ellipsis-vertical ellipsis-review" data-review-id="<%= review._id %>"></i>
                     <form action="/campgrounds/<%=campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST" class="delete-review-form" id="delete-review-form-<%= review._id %>" style="display: none;">
                       <button class="delete-reply"><i class="fa-solid fa-trash-can bin-reply-icon" style="color: #000000;"></i>Delete</button>
                     </form>
@@ -222,8 +297,9 @@
               Review: <%= review.body  %>
             </p>
 
-
-
+            <% if (review && review.body && review.body.length > 4) { %>
+              <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more <i class="fa-solid fa-chevron-right" style="color: #000000; margin-left: 0.6rem; font-size: 1rem;"></i></a>
+            <% } %>
 
             <!-- Display replies for this review -->
             <div class="replies">
@@ -243,11 +319,11 @@
                     </div>
                     <!-- Add the three dots icon here -->
                     <div class="dropdown">
-                      <i class="fas fa-ellipsis-vertical ellipsis-icon" data-reply-id="<%= reply._id %>"></i>
                       <!-- Conditionally show the "Delete Reply" button -->
                       <% if (currentUser && reply.author.equals(currentUser._id)) { %>
+                        <i class="fas fa-ellipsis-vertical ellipsis-icon" data-reply-id="<%= reply._id %>"></i>
                         <!-- Add a "Delete Reply" option -->
-                        <form id="delete-form-<%= reply._id %>" action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>/replies/<%= reply._id %>?_method=DELETE" method="POST" class="delete-reply" style="display: none; position: absolute;">
+                        <form id="delete-form-<%= reply._id %>" action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>/replies/<%= reply._id %>?_method=DELETE" method="POST" class="delete-reply-form" style="display: none; position: absolute;">
                           <button class="delete-reply"><i class="fa-solid fa-trash-can bin-reply-icon" style="color: #000000;"></i>Delete</button>
                         </form>
                       <% } %>
@@ -266,16 +342,9 @@
             <!-- Add a reply form for this review (restricted to campground author) -->
             <% if (currentUser && campground.author.equals(currentUser._id) && review.replies.length === 0) { %>
               <div class="reply-form-container">
-                <div class="reply-form-container">
-                  <div class="d-flex justify-content-between align-items-center">
-                    <!-- Show more link -->
-                    <% if(review.body.length > 4) { %>
-                      <a href="#!" class="show-more-link" data-review-id="<%= review._id %>">Show more <i class="fa-solid fa-chevron-right" style="color: #000000; margin-left: 0.6rem; font-size: 1rem;"></i></a>
-                    <% } %>
-
-                    <!-- Only show the reply button if the user is the campground owner -->
-                    <button class="btn reply-button" id="review-<%= review._id %>-reply">Reply</button>
-                  </div>
+                <div class="d-flex justify-content-start">
+                  <!-- Only show the reply button if the user is the campground owner -->
+                  <button class="btn reply-button" id="review-<%= review._id %>-reply">Reply</button>
                 </div>
 
                 <!-- Reply Form (initially hidden) -->
@@ -284,7 +353,7 @@
 
                   <div class="form-group">
                     <div class="reviewTextCard">
-                      <label for="reply[body]">Reply:</label>
+                      <label for="reply[body]">Reply Text:</label>
                       <textarea class="form-control" name="reply[text]" id="textarea-reply"
                       cols="30" rows="3" required></textarea>
                     </div>
@@ -321,6 +390,7 @@
       <button id="showAllReviews">Show all <%= campground.reviews.length %> reviews</button>
     <% } %>
   </div>
+
 
 
 </div>
@@ -403,8 +473,6 @@
   const mapToken = "<%-process.env.MAPBOX_TOKEN %>";
   const campground = <%- JSON.stringify(campground) %>
 
-
-
   document.addEventListener('DOMContentLoaded', function() {
 
     const modal = document.getElementById('reviewsModal');
@@ -446,17 +514,12 @@
     });
 
 
-
     initializeModalControls(modal, campgroundId);
     handleReviewSearch(reviewSearch);
     showMoreHandler();
     initializeSwiperCarousel();
     handleCarouselArrowHiding();
-    handleDynamicCarouselIndicator(modal, closeButton, function() {
-      const reviewSearchInput = document.getElementById('reviewSearch');
-      const clearIcon = document.querySelector('.clear-icon');
-      clearSearch(reviewSearchInput, clearIcon);
-    });
+
 
      // Check if closeButton actually got an element
     if (closeButton) {
@@ -488,13 +551,46 @@
       });
     });
 
+
+
     const replyButtons = document.querySelectorAll('.reply-button');
+
+    // Function to update the reviewCard height based on replies and screen size
+    function updateReviewCardHeight() {
+      const reviewCards = document.querySelectorAll('.reviewCard');
+
+      reviewCards.forEach(reviewCard => {
+        const repliesContainer = reviewCard.querySelector('.replies');
+        const screenWidth = window.innerWidth;
+
+        if (repliesContainer && repliesContainer.children.length > 0) {
+          // If there are replies, set the height to '24rem'
+          reviewCard.style.height = '30rem';
+          if (screenWidth <= 576) {
+            reviewCard.style.marginBottom = '8rem';
+          }
+
+        } else {
+          let defaultHeight = '22rem'; // Default height for laptop/computer size
+
+          // Check if the screen width is less than or equal to 576px (phone size)
+          if (screenWidth <= 576) {
+            defaultHeight = '21.5rem'; // Height for phone size
+          }
+
+          // Set the height to the default value based on screen size
+          reviewCard.style.height = defaultHeight;
+        }
+      });
+    }
+
 
     // Add a click event listener to each reply button
     replyButtons.forEach(button => {
       button.addEventListener('click', () => {
         // Extract the reviewId from the button's id
         const reviewId = button.id.split('-')[1]; // Assumes the ID is in the format 'review-<reviewId>-reply'
+
         // Log the ID of the clicked reply button
         console.log(`Button with ID: ${button.id} clicked`);
 
@@ -505,26 +601,148 @@
         // Get the corresponding form element
         const form = document.getElementById(formId);
 
-      // Toggle the visibility of the form
+        // Toggle the visibility of the form
         if (form.style.display === 'block') {
           form.style.display = 'none';
           console.log(`Hiding form with ID: ${formId}`);
+
+          // Remove the 'expanded' class to revert to default styles
+          const reviewCard = button.closest('.reviewCard'); // Find the nearest parent with the class 'reviewCard'
+          reviewCard.classList.remove('expanded');
         } else {
           form.style.display = 'block';
           console.log(`Showing form with ID: ${formId}`);
+
+          // Add the 'expanded' class to apply expanded styles
+          const reviewCard = button.closest('.reviewCard'); // Find the nearest parent with the class 'reviewCard'
+          reviewCard.classList.add('expanded');
+
+          // to find the correct parent element. You can do this by using the closest method to find the nearest parent element with the class reviewCard.
+          // By using button.closest('.reviewCard'), you ensure that you select the specific .reviewCard element associated with the clicked reply button,
+          // allowing you to add or remove the expanded class accordingly.
+        }
+
+
+        // Get the form Phone ID from the button's ID
+        const formPhoneId = `review-${reviewId}-form-phone`;
+        // Log the ID of the form
+        console.log(`Form ID from button's ID: ${formPhoneId}`);
+        // Get the corresponding form element
+        const formPhone = document.getElementById(formPhoneId);
+
+         // Toggle the visibility of the form
+         if (formPhone.style.display === 'block') {
+          formPhone.style.display = 'none';
+          console.log(`Hiding form Phone with ID: ${formPhoneId}`);
+
+          // Remove the 'expanded' class to revert to default styles
+          const reviewCard = button.closest('.reviewCard'); // Find the nearest parent with the class 'reviewCard'
+          reviewCard.classList.remove('expanded');
+        } else {
+          formPhone.style.display = 'block';
+          console.log(`Showing form Phone with ID: ${formPhoneId}`);
+
+          // Add the 'expanded' class to apply expanded styles
+          const reviewCard = button.closest('.reviewCard'); // Find the nearest parent with the class 'reviewCard'
+          reviewCard.classList.add('expanded');
         }
 
       });
     });
 
+    // Initial call to set the reviewCard heights based on replies
+    updateReviewCardHeight();
 
+
+
+
+
+    // phone
     // Function to toggle the display of a delete form
-    function toggleDeleteForm(formId) {
-      const deleteForm = document.getElementById(formId);
-      if (deleteForm.style.display === 'block') {
-        deleteForm.style.display = 'none';
+    function toggleDeletePhoneForm(formPhoneId) {
+      const deletePhoneForm = document.getElementById(formPhoneId);
+
+      // Check if the deleteForm element exists
+      if (deletePhoneForm) {
+        // Check if the style property is not null before accessing it
+        if (deletePhoneForm.style && deletePhoneForm.style.display === 'block') {
+          deletePhoneForm.style.display = 'none';
+        } else if (deletePhoneForm.style) {
+          deletePhoneForm.style.display = 'block';
+        }
       } else {
-        deleteForm.style.display = 'block';
+        console.error(`Element with ID '${formPhoneId}' not found.`);
+      }
+    }
+
+
+    // Select all ellipsis icons for replies
+    const ellipsisPhoneReplyIcons = document.querySelectorAll('.ellipsis-phone-icon');
+
+    // Loop through each ellipsis icon for replies and add a click event listener
+    ellipsisPhoneReplyIcons.forEach(ellipsisIcon => {
+      ellipsisIcon.addEventListener('click', () => {
+        // Get the reply ID from the data-reply-id attribute
+        const replyPhoneId = ellipsisIcon.getAttribute('data-reply-id');
+        // Construct the form ID for deleting the reply
+        const formPhoneId = `delete-form-phone-${replyPhoneId}`;
+
+        const deletePhoneForm = document.getElementById(formPhoneId);
+
+        if (deletePhoneForm.style.display === 'none' || deletePhoneForm.style.display === '') {
+          // If the delete form is hidden or not displayed, show it
+          toggleDeleteForm(formPhoneId);
+          // Add the "no-padding" class to remove padding
+          ellipsisIcon.classList.add('no-padding');
+        } else {
+          // If the delete form is visible, hide it
+          toggleDeleteForm(formPhoneId);
+          // Remove the "no-padding" class to restore padding
+          ellipsisIcon.classList.remove('no-padding');
+        }
+
+      });
+    });
+
+    // Select all ellipsis icons for reviews
+    const ellipsisPhoneReviewIcons = document.querySelectorAll('.ellipsis-phone-review');
+
+    // Loop through each ellipsis icon for reviews and add a click event listener
+    ellipsisPhoneReviewIcons.forEach(ellipsisIcon => {
+      ellipsisIcon.addEventListener('click', () => {
+        // Get the review ID from the data-review-id attribute
+        const reviewId = ellipsisIcon.getAttribute('data-review-id');
+        // Construct the form ID for deleting the review
+        const formPhoneId = `delete-review-phone-form-${reviewId}`;
+
+        toggleDeleteForm(formPhoneId);
+        const deletePhoneForm = document.getElementById(formPhoneId);
+
+        if (deletePhoneForm.style.display === 'none' || deletePhoneForm.style.display === '') {
+          ellipsisIcon.classList.remove('no-padding-review');
+        } else {
+          ellipsisIcon.classList.add('no-padding-review');
+        }
+      });
+    });
+
+    // phone
+
+
+     // Function to toggle the display of a delete form
+     function toggleDeleteForm(formId) {
+      const deleteForm = document.getElementById(formId);
+
+      // Check if the deleteForm element exists
+      if (deleteForm) {
+        // Check if the style property is not null before accessing it
+        if (deleteForm.style && deleteForm.style.display === 'block') {
+          deleteForm.style.display = 'none';
+        } else if (deleteForm.style) {
+          deleteForm.style.display = 'block';
+        }
+      } else {
+        console.error(`Element with ID '${formId}' not found.`);
       }
     }
 
@@ -540,6 +758,15 @@
         const formId = `delete-form-${replyId}`;
         // Toggle the display of the delete form
         toggleDeleteForm(formId);
+        const deleteForm = document.getElementById(formId);
+
+        if (deleteForm.style.display === 'none' || deleteForm.style.display === '') {
+          // If the margin-right is not set or is 0px, set it to 4rem
+          ellipsisIcon.style.marginRight = '0';
+        } else {
+          // If the margin-right is 4rem, remove it
+          ellipsisIcon.style.marginRight = '4rem';
+        }
       });
     });
 
@@ -555,10 +782,25 @@
         const formId = `delete-review-form-${reviewId}`;
         // Toggle the display of the delete form
         toggleDeleteForm(formId);
+
+
+        const deleteForm = document.getElementById(formId);
+
+
+        if (deleteForm.style.display === 'none' || deleteForm.style.display === '') {
+          // If the margin-right is not set or is 0px, set it to 4rem
+          ellipsisIcon.style.padding = '';
+        } else {
+          // If the margin-right is 4rem, remove it
+          ellipsisIcon.style.padding = '0 2rem 1rem 2rem';
+        }
+
       });
     });
 
+
   });
+
 
   function initializeModalControls(modal, campgroundId) {
     // Check if the "Show All Reviews" button exists
@@ -576,8 +818,6 @@
       });
     }
   }
-
-
 
 
   function attachModalEventListeners(modal, closeButton, clearSearchFn, campgroundId) {
@@ -938,67 +1178,7 @@ function closeModal(modal, campgroundId) {
     window.addEventListener('mousedown', handleMouseDownOnce);
   }
 
-  function handleDynamicCarouselIndicator() {
-    // dinamyc indicator for the carousel
-    $(document).ready(function() {
-      let $carousel = $('#campgroundCarousel');
-      let $indicators = $('.carousel-indicators li');
-      let totalIndicators = $indicators.length;
 
-      // Limiting the indicators to a maximum of 5
-      if (totalIndicators > 5) {
-          // Display only 5 dots initially
-          for(let i=5; i<totalIndicators; i++) {
-            $indicators.eq(i).hide();
-          }
-          // Set initial classes for the last two indicators
-          $indicators.eq(3).addClass('small');
-          $indicators.eq(4).addClass('smallest');
-      }
-
-      $carousel.on('slide.bs.carousel', function (e) {
-        let currentIndex = $(e.relatedTarget).index();
-        $indicators.removeClass('small smallest').show();
-
-        // If there are 5 or fewer images, no special adjustments required
-        if (totalIndicators <= 5) return;  // No special logic for 5 or fewer indicators
-
-          // When you are in the first three images
-        if (currentIndex < 3) {
-          for(let i=5; i<totalIndicators; i++) {
-            $indicators.eq(i).hide();
-          }
-          $indicators.eq(3).addClass('small');
-          $indicators.eq(4).addClass('smallest');
-        }
-          // When you slide to the 4th image onward, adjust the shown indicators
-        else if (currentIndex >= 3 && currentIndex < totalIndicators - 2) {
-          let start = currentIndex - 2;
-          for(let i=0; i<start; i++) {
-            $indicators.eq(i).hide();
-          }
-          for(let i=currentIndex+3; i<totalIndicators; i++) {
-            $indicators.eq(i).hide();
-          }
-          $indicators.eq(currentIndex - 2).addClass('smallest');
-          $indicators.eq(currentIndex - 1).addClass('small');
-          $indicators.eq(currentIndex + 1).addClass('small');
-          $indicators.eq(currentIndex + 2).addClass('smallest');
-        }
-          // When you're at the last two images, adjust the indicators
-        else {
-          for(let i=0; i<totalIndicators-5; i++) {
-            $indicators.eq(i).hide();
-          }
-          $indicators.slice(-5).show();  // Show the last five indicators
-          $indicators.eq(totalIndicators - 5).addClass('smallest');
-          $indicators.eq(totalIndicators - 4).addClass('small');
-        }
-
-      });
-    });
-
-  }
 
   function displayReviewInModal(reviewId) {
     // Log the reviewId to confirm it's being passed correctly

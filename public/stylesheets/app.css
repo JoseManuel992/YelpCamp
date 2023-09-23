@@ -314,36 +314,6 @@
 }
 
 
-.carousel-indicators {
-  list-style-type: none;
-}
-
-/* styling the indicators for the carousel */
-.carousel-indicators-container {
-  overflow: hidden;
-}
-
-.carousel-indicators li {
-  width: 10px !important; /* adjust as needed */
-  height: 10px !important; /* adjust as needed */
-  border-radius: 50% !important;
-  background-color: rgb(215, 215, 215) !important; /* or any color you want */
-  margin: 0 3px !important;  /* Space between dots */
-  border: none !important;  /* No border */
-  padding: 0 !important;  /* No padding */
-  box-sizing: border-box !important;  /* Ensures padding and border are included in the width/height */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Horizontal, vertical, blur, shadow color */
-  transition: transform 0.5s ease;
-
-}
-
-.carousel-indicators .active {
-  background-color: white !important; /* or any other color to represent the active slide */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Horizontal, vertical, blur, shadow color */
-
-
-}
-
 .small {
   transform: scale(0.8);
 }
@@ -411,8 +381,13 @@ h2{
 
 .reviewCard{
   margin-bottom: 2.5rem;
-  height: 22rem;
+  height: 18rem;
   border: none;
+}
+/* Add styles for the expanded state when the reply button is clicked */
+.reviewCard.expanded {
+  height: 18rem;
+  margin-bottom: 12rem;
 }
 
 .delete-review{
@@ -427,6 +402,9 @@ h2{
   font-weight: 600;
 }
 
+.card-text-review{
+  margin-top: 4.5rem;
+}
 
 .card-footer{
   padding: 1rem;
@@ -450,7 +428,8 @@ h2{
 
 }
 
-/* Add these CSS styles to your app.css or a separate CSS file */
+/* reply */
+
 .reply {
   position: relative; /* Set the parent div to relative positioning */
   padding: 15px; /* Add some padding for spacing */
@@ -468,6 +447,9 @@ h2{
 .reply-head {
   display: flex;
 }
+.reply-button {
+  margin-left: auto; /* Push the reply button to the right */
+}
 
 .ellipsis-icon {
   cursor: pointer;
@@ -477,9 +459,16 @@ h2{
   margin-bottom: 0.2rem;
 }
 
+.ellipsis-review{
+  font-size: 1.4rem;
+  padding: 0 0 2rem 2rem; /* Padding: top right bottom left */
+}
+
+
 .dropdown {
   position: absolute;
-  right: 6rem;
+  right: 0;
+  top: 0;
 }
 
 .bin-reply-icon{
@@ -505,10 +494,11 @@ h2{
 }
 
 .reply-content{
-  margin-top: 2rem;
+  margin-top: 4.5rem;
 }
 
 .reply-button {
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
   background-color: transparent;
   border-radius: 5rem;
   width: 6rem;
@@ -516,11 +506,15 @@ h2{
   text-align: center;
   font-weight: 600;
   transition: background-color 0.3s, color 0.3s, transform 0.3s; /* Add smooth transitions for background color, text color, and transform */
+ border: none;
 }
 
 .reply-button:hover{
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
   background-color: #dfdede;
   border-radius: 5rem;
+  transform: scale(1.2);
+  border: none;
 }
 
 
@@ -664,6 +658,10 @@ h2{
   cursor: pointer;
 }
 
+.arrows-for-swiper {
+  display: none;
+}
+
 #showAllReviews {
   display: block;
   text-align: center;
@@ -687,6 +685,12 @@ h2{
   margin: 4px 2px;
   cursor: pointer;
   margin-bottom: 3rem;
+  background-color: white;
+  transition: background-color 0.3s ease;
+
+}
+#showAllReviews:hover{
+  background-color: #efefefaf;
 }
 
 .hide-overflow {
@@ -761,6 +765,7 @@ h2{
     height: 16rem;
   }
 
+
   .fixed-size-image{
     height: 16rem;
   }
@@ -784,8 +789,8 @@ h2{
   }
 
   .reviewCard{
-    border: 1px solid #ced4da;
-    border-radius:  1rem;
+    /* border: 1px solid #ced4da;
+    border-radius:  1rem; */
     height: 24.5rem;
     margin-bottom: 3rem;
     position: relative;
@@ -803,13 +808,12 @@ h2{
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100% !important;
+    width: 100% ;
   }
 
 
   /* Ensure only one review card is visible on mobile screens at a time */
   .swiper-container, .swiper-slide {
-
     height: auto !important;
   }
   .swiper-container {
@@ -821,6 +825,28 @@ h2{
   #reviewsModal {
     z-index: 2000;     /* Make content occupy full height */
 
+  }
+
+  /* replies */
+  .reply {
+    margin-left: 1rem;
+  }
+  .reviewTextCard{
+    margin-top: 4rem;
+  }
+
+  .reviewCard.expanded {
+    margin-bottom: 20rem;
+  }
+
+  .dropdown {
+    top: 0rem;
+    right: 0rem;
+  }
+
+  .ellipsis-phone-review  {
+    font-size: 1.4rem;
+    padding: 0.5rem 0 2rem 2rem; /* Padding: top right bottom left */
   }
 
     /* Modal Content */
@@ -898,6 +924,40 @@ h2{
     position: relative;
     z-index: 500;
   }
+
+  .ellipsis-phone-icon {
+    font-size: 1.4rem;
+    padding: 0 0 2rem 2rem; /* Padding: top right bottom left */
+  }
+  .no-padding {
+    padding: 0 0 1rem 2rem;
+    margin-right: 0;
+  }
+
+  .no-padding-review {
+    padding: 0.5rem 0 1.5rem 2rem;
+  }
+
+
+  /* Adjust the positioning of the delete button form */
+  .delete-reply-form {
+    position: absolute;
+    top: 100%; /* Position it below the ellipsis icon */
+    right: 0; /* Align it to the right of the parent element */
+  }
+
+
+  .delete-reply {
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    width: 3rem;
+
+  }
+
+  .bin-reply-icon{
+    margin: 0;
+  }
+
 }
 
 
