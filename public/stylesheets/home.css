@@ -29,6 +29,10 @@ body {
   border-bottom-color: white;
 }
 
+.view-campgrounds-button{
+  margin-top: 8rem;
+}
+
 .button {
   color: #333;
   background-color: #fff;
@@ -43,7 +47,7 @@ body {
 
 .title {
   margin-bottom: 2rem;
-  font-size: 2rem;
+  font-size: 3rem;
 }
 
 .navbar-brand  {
@@ -51,8 +55,8 @@ body {
 }
 
 .lead {
-  font-size: 1rem;
-  margin-bottom: 6rem;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
 }
 
 .copyright {
@@ -171,7 +175,11 @@ body {
 
   .lead {
     font-size: 0.85rem;
-    margin-bottom: 4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .view-campgrounds-button{
+    margin-top: 4rem;
   }
 
   .button {
