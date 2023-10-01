@@ -17,7 +17,6 @@ router.get('/:reviewId', catchAsync(reviews.showReview));
 //delete
 router.delete("/:reviewId", isLoggedIn, isReviewAuthor, catchAsync(reviews.deleteReview))
 
-module.exports = router;
 
 //Replies
 
@@ -26,3 +25,5 @@ router.post("/:reviewId/replies", isLoggedIn, isCampgroundAuthor, catchAsync(rev
 
 //delete the reply
 router.delete("/:reviewId/replies/:replyId", isLoggedIn, isCampgroundAuthor, catchAsync(reviews.deleteReply));
+
+module.exports = router;
