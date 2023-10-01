@@ -899,8 +899,15 @@ h2{
   }
 
   .close-modal {
-    left: 10px;
-    top: 2px;
+    left: 20px;
+    top: 12px;
+  }
+
+  #reviewSearch{
+    margin-top: 2rem;
+  }
+  .search-icon{
+    top: 70%;
   }
 
   /* replies */
