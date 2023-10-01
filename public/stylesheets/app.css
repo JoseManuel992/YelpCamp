@@ -896,7 +896,11 @@ h2{
 
   #reviewsModal {
     z-index: 2000;     /* Make content occupy full height */
+  }
 
+  .close-modal {
+    left: 10px;
+    top: 2px;
   }
 
   /* replies */
