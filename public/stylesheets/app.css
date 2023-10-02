@@ -978,6 +978,11 @@ h2{
     padding: 0px 14px;
   }
 
+  .clear-icon {
+    top: 70%;
+  }
+
+
 
   /* Search Result Message */
   .search-result-message {
